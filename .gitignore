@@ -107,3 +107,9 @@ InitTestScene*.unity*
 
 # macOS
 .DS_Store
+
+# ProBuilder auto-generated editor preferences (per-user, not project-wide)
+ProjectSettings/Packages/com.unity.probuilder/Settings.json
+
+# ProBuilder auto-generated data (material palettes, etc.)
+/[Aa]ssets/ProBuilder Data/
