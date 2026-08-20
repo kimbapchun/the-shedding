@@ -1,0 +1,99 @@
+name: pr-init-configuration
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  pull-requests: write
+  contents: read
+  issues: write
+
+jobs:
+  sync-pr:
+    name: sync-pr
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Get Branch Name
+        id: get_branch
+        run: |
+          echo "branch_name=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
+
+      - name: Extract Issue Number
+        id: extract_issue
+        run: |
+          ISSUE_NUMBER="$(echo "${{ steps.get_branch.outputs.branch_name }}" | grep -oP '(?<=/)\d+(?=[^0-9]*$)' || true)"
+          echo "issue_number=${ISSUE_NUMBER}" >> "$GITHUB_OUTPUT"
+
+      - name: Get Issue Title
+        id: get_issue
+        if: steps.extract_issue.outputs.issue_number != ''
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issueNumber = process.env.ISSUE_NUMBER;
+            const issue = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+            });
+            core.setOutput('issue_title', issue.data.title);
+        env:
+          ISSUE_NUMBER: ${{ steps.extract_issue.outputs.issue_number }}
+
+      - name: Update Pull Request Title
+        if: steps.get_issue.outputs.issue_title != ''
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              title: process.env.ISSUE_TITLE
+            });
+        env:
+          ISSUE_TITLE: ${{ steps.get_issue.outputs.issue_title }}
+
+      - name: Auto assignee
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumber = context.issue.number;
+
+            const author = context.payload.pull_request.user.login;
+
+            // Assign the author to the PR
+            await github.rest.issues.addAssignees({
+              owner,
+              repo,
+              issue_number: prNumber,
+              assignees: [author],
+            });
+            core.info(`Assignee set to author: ${author}`);
+
+      - name: Auto reviewer
+        if: github.event_name == 'pull_request' && github.event.action == 'opened'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const reviewerMap = {
+              hwannow: 'neaimt',
+              neaimt: 'hwannow',
+            };
+            const author = context.payload.pull_request.user.login;
+            const reviewer = reviewerMap[author];
+            if (!reviewer) {
+              core.info(`No reviewer mapping for author: ${author}`);
+              return;
+            }
+            await github.rest.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              reviewers: [reviewer],
+            });
+            core.info(`Reviewer set to: ${reviewer}`);
