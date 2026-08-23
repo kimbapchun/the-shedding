@@ -2,7 +2,7 @@ name: pr-init-configuration
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened]
 
 permissions:
   pull-requests: write
@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Set Base Branch to Develop
-        if: github.event.action == 'opened' && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref != 'develop'
+        if: github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref != 'develop'
         uses: actions/github-script@v6
         with:
           script: |
@@ -60,7 +60,7 @@ jobs:
           ISSUE_NUMBER: ${{ steps.extract_issue.outputs.issue_number }}
 
       - name: Update Pull Request Title
-        if: github.event.action == 'opened' && steps.get_issue.outputs.issue_title != ''
+        if: steps.get_issue.outputs.issue_title != ''
         uses: actions/github-script@v6
         with:
           script: |
@@ -93,7 +93,6 @@ jobs:
             core.info(`Assignee set to author: ${author}`);
 
       - name: Auto reviewer
-        if: github.event_name == 'pull_request' && github.event.action == 'opened'
         uses: actions/github-script@v6
         with:
           script: |
