@@ -30,13 +30,17 @@ jobs:
 
       - name: Get Branch Name
         id: get_branch
+        env:
+          BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
-          echo "branch_name=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_OUTPUT"
+          echo "branch_name=$BRANCH" >> "$GITHUB_OUTPUT"
 
       - name: Extract Issue Number
         id: extract_issue
+        env:
+          BRANCH_NAME: ${{ steps.get_branch.outputs.branch_name }}
         run: |
-          ISSUE_NUMBER="$(echo "${{ steps.get_branch.outputs.branch_name }}" | grep -oP '(?<=/)\d+(?=[^0-9]*$)' || true)"
+          ISSUE_NUMBER="$(echo "$BRANCH_NAME" | grep -oP '(?<=/)\d+(?=[^0-9]*$)' || true)"
           echo "issue_number=${ISSUE_NUMBER}" >> "$GITHUB_OUTPUT"
 
       - name: Get Issue Title
