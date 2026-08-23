@@ -60,7 +60,7 @@ jobs:
           ISSUE_NUMBER: ${{ steps.extract_issue.outputs.issue_number }}
 
       - name: Update Pull Request Title
-        if: steps.get_issue.outputs.issue_title != ''
+        if: github.event.action == 'opened' && steps.get_issue.outputs.issue_title != ''
         uses: actions/github-script@v6
         with:
           script: |
