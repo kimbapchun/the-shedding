@@ -511,7 +511,7 @@ PrefabInstance:
       objectReference: {fileID: 1402174823}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall06
+      value: Wall_06
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEditorRenderState
@@ -1798,7 +1798,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (1)
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -2070,7 +2070,7 @@ GameObject:
   m_Component:
   - component: {fileID: 105361935}
   m_Layer: 0
-  m_Name: back
+  m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2915,7 +2915,7 @@ GameObject:
   m_Component:
   - component: {fileID: 157820236}
   m_Layer: 0
-  m_Name: right
+  m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4912,7 +4912,7 @@ GameObject:
   m_Component:
   - component: {fileID: 245303643}
   m_Layer: 0
-  m_Name: back
+  m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5322,9 +5322,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1908385847}
+  - {fileID: 1332457802}
   - {fileID: 1615316741}
   - {fileID: 2050582865}
-  - {fileID: 1332457802}
   m_Father: {fileID: 157692171}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &263041321
@@ -5381,7 +5381,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (6)
+      value: Wall_07
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -5463,7 +5463,7 @@ PrefabInstance:
       objectReference: {fileID: 1039170252}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall03
+      value: Wall_03
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -5491,15 +5491,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].b
@@ -6283,7 +6283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4331610531200903530, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_Name
-      value: Wall_door
+      value: Wall_Door
       objectReference: {fileID: 0}
     - target: {fileID: 5125227395971148519, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6579,7 +6579,7 @@ PrefabInstance:
       objectReference: {fileID: 1039170252}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall03
+      value: Wall_03
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -6607,11 +6607,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_SelectedFaces.Array.data[0]'
@@ -6619,7 +6619,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].a
@@ -6915,7 +6915,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall02
+      value: Wall_02
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -7684,15 +7684,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1328338066604004563, guid: 722a7070eec4c4ce394584cbccb32a13, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1328338066604004563, guid: 722a7070eec4c4ce394584cbccb32a13, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1328338066604004563, guid: 722a7070eec4c4ce394584cbccb32a13, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1667398506806128125, guid: 722a7070eec4c4ce394584cbccb32a13, type: 3}
       propertyPath: m_Mesh
@@ -8378,7 +8378,7 @@ GameObject:
   m_Component:
   - component: {fileID: 371476270}
   m_Layer: 0
-  m_Name: right
+  m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8638,7 +8638,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -8650,15 +8650,15 @@ PrefabInstance:
       objectReference: {fileID: 985121237}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8724,7 +8724,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (2)
+      value: Wall_03
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -11172,7 +11172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 484717040}
   m_Layer: 0
-  m_Name: left
+  m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11187,7 +11187,7 @@ Transform:
   m_GameObject: {fileID: 484717039}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -7.2, y: 0.00000011920929, z: -1.5000014}
+  m_LocalPosition: {x: -7.2, y: 0, z: -1.5000014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11226,8 +11226,8 @@ Transform:
   m_Children:
   - {fileID: 838128844}
   - {fileID: 245303643}
-  - {fileID: 157820236}
   - {fileID: 484717040}
+  - {fileID: 157820236}
   m_Father: {fileID: 82519322}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &496130001
@@ -11911,7 +11911,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (5)
+      value: Wall_06
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -11989,7 +11989,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (4)
+      value: Wall_05
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -12101,7 +12101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 546621694}
   m_Layer: 0
-  m_Name: back
+  m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12116,7 +12116,7 @@ Transform:
   m_GameObject: {fileID: 546621693}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 1.5000007, y: 0.000000059604645, z: -1.5000014}
+  m_LocalPosition: {x: 1.5000007, y: 0, z: -1.5000014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12181,7 +12181,7 @@ PrefabInstance:
       objectReference: {fileID: 1953341568}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall02
+      value: Wall_02
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -12209,15 +12209,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].b
@@ -12323,7 +12323,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -12461,7 +12461,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall02
+      value: Wall_02
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -12535,7 +12535,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (3)
+      value: Wall_04
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -12695,7 +12695,7 @@ PrefabInstance:
       objectReference: {fileID: 402060216}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 5586802544704850552, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Mesh
@@ -12777,7 +12777,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -12916,8 +12916,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1613094450}
   - {fileID: 2082144050}
+  - {fileID: 1613094450}
   m_Father: {fileID: 1621857848}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &612107521
@@ -13230,7 +13230,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall03
+      value: Wall_03
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -13254,11 +13254,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_SelectedFaces.Array.data[0]'
@@ -13266,7 +13266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].a
@@ -13640,7 +13640,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -13664,15 +13664,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].b
@@ -14083,7 +14083,7 @@ GameObject:
   m_Component:
   - component: {fileID: 683966786}
   m_Layer: 0
-  m_Name: right
+  m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14341,7 +14341,7 @@ PrefabInstance:
       objectReference: {fileID: 1741514638}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall05
+      value: Wall_05
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEditorRenderState
@@ -14783,7 +14783,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -15173,7 +15173,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2856234394352192471, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_Name
-      value: Wall_10x10 (2)
+      value: Wall_10x10
       objectReference: {fileID: 0}
     - target: {fileID: 4216689033703910158, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_LocalScale.x
@@ -15225,7 +15225,7 @@ PrefabInstance:
       objectReference: {fileID: 612107521}
     - target: {fileID: 7036598786311813789, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_VersionIndex
-      value: 110
+      value: 113
       objectReference: {fileID: 0}
     - target: {fileID: 8267276060410948981, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_Mesh
@@ -15473,7 +15473,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -15746,15 +15746,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3867369348888670148, guid: 7040f032cb0fd47ba9795abe28737183, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3867369348888670148, guid: 7040f032cb0fd47ba9795abe28737183, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3867369348888670148, guid: 7040f032cb0fd47ba9795abe28737183, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4213852273359675790, guid: 7040f032cb0fd47ba9795abe28737183, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -15824,7 +15824,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -15906,7 +15906,7 @@ PrefabInstance:
       objectReference: {fileID: 1167805683}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall04
+      value: Wall_04
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -15934,15 +15934,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].b
@@ -16454,11 +16454,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: 'm_SelectedFaces.Array.data[0]'
@@ -16466,7 +16466,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].a
@@ -16726,7 +16726,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4331610531200903530, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_Name
-      value: Wall_door
+      value: Wall_Door
       objectReference: {fileID: 0}
     - target: {fileID: 5125227395971148519, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16987,8 +16987,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1566648116}
   - {fileID: 1881900841}
+  - {fileID: 1566648116}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &831724750
@@ -17209,7 +17209,7 @@ GameObject:
   m_Component:
   - component: {fileID: 838128844}
   m_Layer: 0
-  m_Name: front
+  m_Name: Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18730,7 +18730,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (1)
+      value: Wall_02
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -18812,7 +18812,7 @@ PrefabInstance:
       objectReference: {fileID: 1039170252}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall03
+      value: Wall_03
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -18840,11 +18840,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_SelectedFaces.Array.data[0]'
@@ -18852,7 +18852,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].a
@@ -19187,199 +19187,6 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!43 &939508397
-Mesh:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh568105589213607786
-  serializedVersion: 12
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 156
-    topology: 0
-    baseVertex: 0
-    firstVertex: 22
-    vertexCount: 62
-    localAABB:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0.5, y: 0.5, z: 0.5}
-  - serializedVersion: 2
-    firstByte: 312
-    indexCount: 60
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 22
-    localAABB:
-      m_Center: {x: 0, y: 0, z: 0.5}
-      m_Extent: {x: 0.5, y: 0.5, z: 0}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_BonesAABB: []
-  m_VariableBoneCountWeights:
-    m_Data: 
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexFormat: 0
-  m_IndexBuffer: 1700180019001d001e001c001e001f001c001c001f001b001f0016001b001b0016001a00160017001a001a001700190038003a00370037003a003b0037003b00360036003b003c0036003c003f003f003c003d003f003d003e00380039003a004300410042004300440041004400400041004400450040004500490040004500460049004600480049004600470048004a004b004c0053004a004c0053004c004d00520053004d0052004d004e00510052004e0051004e004f00500051004f003200300031003200330030003400330032003400350033002000350034002000210035002200210020002200230021002300250021002300240025002400270025002400260027002600290027002600280029002c002a002b002c002d002a002f002b002e002f002c002b0033002e00300033002f002e000900060007000800090007000b00090008000a000b0008000f000b000a000e000f000a0011000f000e00100011000e000c000d000f0011000c000f00140015000d000c0014000d00120013001500140012001500000001000200030000000200030002000400050003000400050004000600090005000600
-  m_VertexData:
-    serializedVersion: 3
-    m_VertexCount: 84
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 24
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 40
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 4032
-    _typelessdata: 0000803e000000bf0000003f00000000000000000000803f000080bf0000000000000000000080bf0000803e000000000000003f000000bf0000003f00000000000000000000803f000080bf0000000000000000000080bf00000000000000000000003f000080be0000003f00000000000000000000803f000080bf0000000000000000000080bf000000000000803e0000803e000080be0000003f00000000000000000000803f000080bf0000000000000000000080bf0000803e0000803e0000003f000000000000003f00000000000000000000803f000080bf0000000000000000000080bf000000000000003f0000803e000000000000003f00000000000000000000803f000080bf0000000000000000000080bf0000803e0000003f0000003f0000803e0000003f00000000000000000000803f000080bf0000000000000000000080bf000000000000403f0000003f0000003f0000003f00000000000000000000803f000080bf0000000000000000000080bf000000000000803f0000803e0000003f0000003f00000000000000000000803f000080bf0000000000000000000080bf0000803e0000803f0000803e0000803e0000003f00000000000000000000803f000080bf0000000000000000000080bf0000803e0000403f000000000000003f0000003f00000000000000000000803f000080bf0000000000000000000080bf0000003f0000803f000000000000803e0000003f00000000000000000000803f000080bf0000000000000000000080bf0000003f0000403f000000bf000000000000003f00000000000000000000803f000080bf0000000000000000000080bf0000803f0000003f000080be000000000000003f00000000000000000000803f000080bf0000000000000000000080bf0000403f0000003f000080be0000003f0000003f00000000000000000000803f000080bf0000000000000000000080bf0000403f0000803f000080be0000803e0000003f00000000000000000000803f000080bf0000000000000000000080bf0000403f0000403f000000bf0000003f0000003f00000000000000000000803f000080bf0000000000000000000080bf0000803f0000803f000000bf0000803e0000003f00000000000000000000803f000080bf0000000000000000000080bf0000803f0000403f000000bf000000bf0000003f00000000000000000000803f000080bf0000000000000000000080bf0000803f00000000000080be000000bf0000003f00000000000000000000803f000080bf0000000000000000000080bf0000403f00000000000000bf000080be0000003f00000000000000000000803f000080bf0000000000000000000080bf0000803f0000803e000080be000080be0000003f00000000000000000000803f000080bf0000000000000000000080bf0000403f0000803e000000000000003f000000bf000000000000803f00000000000080bf000000005b5555b5000080bf0000003fffff7f3f000080be0000003f000000bf000000000000803f00000000000080bf000000005b55d5b5000080bf0000403ffeff7f3f000000bf0000003f000000bf000000000000803f00000000000080bf0000000000000000000080bf0000803ffeff7f3f000000bf0000003f0000003f000000000000803f00000000000080bf000000000400a0b5000080bf0000803f6466663f000080be0000003f0000003f000000000000803f00000000000080bf000000005b55d5b5000080bf0000403f6566663f000000000000003f0000003f000000000000803f00000000000080bf000000005b5555b5000080bf0000003f6566663f0000803e0000003f0000003f000000000000803f00000000000080bf000000005b55d5b5000080bf0000803e6666663f0000003f0000003f0000003f000000000000803f00000000000080bf0000000000000000000080bf000000006666663f0000003f0000003f000000bf000000000000803f00000000000080bf000000000400a0b5000080bf000000000000803f0000803e0000003f000000bf000000000000803f00000000000080bf000000005b55d5b5000080bf0000803effff7f3f0000803e0000003f000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000403f0000803f0000803e0000803e000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000403f0000403f0000003f0000003f000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000803f0000803f0000003f0000803e000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000803f0000403f0000003f00000000000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000803f0000003f0000803e00000000000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000403f0000003f0000003f000080be000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000803f0000803e0000803e000080be000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000403f0000803e0000003f000000bf000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000803f000000000000803e000000bf000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000403f00000000000000bf000000bf000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000000000000000000000bf000080be000000bf0000000000000000000080bf0000803f0000000000000000000080bf000000000000803e000080be000080be000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000803e0000803e000080be000000bf000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000803e00000000000000bf00000000000000bf0000000000000000000080bf0000803f0000000000000000000080bf000000000000003f000080be00000000000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000803e0000003f000000bf0000803e000000bf0000000000000000000080bf0000803f0000000000000000000080bf000000000000403f000000bf0000003f000000bf0000000000000000000080bf0000803f0000000000000000000080bf000000000000803f000080be0000003f000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000803e0000803f000080be0000803e000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000803e0000403f000000000000003f000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000003f0000803f000000000000803e000000bf0000000000000000000080bf0000803f0000000000000000000080bf0000003f0000403f00000000000000bf0000003f00000000000080bf00000000000080bf0000000000000000000080bf0000003fcccccc3c000080be000000bf0000003f00000000000080bf00000000000080bf0000000000000000000080bf0000403fcccccc3c000000bf000000bf0000003f00000000000080bf00000000000080bf0000000000000000000080bf0000803fcccccc3c000000bf000000bf000000bf00000000000080bf00000000000080bf0000000000000000000080bf0000803f000080b0000080be000000bf000000bf00000000000080bf00000000000080bf0000000000000000000080bf0000403f000080b000000000000000bf000000bf00000000000080bf00000000000080bf0000000000000000000080bf0000003f000080b00000803e000000bf000000bf00000000000080bf00000000000080bf0000000000000000000080bf0000803e000080b00000003f000000bf000000bf00000000000080bf00000000000080bf0000000000000000000080bf00000000000080b00000003f000000bf0000003f00000000000080bf00000000000080bf0000000000000000000080bf00000000cccccc3c0000803e000000bf0000003f00000000000080bf00000000000080bf0000000000000000000080bf0000803ecccccc3c000000bf000000000000003f000080bf00000000000000000000000000000000000080bf000080bf000040320000003f000000bf0000803e0000003f000080bf00000000000000000000000000000000000080bf000080bf000040320000403f000000bf0000003f0000003f000080bf00000000000000000000000000000000000080bf000080bf000040320000803f000000bf0000003f000000bf000080bf00000000000000000000000000000000000080bf000080bfcecccc3d0000803f000000bf0000803e000000bf000080bf00000000000000000000000000000000000080bf000080bfcecccc3d0000403f000000bf00000000000000bf000080bf00000000000000000000000000000000000080bf000080bfcecccc3d0000003f000000bf000080be000000bf000080bf00000000000000000000000000000000000080bf000080bfcecccc3d0000803e000000bf000000bf000000bf000080bf00000000000000000000000000000000000080bf000080bfcecccc3d00000000000000bf000000bf0000003f000080bf00000000000000000000000000000000000080bf000080bf0000403200000000000000bf000080be0000003f000080bf00000000000000000000000000000000000080bf000080bf000040320000803e0000003f000000bf0000003f0000803f000000000000000000000000000000000000803f000080bfcecccc3d000000000000003f000000bf000000bf0000803f000000000000000000000000000000000000803f000080bf00004032000000000000003f000080be000000bf0000803f000000000000000000000000000000000000803f000080bf000040320000803e0000003f00000000000000bf0000803f000000000000000000000000000000000000803f000080bf000040320000003f0000003f0000803e000000bf0000803f000000000000000000000000000000000000803f000080bf000040320000403f0000003f0000003f000000bf0000803f000000000000000000000000000000000000803f000080bf000040320000803f0000003f0000003f0000003f0000803f000000000000000000000000000000000000803f000080bfcecccc3d0000803f0000003f0000803e0000003f0000803f000000000000000000000000000000000000803f000080bfcecccc3d0000403f0000003f000000000000003f0000803f000000000000000000000000000000000000803f000080bfcecccc3d0000003f0000003f000080be0000003f0000803f000000000000000000000000000000000000803f000080bfcecccc3d0000803e
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.5, y: 0.5, z: 0.5}
-  m_MeshUsageFlags: 0
-  m_CookingOptions: 30
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  'm_MeshMetrics[0]': 24.232323
-  'm_MeshMetrics[1]': 1
-  m_MeshOptimizationFlags: 1
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
-  m_MeshLodInfo:
-    serializedVersion: 2
-    m_LodSelectionCurve:
-      serializedVersion: 1
-      m_LodSlope: 0
-      m_LodBias: 0
-    m_NumLevels: 1
-    m_SubMeshes:
-    - serializedVersion: 2
-      m_Levels:
-      - serializedVersion: 1
-        m_IndexStart: 0
-        m_IndexCount: 0
-    - serializedVersion: 2
-      m_Levels:
-      - serializedVersion: 1
-        m_IndexStart: 0
-        m_IndexCount: 0
 --- !u!1001 &940313006
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19647,7 +19454,7 @@ PrefabInstance:
     - target: {fileID: 12944893061370215, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 939508397}
+      objectReference: {fileID: 1536236140}
     - target: {fileID: 2518751707361825560, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -19662,11 +19469,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: 'm_SelectedFaces.Array.data[0]'
@@ -19674,7 +19481,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].a
@@ -19934,7 +19741,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4331610531200903530, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_Name
-      value: Wall_door
+      value: Wall_Door
       objectReference: {fileID: 0}
     - target: {fileID: 5125227395971148519, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20376,7 +20183,7 @@ PrefabInstance:
       objectReference: {fileID: 1740852676}
     - target: {fileID: 4331610531200903530, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_Name
-      value: Wall_door
+      value: Wall_Door
       objectReference: {fileID: 0}
     - target: {fileID: 5125227395971148519, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -21428,7 +21235,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -22374,7 +22181,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall02
+      value: Wall_02
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -22398,15 +22205,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].b
@@ -24097,7 +23904,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (2)
+      value: Wall_03
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -24357,7 +24164,7 @@ PrefabInstance:
       objectReference: {fileID: 402060216}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -24385,15 +24192,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].b
@@ -24774,7 +24581,7 @@ PrefabInstance:
       objectReference: {fileID: 1479477390}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall07
+      value: Wall_07
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -24802,15 +24609,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].b
@@ -25955,7 +25762,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1205743295}
   m_Layer: 0
-  m_Name: right
+  m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26403,7 +26210,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (4)
+      value: Wall_05
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -27139,7 +26946,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1299594548}
   m_Layer: 0
-  m_Name: left
+  m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27427,7 +27234,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1332457802}
   m_Layer: 0
-  m_Name: back
+  m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28125,7 +27932,7 @@ PrefabInstance:
       objectReference: {fileID: 402060216}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEditorRenderState
@@ -29543,7 +29350,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -29795,7 +29602,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -30062,7 +29869,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall03
+      value: Wall_03
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -30074,15 +29881,15 @@ PrefabInstance:
       objectReference: {fileID: 1246991967}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -30508,7 +30315,7 @@ PrefabInstance:
       objectReference: {fileID: 1167805683}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall04
+      value: Wall_04
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEditorRenderState
@@ -30943,7 +30750,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -31681,9 +31488,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2072633144}
   - {fileID: 1299594548}
   - {fileID: 683966786}
-  - {fileID: 2072633144}
   m_Father: {fileID: 822779009}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1570284777
@@ -31744,7 +31551,7 @@ PrefabInstance:
       objectReference: {fileID: 1039170252}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall03
+      value: Wall_03
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEditorRenderState
@@ -31794,15 +31601,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1328338066604004563, guid: 722a7070eec4c4ce394584cbccb32a13, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1328338066604004563, guid: 722a7070eec4c4ce394584cbccb32a13, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1328338066604004563, guid: 722a7070eec4c4ce394584cbccb32a13, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1667398506806128125, guid: 722a7070eec4c4ce394584cbccb32a13, type: 3}
       propertyPath: m_Mesh
@@ -31924,7 +31731,7 @@ PrefabInstance:
       objectReference: {fileID: 402060216}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 5586802544704850552, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Mesh
@@ -32188,7 +31995,7 @@ PrefabInstance:
       objectReference: {fileID: 1741514638}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall05
+      value: Wall_05
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -32364,7 +32171,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1600757327}
   m_Layer: 0
-  m_Name: right
+  m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32754,7 +32561,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1613094450}
   m_Layer: 0
-  m_Name: right
+  m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32786,7 +32593,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1615316741}
   m_Layer: 0
-  m_Name: left
+  m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33210,8 +33017,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 589171820}
   - {fileID: 161617285}
+  - {fileID: 589171820}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1637236132
@@ -33268,7 +33075,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall02
+      value: Wall_02
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -33280,15 +33087,15 @@ PrefabInstance:
       objectReference: {fileID: 1996250625}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -33488,7 +33295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1653335672}
   m_Layer: 0
-  m_Name: front
+  m_Name: Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33746,7 +33553,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (1)
+      value: Wall_02
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -33970,7 +33777,7 @@ PrefabInstance:
       objectReference: {fileID: 1514608081}
     - target: {fileID: 4331610531200903530, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_Name
-      value: Wall_door
+      value: Wall_Door
       objectReference: {fileID: 0}
     - target: {fileID: 5125227395971148519, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -34036,7 +33843,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2856234394352192471, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_Name
-      value: Wall_10x10 (1)
+      value: Wall_10x10
       objectReference: {fileID: 0}
     - target: {fileID: 4216689033703910158, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_LocalScale.x
@@ -34088,7 +33895,7 @@ PrefabInstance:
       objectReference: {fileID: 1519652248}
     - target: {fileID: 7036598786311813789, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_VersionIndex
-      value: 110
+      value: 113
       objectReference: {fileID: 0}
     - target: {fileID: 8267276060410948981, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_Mesh
@@ -34114,7 +33921,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1703920736}
   m_Layer: 0
-  m_Name: front
+  m_Name: Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34192,7 +33999,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall03
+      value: Wall_03
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -34216,11 +34023,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_SelectedFaces.Array.data[0]'
@@ -34228,7 +34035,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].a
@@ -34424,7 +34231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall03
+      value: Wall_03
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -34448,11 +34255,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_SelectedFaces.Array.data[0]'
@@ -34460,7 +34267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].a
@@ -35020,7 +34827,7 @@ PrefabInstance:
       objectReference: {fileID: 1953341568}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall02
+      value: Wall_02
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEditorRenderState
@@ -35462,7 +35269,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall02
+      value: Wall_02
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -35492,7 +35299,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1756864778}
   m_Layer: 0
-  m_Name: front
+  m_Name: Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35507,7 +35314,7 @@ Transform:
   m_GameObject: {fileID: 1756864777}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -7.2, y: 0.00000011920929, z: -1.5000014}
+  m_LocalPosition: {x: -7.2, y: 0, z: -1.5000014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -35814,7 +35621,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall03
+      value: Wall_03
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -35879,10 +35686,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1600757327}
-  - {fileID: 1898091311}
-  - {fileID: 546621694}
   - {fileID: 1756864778}
+  - {fileID: 546621694}
+  - {fileID: 1898091311}
+  - {fileID: 1600757327}
   m_Father: {fileID: 1788497962}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &1782405135
@@ -36328,7 +36135,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (1)
+      value: Wall_02
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -36796,7 +36603,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1811719510}
   m_Layer: 0
-  m_Name: left
+  m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36811,7 +36618,7 @@ Transform:
   m_GameObject: {fileID: 1811719509}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -7.2, y: 0.00000011920929, z: -1.5000014}
+  m_LocalPosition: {x: -7.2, y: 0, z: -1.5000014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -37589,7 +37396,7 @@ PrefabInstance:
       objectReference: {fileID: 1953341568}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall02
+      value: Wall_02
       objectReference: {fileID: 0}
     - target: {fileID: 5586802544704850552, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Mesh
@@ -37849,7 +37656,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (3)
+      value: Wall_04
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -38005,7 +37812,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (2)
+      value: Wall_03
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -38261,7 +38068,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall02
+      value: Wall_02
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -38289,11 +38096,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_SelectedFaces.Array.data[0]'
@@ -38301,7 +38108,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].a
@@ -38423,7 +38230,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -38485,7 +38292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1898091311}
   m_Layer: 0
-  m_Name: left
+  m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38500,7 +38307,7 @@ Transform:
   m_GameObject: {fileID: 1898091310}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.00000011920929, y: 0.000000059604645, z: -5.699999}
+  m_LocalPosition: {x: 0, y: 0, z: -5.699999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -38563,7 +38370,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall03
+      value: Wall_03
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -38587,11 +38394,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_SelectedFaces.Array.data[0]'
@@ -38599,7 +38406,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].a
@@ -38673,7 +38480,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1907535969}
   m_Layer: 0
-  m_Name: back
+  m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38707,7 +38514,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1908385847}
   m_Layer: 0
-  m_Name: front
+  m_Name: Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38789,7 +38596,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall02
+      value: Wall_02
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -38813,11 +38620,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_SelectedFaces.Array.data[0]'
@@ -38825,7 +38632,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].a
@@ -39078,7 +38885,7 @@ PrefabInstance:
     - target: {fileID: 12944893061370215, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1514608081}
+      objectReference: {fileID: 1369447915}
     - target: {fileID: 2518751707361825560, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -39089,7 +38896,7 @@ PrefabInstance:
       objectReference: {fileID: 1369447915}
     - target: {fileID: 4331610531200903530, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_Name
-      value: Wall_door
+      value: Wall_Door
       objectReference: {fileID: 0}
     - target: {fileID: 5125227395971148519, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39349,11 +39156,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: 'm_SelectedFaces.Array.data[0]'
@@ -39361,7 +39168,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2977751514412098072, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].a
@@ -39633,7 +39440,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4331610531200903530, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_Name
-      value: Wall_door
+      value: Wall_Door
       objectReference: {fileID: 0}
     - target: {fileID: 5125227395971148519, guid: 645fedc402f364c888ca87a35583a5dd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39929,7 +39736,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (3)
+      value: Wall_04
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -40378,7 +40185,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -40634,7 +40441,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -40867,8 +40674,8 @@ Transform:
   m_Children:
   - {fileID: 1703920736}
   - {fileID: 1907535969}
-  - {fileID: 1205743295}
   - {fileID: 1811719510}
+  - {fileID: 1205743295}
   m_Father: {fileID: 738081142}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2026269369
@@ -40947,7 +40754,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2050582865}
   m_Layer: 0
-  m_Name: right
+  m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41029,7 +40836,7 @@ PrefabInstance:
       objectReference: {fileID: 1479477390}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall07
+      value: Wall_07
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEditorRenderState
@@ -41053,15 +40860,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -41161,7 +40968,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2072633144}
   m_Layer: 0
-  m_Name: front
+  m_Name: Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41371,7 +41178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2082144050}
   m_Layer: 0
-  m_Name: back
+  m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42316,7 +42123,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall01
+      value: Wall_01
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Materials.Array.size
@@ -42340,11 +42147,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedFaces.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_SelectedFaces.Array.data[0]'
@@ -42352,7 +42159,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedVertices.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5748742043748561198, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_SelectedEdges.Array.data[0].a
@@ -42470,7 +42277,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 941817547726592523, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: m_Name
-      value: Wall (4)
+      value: Wall_05
       objectReference: {fileID: 0}
     - target: {fileID: 2130788466629532126, guid: bd6aa794c4e1748a3bd933fa9e93e6bb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
