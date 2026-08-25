@@ -15173,7 +15173,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2856234394352192471, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_Name
-      value: Wall_10x10
+      value: Wall_10x1
       objectReference: {fileID: 0}
     - target: {fileID: 4216689033703910158, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_LocalScale.x
@@ -33843,7 +33843,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2856234394352192471, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_Name
-      value: Wall_10x10
+      value: Wall_10x1
       objectReference: {fileID: 0}
     - target: {fileID: 4216689033703910158, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_LocalScale.x
@@ -42650,7 +42650,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2856234394352192471, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_Name
-      value: Wall_10x10
+      value: Wall_10x1
       objectReference: {fileID: 0}
     - target: {fileID: 4216689033703910158, guid: b1b2a69adcfc24b05a01f7da8e7bf8d4, type: 3}
       propertyPath: m_LocalScale.x
