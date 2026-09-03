@@ -83,3 +83,8 @@
 *.zip    filter=lfs diff=lfs merge=lfs -text
 *.7z     filter=lfs diff=lfs merge=lfs -text
 *.rar    filter=lfs diff=lfs merge=lfs -text
+
+# TMP 폰트 애셋: 아틀라스 텍스처가 원시 바이트로 통째로 들어 있어
+# 텍스트 diff/머지가 무의미하고 파일 하나가 수 MB에 달한다. LFS로 관리한다.
+# (*.asset 의 unityyamlmerge 규칙보다 아래에 두어 이 경로에만 덮어쓴다)
+Assets/Fonts/*.asset filter=lfs diff=lfs merge=lfs -text
