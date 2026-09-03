@@ -45,6 +45,12 @@ namespace TheShedding.Network
 
         public ConnectionState State { get; private set; } = ConnectionState.Disconnected;
 
+        /// <summary>
+        /// 이 인스턴스가 호스트인지. UI가 NGO를 직접 참조하지 않고도
+        /// "호스트 전용 버튼"을 판단할 수 있도록 여기서 대신 노출한다.
+        /// </summary>
+        public bool IsHost => m_NetworkManager != null && m_NetworkManager.IsHost;
+
         private NetworkManager m_NetworkManager;
 
         /// <summary>

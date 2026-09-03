@@ -21,9 +21,11 @@ namespace TheShedding.Network
         [SerializeField] private Button hostButton;
         [SerializeField] private Button clientButton;
         [SerializeField] private Button disconnectButton;
+        [SerializeField] private Button startGameButton;
         [SerializeField] private TMP_Text statusText;
 
         private ConnectionManager m_Connection;
+        private NetworkSceneLoader m_SceneLoader;
 
         // Awake가 아니라 Start를 쓰는 이유:
         // ConnectionManager는 자기 Awake()에서 Instance를 설정한다. Unity는 모든 오브젝트의
@@ -49,9 +51,17 @@ namespace TheShedding.Network
             hostButton.onClick.AddListener(m_Connection.StartHost);
             clientButton.onClick.AddListener(m_Connection.StartClient);
             disconnectButton.onClick.AddListener(m_Connection.Disconnect);
+            startGameButton.onClick.AddListener(HandleStartGameClicked);
 
             m_Connection.OnStateChanged += HandleStateChanged;
             m_Connection.OnConnectionFailed += HandleConnectionFailed;
+
+            // 씬 전환 실패도 같은 상태 표시줄에 보여준다.
+            m_SceneLoader = NetworkSceneLoader.Instance;
+            if (m_SceneLoader != null)
+            {
+                m_SceneLoader.OnSceneLoadFailed += HandleConnectionFailed;
+            }
 
             // 이벤트는 "상태가 바뀔 때"만 발행되므로, 시작 시점의 현재 상태는
             // 직접 한 번 반영해줘야 화면이 빈 채로 남지 않는다.
@@ -72,9 +82,31 @@ namespace TheShedding.Network
             hostButton.onClick.RemoveListener(m_Connection.StartHost);
             clientButton.onClick.RemoveListener(m_Connection.StartClient);
             disconnectButton.onClick.RemoveListener(m_Connection.Disconnect);
+            startGameButton.onClick.RemoveListener(HandleStartGameClicked);
 
             m_Connection.OnStateChanged -= HandleStateChanged;
             m_Connection.OnConnectionFailed -= HandleConnectionFailed;
+
+            if (m_SceneLoader != null)
+            {
+                m_SceneLoader.OnSceneLoadFailed -= HandleConnectionFailed;
+            }
+        }
+
+        /// <summary>
+        /// 게임 시작은 호스트만 누를 수 있다. 실제 권한 검사는 NetworkSceneLoader가 하고,
+        /// 여기서는 버튼을 눌렀다는 사실만 전달한다.
+        /// </summary>
+        private void HandleStartGameClicked()
+        {
+            if (m_SceneLoader == null)
+            {
+                Debug.LogError("[LobbyUI] NetworkSceneLoader를 찾지 못했습니다. " +
+                               "NetworkManager 오브젝트에 붙어 있는지 확인하세요.");
+                return;
+            }
+
+            m_SceneLoader.LoadGameScene();
         }
 
         /// <summary>
@@ -92,6 +124,11 @@ namespace TheShedding.Network
             hostButton.interactable = idle;
             clientButton.interactable = idle;
             disconnectButton.interactable = !idle;
+
+            // 게임 시작은 호스트만, 그것도 연결이 끝난 뒤에야 가능하다.
+            // 클라이언트가 눌러도 NetworkSceneLoader가 막지만, 애초에 누를 수 없게 둔다.
+            startGameButton.interactable =
+                state == ConnectionState.Connected && m_Connection.IsHost;
 
             statusText.text = state switch
             {
