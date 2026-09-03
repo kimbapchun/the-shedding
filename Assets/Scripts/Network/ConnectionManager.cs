@@ -40,6 +40,9 @@ namespace TheShedding.Network
         /// 연결 실패 또는 예기치 않은 끊김. 인자는 사용자에게 그대로 보여줄 사유 문자열.
         /// OnStateChanged(Disconnected)와 함께 발행되지만, "내가 끊은 것"과
         /// "끊겨버린 것"을 UI가 구분할 수 있도록 별도 이벤트로 둔다.
+        ///
+        /// TODO: 사유 문구는 한글 TMP 폰트 애셋을 붙인 뒤 한국어로 교체할 것.
+        ///       현재 기본 폰트(LiberationSans)에 한글 글리프가 없어 화면에서 깨진다.
         /// </summary>
         public event Action<string> OnConnectionFailed;
 
@@ -111,7 +114,7 @@ namespace TheShedding.Network
             {
                 // 시도 중이던 연결을 정리해야 다음 시도가 깨끗하게 시작된다.
                 m_NetworkManager.Shutdown();
-                Fail("연결 시간이 초과되었습니다. 호스트가 실행 중인지 확인하세요.");
+                Fail("Connection timed out. Make sure a host is running.");
             }
         }
 
@@ -131,7 +134,7 @@ namespace TheShedding.Network
             // (예: 7777 포트를 다른 프로세스가 이미 쓰고 있는 경우)
             if (!m_NetworkManager.StartHost())
             {
-                Fail("호스트를 시작하지 못했습니다. 포트가 이미 사용 중일 수 있습니다.");
+                Fail("Failed to start host. The port may already be in use.");
             }
         }
 
@@ -149,7 +152,7 @@ namespace TheShedding.Network
             // 서버가 없어서 실패하는 경우는 여기가 아니라 Update()의 타임아웃이 잡는다.
             if (!m_NetworkManager.StartClient())
             {
-                Fail("클라이언트를 시작하지 못했습니다.");
+                Fail("Failed to start client.");
             }
         }
 
@@ -235,7 +238,7 @@ namespace TheShedding.Network
             // 서버가 연결을 거부하거나 강제로 끊을 때 사유를 실어 보낼 수 있다.
             // 5단계(재연결)에서 연결 승인 로직을 붙이면 여기에 값이 들어온다.
             var reason = m_NetworkManager.DisconnectReason;
-            Fail(string.IsNullOrEmpty(reason) ? "연결이 끊어졌습니다." : reason);
+            Fail(string.IsNullOrEmpty(reason) ? "Disconnected from host." : reason);
         }
 
         // ── 내부 ─────────────────────────────────────────────────────────
