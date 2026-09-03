@@ -93,13 +93,11 @@ namespace TheShedding.Network
             clientButton.interactable = idle;
             disconnectButton.interactable = !idle;
 
-            // TODO: 한글 TMP 폰트 애셋을 붙인 뒤 한국어 문구로 교체할 것.
-            //       현재 기본 폰트(LiberationSans)에 한글 글리프가 없어 깨져 보인다.
             statusText.text = state switch
             {
-                ConnectionState.Disconnected => "Disconnected",
-                ConnectionState.Connecting => "Connecting...",
-                ConnectionState.Connected => "Connected",
+                ConnectionState.Disconnected => "연결 없음",
+                ConnectionState.Connecting => "연결 중...",
+                ConnectionState.Connected => "연결됨",
                 _ => state.ToString()
             };
         }
