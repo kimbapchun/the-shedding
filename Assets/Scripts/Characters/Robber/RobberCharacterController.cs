@@ -44,11 +44,6 @@ namespace TheShedding.Characters
             isFlashlightOn = !isFlashlightOn;
         }
 
-        protected override void OnDeath()
-        {
-            // TODO: GameManager.Instance.OnRobberDied(this)
-        }
-
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = isFlashlightOn

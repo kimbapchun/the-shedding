@@ -39,11 +39,6 @@ namespace TheShedding.Characters
         // 우클릭 스킬: 없음
         protected override bool UseSkill() => false;
 
-        protected override void OnDeath()
-        {
-            // TODO: GameManager.Instance.OnFamilyMemberDied(this)
-        }
-
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;

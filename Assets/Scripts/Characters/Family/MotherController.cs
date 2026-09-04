@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace TheShedding.Characters
@@ -15,6 +16,8 @@ namespace TheShedding.Characters
 
         private TrapType selectedTrapType;
         private GameObject trapPreviewInstance;
+
+        public event Action<TrapType, Vector3> OnTrapPlaced;
 
         protected override void Awake()
         {
@@ -118,14 +121,9 @@ namespace TheShedding.Characters
             if (trapPrefabs == null || idx >= trapPrefabs.Length || trapPrefabs[idx] == null)
                 return false;
 
-            Instantiate(trapPrefabs[idx], GetPlacementPosition(), Quaternion.identity);
+            OnTrapPlaced?.Invoke(selectedTrapType, GetPlacementPosition());
             DestroyPreview();
             return true;
-        }
-
-        protected override void OnDeath()
-        {
-            // TODO: GameManager.Instance.OnFamilyMemberDied(this)
         }
 
         private void OnDrawGizmosSelected()

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,6 +30,12 @@ namespace TheShedding.Characters
         protected float statusEffectEndTime;
         public bool isSitting { get; protected set; }
         public bool isLying { get; protected set; }
+
+        // ── 이벤트 ───────────────────────────────────────────────────────
+
+        public event Action<int> OnLifeChanged;
+        public event Action<StatusEffect> OnStatusChanged;
+        public event Action OnDied;
 
         // ── 컴포넌트 레퍼런스 ────────────────────────────────────────────
 
@@ -141,6 +148,7 @@ namespace TheShedding.Characters
 
             currentStatusEffect = type;
             statusEffectEndTime = Time.time + duration;
+            OnStatusChanged?.Invoke(type);
             OnStatusEffectApplied(type);
         }
 
@@ -148,17 +156,42 @@ namespace TheShedding.Characters
 
         // ── 데미지 / 생사 ─────────────────────────────────────────────────
 
-        public virtual void TakeDamage(int amount)
+        // 판정: 실제 적용할 데미지 계산 (방어력 등 추가 시 override)
+        protected virtual int CalculateDamage(int rawAmount) => rawAmount;
+
+        // 반영
+        public virtual void ApplyDamage(int amount)
         {
             if (!IsAlive()) return;
             currentLifeSegments = Mathf.Max(0, currentLifeSegments - amount);
+            OnLifeChanged?.Invoke(currentLifeSegments);
             OnDamageTaken(amount);
-            if (!IsAlive()) OnDeath();
+            if (!IsAlive())
+            {
+                OnDied?.Invoke();
+                OnDeath();
+            }
+        }
+
+        // 회복
+        public virtual void ApplyHeal(int amount)
+        {
+            if (!IsAlive()) return;
+            currentLifeSegments = Mathf.Min(currentLifeSegments + amount, maxLifeSegments);
+            OnLifeChanged?.Invoke(currentLifeSegments);
+            OnHealTaken(amount);
+        }
+
+        // 외부 호출: 판정 → 반영
+        public void TakeDamage(int rawAmount)
+        {
+            ApplyDamage(CalculateDamage(rawAmount));
         }
 
         public bool IsAlive() => currentLifeSegments > 0;
 
         protected virtual void OnDamageTaken(int amount) { }
+        protected virtual void OnHealTaken(int amount) { }
         protected virtual void OnDeath() { }
 
         // ── 앉기 / 눕기 ───────────────────────────────────────────────────

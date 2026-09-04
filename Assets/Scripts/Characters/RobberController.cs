@@ -53,7 +53,7 @@ namespace TheShedding.Characters
         public void Recover()
         {
             if (currentStatusEffect == StatusEffect.KnockedDown) return;
-            currentLifeSegments = Mathf.Min(currentLifeSegments + 1, maxLifeSegments);
+            ApplyHeal(1);
             ApplyStatusEffect(StatusEffect.None, 0f);
         }
     }

@@ -40,11 +40,6 @@ namespace TheShedding.Characters
             return false;
         }
 
-        protected override void OnDeath()
-        {
-            // TODO: GameManager.Instance.OnFamilyMemberDied(this)
-        }
-
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.cyan;
