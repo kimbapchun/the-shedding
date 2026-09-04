@@ -111,9 +111,11 @@ namespace TheShedding.Network
             // 서버가 실제로 없어도 실패를 즉시 알려주지 않는다(UDP라 응답이 없을 뿐이다).
             // 그래서 직접 시간을 재서 끊어줘야 무한 "연결 중..."에 빠지지 않는다.
             //
-            // Time.time이 아니라 realtimeSinceStartup을 쓰는 이유:
+            // Time.time이 아니라 unscaledTime을 쓰는 이유:
             // timeScale = 0으로 게임을 멈춰도 네트워크 타임아웃은 흘러가야 한다.
-            if (Time.realtimeSinceStartup >= m_ConnectDeadline)
+            // realtimeSinceStartup은 에디터를 Pause 해둔 시간까지 세기 때문에,
+            // 디버깅하려고 잠깐 멈췄다 재개하면 곧바로 타임아웃이 터진다.
+            if (Time.unscaledTime >= m_ConnectDeadline)
             {
                 // 시도 중이던 연결을 정리해야 다음 시도가 깨끗하게 시작된다.
                 m_NetworkManager.Shutdown();
@@ -275,7 +277,8 @@ namespace TheShedding.Network
 
         private void BeginConnecting()
         {
-            m_ConnectDeadline = Time.realtimeSinceStartup + connectTimeoutSeconds;
+            // Update()의 비교와 반드시 같은 시계를 써야 한다.
+            m_ConnectDeadline = Time.unscaledTime + connectTimeoutSeconds;
             SetState(ConnectionState.Connecting);
         }
 
