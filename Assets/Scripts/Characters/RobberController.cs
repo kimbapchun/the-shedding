@@ -10,15 +10,26 @@ namespace TheShedding.Characters
 
         private float struggleGauge;
 
-        // ── Unity 생명주기 ────────────────────────────────────────────────
+        // ── 이동 (KnockedDown 중 차단) ────────────────────────────────────
 
-        protected override void Update()
+        public override void Move(Vector2 input, bool sprintPressed)
         {
             if (currentStatusEffect == StatusEffect.KnockedDown)
             {
                 rb.linearVelocity = Vector3.zero;
                 return;
             }
+            base.Move(input, sprintPressed);
+        }
+
+        // ── Unity 생명주기 ────────────────────────────────────────────────
+
+        protected override void Update()
+        {
+            // KnockedDown 중에는 서브클래스(플래시라이트 등) 로직도 차단
+            if (currentStatusEffect == StatusEffect.KnockedDown)
+                return;
+
             base.Update();
         }
 

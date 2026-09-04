@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace TheShedding.Characters
 {
@@ -12,28 +11,12 @@ namespace TheShedding.Characters
 
         public bool isFlashlightOn { get; private set; }
 
-        private InputAction flashlightToggleAction;
-
         protected override void Awake()
         {
             moveSpeed = 5f;
             bodyScale = 2;
             maxLifeSegments = 3;
             base.Awake();
-
-            flashlightToggleAction = playerInput.actions["Skill"];
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            flashlightToggleAction.performed += OnFlashlightTogglePerformed;
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            flashlightToggleAction.performed -= OnFlashlightTogglePerformed;
         }
 
         protected override void Update()
@@ -54,7 +37,9 @@ namespace TheShedding.Characters
             }
         }
 
-        private void OnFlashlightTogglePerformed(InputAction.CallbackContext ctx)
+        // ── 스킬 (PlayerInputReader → OnSkillInput): 플래시라이트 토글 ────
+
+        public override void OnSkillInput()
         {
             isFlashlightOn = !isFlashlightOn;
         }

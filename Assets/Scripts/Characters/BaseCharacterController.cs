@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 namespace TheShedding.Characters
 {
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(PlayerInput))]
     public abstract class BaseCharacterController : MonoBehaviour
     {
         // ── 인스펙터 설정 ────────────────────────────────────────────────
@@ -35,15 +34,6 @@ namespace TheShedding.Characters
 
         protected Rigidbody rb;
         protected Animator animator;
-        protected PlayerInput playerInput;
-
-        private InputAction moveAction;
-        private InputAction sprintAction;
-        private InputAction interactAction;
-        private InputAction sitAction;
-        private InputAction lieAction;
-        private InputAction previousAction;
-        private InputAction nextAction;
 
         // ── 상수 ─────────────────────────────────────────────────────────
 
@@ -56,7 +46,6 @@ namespace TheShedding.Characters
         {
             rb = GetComponent<Rigidbody>();
             animator = GetComponent<Animator>();
-            playerInput = GetComponent<PlayerInput>();
 
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
@@ -65,33 +54,10 @@ namespace TheShedding.Characters
 
             currentLifeSegments = maxLifeSegments;
             canPassNarrowPath = bodyScale <= 2;
-
-            moveAction     = playerInput.actions["Move"];
-            sprintAction   = playerInput.actions["Sprint"];
-            interactAction = playerInput.actions["Interact"];
-            sitAction      = playerInput.actions["Sit"];
-            lieAction      = playerInput.actions["Lie"];
-            previousAction = playerInput.actions["Previous"];
-            nextAction     = playerInput.actions["Next"];
         }
 
-        protected virtual void OnEnable()
-        {
-            interactAction.performed += OnInteractPerformed;
-            sitAction.performed      += OnSitPerformed;
-            lieAction.performed      += OnLiePerformed;
-            previousAction.performed += OnPreviousPerformed;
-            nextAction.performed     += OnNextPerformed;
-        }
-
-        protected virtual void OnDisable()
-        {
-            interactAction.performed -= OnInteractPerformed;
-            sitAction.performed      -= OnSitPerformed;
-            lieAction.performed      -= OnLiePerformed;
-            previousAction.performed -= OnPreviousPerformed;
-            nextAction.performed     -= OnNextPerformed;
-        }
+        protected virtual void OnEnable() { }
+        protected virtual void OnDisable() { }
 
         protected virtual void Update()
         {
@@ -99,18 +65,16 @@ namespace TheShedding.Characters
             if (Keyboard.current.pKey.isPressed)
                 ApplyStatusEffect(StatusEffect.Limp, 0.5f);
 #endif
-            Vector2 input = moveAction.ReadValue<Vector2>();
-            Move(input);
         }
 
         // ── 이동 ─────────────────────────────────────────────────────────
 
-        // input은 XZ 평면 이동 — Vector2(x, y) → Vector3(x, 0, y)
-        public virtual void Move(Vector2 input)
+        // PlayerInputReader가 매 프레임 호출
+        public virtual void Move(Vector2 input, bool sprintPressed)
         {
-            bool isMoving   = input != Vector2.zero;
-            bool isLimping  = currentStatusEffect == StatusEffect.Limp || currentStatusEffect == StatusEffect.LimpAndBleed;
-            bool isSprinting = isMoving && !isLimping && sprintAction.ReadValue<float>() > 0f;
+            bool isMoving    = input != Vector2.zero;
+            bool isLimping   = currentStatusEffect == StatusEffect.Limp || currentStatusEffect == StatusEffect.LimpAndBleed;
+            bool isSprinting = isMoving && !isLimping && sprintPressed;
 
             float multiplier = GetSpeedMultiplier();
             if (isSprinting) multiplier *= runSpeedMultiplier;
@@ -168,8 +132,6 @@ namespace TheShedding.Characters
             closest?.Interact(this);
         }
 
-        private void OnInteractPerformed(InputAction.CallbackContext ctx) => TryInteract();
-
         // ── 상태이상 ──────────────────────────────────────────────────────
 
         public void ApplyStatusEffect(StatusEffect type, float duration)
@@ -199,7 +161,7 @@ namespace TheShedding.Characters
         protected virtual void OnDamageTaken(int amount) { }
         protected virtual void OnDeath() { }
 
-        // ── 앉기 ──────────────────────────────────────────────────────────
+        // ── 앉기 / 눕기 ───────────────────────────────────────────────────
 
         public virtual void SetSittingState(bool sitting)
         {
@@ -233,13 +195,12 @@ namespace TheShedding.Characters
                 animator.SetBool("isLying", lying);
         }
 
-        private void OnSitPerformed(InputAction.CallbackContext ctx) => SetSittingState(!isSitting);
-        private void OnLiePerformed(InputAction.CallbackContext ctx) => SetLyingState(!isLying);
-        private void OnPreviousPerformed(InputAction.CallbackContext ctx) => OnPreviousItem();
-        private void OnNextPerformed(InputAction.CallbackContext ctx) => OnNextItem();
+        // ── 입력 진입점 (PlayerInputReader → 서브클래스 override) ─────────
 
-        protected virtual void OnPreviousItem() { }
-        protected virtual void OnNextItem() { }
+        public virtual void OnAttackInput() { }
+        public virtual void OnSkillInput() { }
+        public virtual void OnPreviousItem() { }
+        public virtual void OnNextItem() { }
 
         // ── 에디터 Gizmo ──────────────────────────────────────────────────
 

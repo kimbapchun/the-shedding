@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace TheShedding.Characters
 {
@@ -25,49 +24,30 @@ namespace TheShedding.Characters
         private float trapSlowEndTime;
         private float stunEndTime;
 
-        private InputAction attackAction;
-        private InputAction skillAction;
-
-        public bool IsTrapped  => Time.time < trapSlowEndTime;
-        private bool IsStunned => Time.time < stunEndTime;
+        public bool IsTrapped    => Time.time < trapSlowEndTime;
+        private bool IsStunned   => Time.time < stunEndTime;
         protected bool IsAttackReady => Time.time >= attackCooldownEndTime;
         protected bool IsSkillReady  => Time.time >= skillCooldownEndTime;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            attackAction = playerInput.actions["Attack"];
-            skillAction  = playerInput.actions["Skill"];
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            attackAction.performed += OnAttackPerformed;
-            skillAction.performed  += OnSkillPerformed;
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            attackAction.performed -= OnAttackPerformed;
-            skillAction.performed  -= OnSkillPerformed;
-        }
-
         protected override void Update()
         {
-            // 상태이상 자동 회복 — 스턴 중에도 시간은 흐름
+            // 상태이상 자동 회복
             if (currentStatusEffect != StatusEffect.None && Time.time >= statusEffectEndTime)
                 ApplyStatusEffect(StatusEffect.None, 0f);
 
-            // 스턴 중: 모든 이동·행동 차단
+            base.Update();
+        }
+
+        // ── 이동 (스턴 중 차단) ───────────────────────────────────────────
+
+        public override void Move(Vector2 input, bool sprintPressed)
+        {
             if (IsStunned)
             {
                 rb.linearVelocity = Vector3.zero;
                 return;
             }
-
-            base.Update();
+            base.Move(input, sprintPressed);
         }
 
         // ── 함정 감속 ─────────────────────────────────────────────────────
@@ -92,9 +72,9 @@ namespace TheShedding.Characters
             rb.linearVelocity = Vector3.zero;
         }
 
-        // ── 기본 공격 (좌클릭) ────────────────────────────────────────────
+        // ── 기본 공격 (PlayerInputReader → OnAttackInput) ─────────────────
 
-        private void OnAttackPerformed(InputAction.CallbackContext ctx)
+        public override void OnAttackInput()
         {
             if (!IsAttackReady) return;
             if (IsStunned) return;
@@ -106,9 +86,9 @@ namespace TheShedding.Characters
 
         protected abstract bool TryAttack();
 
-        // ── 고유 스킬 (우클릭) ────────────────────────────────────────────
+        // ── 고유 스킬 (PlayerInputReader → OnSkillInput) ──────────────────
 
-        private void OnSkillPerformed(InputAction.CallbackContext ctx)
+        public override void OnSkillInput()
         {
             if (!IsSkillReady) return;
             if (IsStunned) return;
