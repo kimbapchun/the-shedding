@@ -52,6 +52,13 @@ namespace TheShedding.Network
 
             // 이벤트는 상태가 바뀔 때만 발행되므로 현재 상태는 직접 한 번 반영한다.
             HandleStateChanged(m_Connection.State);
+
+            // 게임 중 끊겨서 돌아온 경우, 사유를 알린 이벤트는 파괴된 이전 UI에게 갔다.
+            var reason = m_Connection.ConsumeLastFailureReason();
+            if (!string.IsNullOrEmpty(reason))
+            {
+                statusText.text = reason;
+            }
         }
 
         private void OnDestroy()

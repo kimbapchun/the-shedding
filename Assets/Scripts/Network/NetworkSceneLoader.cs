@@ -21,8 +21,8 @@ namespace TheShedding.Network
         [Tooltip("로비에서 게임을 시작할 때 이동할 씬. 빌드 설정에 등록되어 있어야 한다.")]
         [SerializeField] private string gameSceneName = "FirstFloorScene";
 
-        [Tooltip("연결이 끝난 뒤 돌아갈 로비 씬.")]
-        [SerializeField] private string lobbySceneName = "Bootstrap";
+        [Tooltip("연결이 끝난 뒤 돌아갈 로비 씬. 부팅 씬과 달라야 한다.")]
+        [SerializeField] private string lobbySceneName = "Lobby";
 
         /// <summary>모든 클라이언트가 로딩을 마쳤을 때 발행. 캐릭터 스폰의 기준점이 된다.</summary>
         public event Action<string> OnSceneLoadCompleted;
@@ -34,6 +34,7 @@ namespace TheShedding.Network
         public string LobbySceneName => lobbySceneName;
 
         private NetworkManager m_NetworkManager;
+        private ConnectionManager m_Connection;
 
         private void Awake()
         {
@@ -45,6 +46,9 @@ namespace TheShedding.Network
 
             Instance = this;
             m_NetworkManager = GetComponent<NetworkManager>();
+
+            // 싱글톤 대신 같은 오브젝트에서 가져온다. Awake 실행 순서와 무관하게 이미 존재한다.
+            m_Connection = GetComponent<ConnectionManager>();
         }
 
         private void OnEnable()
@@ -53,10 +57,20 @@ namespace TheShedding.Network
             // 여기서 바로 구독할 수 없다.
             m_NetworkManager.OnServerStarted += SubscribeSceneEvents;
             m_NetworkManager.OnClientStarted += SubscribeSceneEvents;
+
+            if (m_Connection != null)
+            {
+                m_Connection.OnStateChanged += HandleConnectionStateChanged;
+            }
         }
 
         private void OnDisable()
         {
+            if (m_Connection != null)
+            {
+                m_Connection.OnStateChanged -= HandleConnectionStateChanged;
+            }
+
             if (m_NetworkManager == null)
             {
                 return;
@@ -72,6 +86,19 @@ namespace TheShedding.Network
             }
         }
 
+        private void Start()
+        {
+            // 부팅 씬은 매니저를 만들기 위한 곳이라 화면이 없다. 곧바로 로비로 넘긴다.
+            //
+            // 부팅 씬과 로비 씬을 분리한 이유: 로비로 돌아갈 때 부팅 씬을 다시 로드하면
+            // NetworkManager 오브젝트가 씬에서 새로 하나 더 만들어진다. NGO는 중복
+            // NetworkManager를 싱글톤으로 등록만 안 할 뿐 파괴하지는 않아서,
+            // 자식으로 둔 EventSystem까지 두 벌이 되어 입력 처리가 꼬인다.
+            //
+            // 이 컴포넌트는 씬 전환에도 살아남으므로 Start는 앱 실행 중 한 번만 불린다.
+            ReturnToLobbyLocal();
+        }
+
         // ── 외부 진입점 ──────────────────────────────────────────────────
 
         /// <summary>게임 씬으로 전환한다. 서버 전용. 로비 UI는 씬과 함께 사라진다.</summary>
@@ -84,6 +111,23 @@ namespace TheShedding.Network
         public void LoadLobbyScene()
         {
             LoadNetworkScene(lobbySceneName);
+        }
+
+        /// <summary>
+        /// 연결이 끊긴 뒤 혼자 로비로 돌아간다.
+        ///
+        /// LoadLobbyScene과 구분해야 한다. Shutdown 이후에는 NetworkManager.SceneManager가
+        /// 없고 알려줄 상대도 없으므로 Unity 기본 SceneManager로 직접 로드한다.
+        /// 규칙 A가 막으려던 것은 "클라이언트끼리 씬이 어긋나는 것"이라 이 경로는 예외다.
+        /// </summary>
+        public void ReturnToLobbyLocal()
+        {
+            if (SceneManager.GetActiveScene().name == lobbySceneName)
+            {
+                return;
+            }
+
+            SceneManager.LoadScene(lobbySceneName, LoadSceneMode.Single);
         }
 
         // ── 내부 ─────────────────────────────────────────────────────────
@@ -105,6 +149,17 @@ namespace TheShedding.Network
             {
                 Fail(DescribeFailure(sceneName, status));
             }
+        }
+
+        /// <summary>끊긴 이유가 무엇이든 "연결이 없다"는 결과는 같으므로 한 곳에서 처리한다.</summary>
+        private void HandleConnectionStateChanged(ConnectionState state)
+        {
+            if (state != ConnectionState.Disconnected)
+            {
+                return;
+            }
+
+            ReturnToLobbyLocal();
         }
 
         private void SubscribeSceneEvents()

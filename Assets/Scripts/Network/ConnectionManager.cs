@@ -32,6 +32,8 @@ namespace TheShedding.Network
         /// <summary>연결 시도 마감 시각 (협업 규칙 B — 남은 시간이 아니라 끝나는 시점).</summary>
         private float m_ConnectDeadline;
 
+        private string m_LastFailureReason;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -130,10 +132,23 @@ namespace TheShedding.Network
                 return;
             }
 
+            m_LastFailureReason = null;
+
             // 상태를 먼저 바꿔두면 Shutdown()이 부를 HandleStopped가 "이미 정리됨"으로 보고
             // 빠져나간다. 그래서 직접 끊은 경우엔 실패 메시지가 뜨지 않는다.
             m_NetworkManager.Shutdown();
             SetState(ConnectionState.Disconnected);
+        }
+
+        /// <summary>
+        /// 마지막 실패 사유를 꺼낸다. 한 번 꺼내면 비워진다.
+        /// 끊긴 뒤 로비로 돌아오는 사이 UI가 파괴되어 이벤트를 놓치므로 필요하다.
+        /// </summary>
+        public string ConsumeLastFailureReason()
+        {
+            var reason = m_LastFailureReason;
+            m_LastFailureReason = null;
+            return reason;
         }
 
         // ── NetworkManager 콜백 ──────────────────────────────────────────
@@ -215,6 +230,9 @@ namespace TheShedding.Network
 
         private void Fail(string reason)
         {
+            // 이벤트보다 먼저 보관해야, 상태 변화를 듣고 씬을 바꾸는 쪽이 새 화면에서 꺼내 쓸 수 있다.
+            m_LastFailureReason = reason;
+
             SetState(ConnectionState.Disconnected);
             OnConnectionFailed?.Invoke(reason);
         }
