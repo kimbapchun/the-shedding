@@ -20,16 +20,18 @@ namespace TheShedding.Characters
         [Header("Flashlight Stun")]
         [SerializeField] private float defaultStunDuration = 2f;
 
-        protected float attackCooldownTimer;
-        protected float skillCooldownTimer;
-        private float trapSlowTimer;
-        private float stunTimer;
+        protected float attackCooldownEndTime;
+        protected float skillCooldownEndTime;
+        private float trapSlowEndTime;
+        private float stunEndTime;
 
         private InputAction attackAction;
         private InputAction skillAction;
 
-        public bool IsTrapped => trapSlowTimer > 0f;
-        private bool IsStunned => stunTimer > 0f;
+        public bool IsTrapped  => Time.time < trapSlowEndTime;
+        private bool IsStunned => Time.time < stunEndTime;
+        protected bool IsAttackReady => Time.time >= attackCooldownEndTime;
+        protected bool IsSkillReady  => Time.time >= skillCooldownEndTime;
 
         protected override void Awake()
         {
@@ -54,30 +56,16 @@ namespace TheShedding.Characters
 
         protected override void Update()
         {
-            if (attackCooldownTimer > 0f)
-                attackCooldownTimer -= Time.deltaTime;
-
-            if (skillCooldownTimer > 0f)
-                skillCooldownTimer -= Time.deltaTime;
-
             // 상태이상 자동 회복 — 스턴 중에도 시간은 흐름
-            if (currentStatusEffect != StatusEffect.None)
-            {
-                statusEffectTimer -= Time.deltaTime;
-                if (statusEffectTimer <= 0f)
-                    ApplyStatusEffect(StatusEffect.None, 0f);
-            }
+            if (currentStatusEffect != StatusEffect.None && Time.time >= statusEffectEndTime)
+                ApplyStatusEffect(StatusEffect.None, 0f);
 
             // 스턴 중: 모든 이동·행동 차단
-            if (stunTimer > 0f)
+            if (IsStunned)
             {
-                stunTimer -= Time.deltaTime;
                 rb.linearVelocity = Vector3.zero;
                 return;
             }
-
-            if (trapSlowTimer > 0f)
-                trapSlowTimer -= Time.deltaTime;
 
             base.Update();
         }
@@ -86,12 +74,12 @@ namespace TheShedding.Characters
 
         public void ApplyTrapSlow(float duration)
         {
-            trapSlowTimer = duration;
+            trapSlowEndTime = Time.time + duration;
         }
 
         protected override float GetSpeedMultiplier()
         {
-            if (trapSlowTimer > 0f) return trapSlowMultiplier;
+            if (IsTrapped) return trapSlowMultiplier;
             return base.GetSpeedMultiplier();
         }
 
@@ -99,7 +87,8 @@ namespace TheShedding.Characters
 
         public void ApplyFlashlightStun(float duration)
         {
-            stunTimer = duration > 0f ? duration : defaultStunDuration;
+            float d = duration > 0f ? duration : defaultStunDuration;
+            stunEndTime = Time.time + d;
             rb.linearVelocity = Vector3.zero;
         }
 
@@ -107,12 +96,12 @@ namespace TheShedding.Characters
 
         private void OnAttackPerformed(InputAction.CallbackContext ctx)
         {
-            if (attackCooldownTimer > 0f) return;
+            if (!IsAttackReady) return;
             if (IsStunned) return;
 
             animator?.SetTrigger("isAttacking");
             if (TryAttack())
-                attackCooldownTimer = attackCooldownDuration;
+                attackCooldownEndTime = Time.time + attackCooldownDuration;
         }
 
         protected abstract bool TryAttack();
@@ -121,11 +110,11 @@ namespace TheShedding.Characters
 
         private void OnSkillPerformed(InputAction.CallbackContext ctx)
         {
-            if (skillCooldownTimer > 0f) return;
+            if (!IsSkillReady) return;
             if (IsStunned) return;
 
             if (UseSkill())
-                skillCooldownTimer = skillCooldownDuration;
+                skillCooldownEndTime = Time.time + skillCooldownDuration;
         }
 
         protected abstract bool UseSkill();

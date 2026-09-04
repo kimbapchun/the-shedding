@@ -50,7 +50,7 @@ namespace TheShedding.Characters
         private void UpdateTrapPreview()
         {
             int idx = (int)selectedTrapType;
-            bool canPlace = skillCooldownTimer <= 0f
+            bool canPlace = IsSkillReady
                 && trapPrefabs != null
                 && idx < trapPrefabs.Length
                 && trapPrefabs[idx] != null;

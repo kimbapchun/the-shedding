@@ -27,7 +27,7 @@ namespace TheShedding.Characters
 
         public int currentLifeSegments { get; protected set; }
         public StatusEffect currentStatusEffect { get; protected set; }
-        protected float statusEffectTimer;
+        protected float statusEffectEndTime;
         public bool isSitting { get; protected set; }
         public bool isLying { get; protected set; }
 
@@ -95,6 +95,10 @@ namespace TheShedding.Characters
 
         protected virtual void Update()
         {
+#if UNITY_EDITOR
+            if (Keyboard.current.pKey.isPressed)
+                ApplyStatusEffect(StatusEffect.Limp, 0.5f);
+#endif
             Vector2 input = moveAction.ReadValue<Vector2>();
             Move(input);
         }
@@ -174,7 +178,7 @@ namespace TheShedding.Characters
                 return;
 
             currentStatusEffect = type;
-            statusEffectTimer = duration;
+            statusEffectEndTime = Time.time + duration;
             OnStatusEffectApplied(type);
         }
 
