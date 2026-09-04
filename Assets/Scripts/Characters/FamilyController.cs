@@ -78,6 +78,7 @@ namespace TheShedding.Characters
         {
             if (!IsAttackReady) return;
             if (IsStunned) return;
+            if (isLying) return;
 
             animator?.SetTrigger("isAttacking");
             if (TryAttack())
