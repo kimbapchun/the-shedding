@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -27,6 +28,13 @@ namespace TheShedding.Network
         /// <summary>UI가 NGO를 참조하지 않고도 호스트 전용 기능을 판단하도록 대신 노출한다.</summary>
         public bool IsHost => m_NetworkManager != null && m_NetworkManager.IsHost;
 
+        /// <summary>
+        /// 이 실행 인스턴스를 식별하는 값. 접속할 때 서버로 보내 승인 심사에 쓰인다.
+        /// 앱을 다시 켜면 새로 발급되므로 "실행 중 끊겼다 다시 붙는" 경우만 같은 사람으로 알아본다.
+        /// NGO의 clientId는 재접속하면 바뀌기 때문에 별도 식별자가 필요하다.
+        /// </summary>
+        public string LocalPlayerId { get; private set; }
+
         private NetworkManager m_NetworkManager;
 
         /// <summary>연결 시도 마감 시각 (협업 규칙 B — 남은 시간이 아니라 끝나는 시점).</summary>
@@ -45,6 +53,7 @@ namespace TheShedding.Network
 
             Instance = this;
             m_NetworkManager = GetComponent<NetworkManager>();
+            LocalPlayerId = Guid.NewGuid().ToString("N");
         }
 
         private void OnEnable()
@@ -98,6 +107,7 @@ namespace TheShedding.Network
             }
 
             BeginConnecting();
+            ApplyConnectionPayload();
 
             // StartHost()는 소켓 바인딩까지 동기적으로 하므로 여기서 바로 실패를 알 수 있다.
             if (!m_NetworkManager.StartHost())
@@ -115,6 +125,7 @@ namespace TheShedding.Network
             }
 
             BeginConnecting();
+            ApplyConnectionPayload();
 
             // 여기서의 false는 "시도조차 못 했다"는 뜻. 서버가 없어서 실패하는 경우는
             // Update()의 타임아웃이 잡는다.
@@ -219,6 +230,15 @@ namespace TheShedding.Network
 
             Debug.LogWarning($"[ConnectionManager] 이미 {State} 상태이므로 요청을 무시합니다.");
             return false;
+        }
+
+        /// <summary>
+        /// 접속 시 서버로 보낼 식별자를 싣는다. 승인 콜백이 이 값을 읽어 심사한다.
+        /// 시작 직전에 넣어야 하며, 호스트도 자기 자신을 심사 대상으로 거치므로 함께 설정한다.
+        /// </summary>
+        private void ApplyConnectionPayload()
+        {
+            m_NetworkManager.NetworkConfig.ConnectionData = Encoding.UTF8.GetBytes(LocalPlayerId);
         }
 
         private void BeginConnecting()

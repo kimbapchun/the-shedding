@@ -329,6 +329,7 @@ GameObject:
   - component: {fileID: 499716745}
   - component: {fileID: 499716748}
   - component: {fileID: 499716749}
+  - component: {fileID: 499716750}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -389,7 +390,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 0169d7bf8288e42dab9f5a502f862c5a, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
-    ConnectionApproval: 0
+    ConnectionApproval: 1
     ConnectionData: 
     EnableTimeResync: 0
     TimeResyncInterval: 30
@@ -454,6 +455,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TheShedding.Network.NetworkSceneLoader
   gameSceneName: FirstFloorScene
   lobbySceneName: Lobby
+--- !u!114 &499716750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 499716744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee99c984ee9dc4debbc21cf5d77ffcc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TheShedding.Network.ConnectionApprovalHandler
+  maxPlayers: 5
 --- !u!1 &1137855457
 GameObject:
   m_ObjectHideFlags: 0
