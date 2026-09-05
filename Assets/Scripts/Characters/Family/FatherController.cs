@@ -27,7 +27,7 @@ namespace TheShedding.Characters
             bool hit = false;
             foreach (var col in hits)
             {
-                if (col.TryGetComponent<BaseCharacterController>(out var target))
+                if (col.TryGetComponent<RobberController>(out var target))
                 {
                     target.TakeDamage(attackDamage);
                     hit = true;

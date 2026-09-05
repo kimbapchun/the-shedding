@@ -32,6 +32,7 @@ namespace TheShedding.Characters
             bool hit = false;
             foreach (var col in hits)
             {
+                if (col.gameObject == gameObject) continue;
                 if (!col.TryGetComponent<BaseCharacterController>(out var target)) continue;
 
                 if (target.CurrentStatusEffect == StatusEffect.KnockedDown)
