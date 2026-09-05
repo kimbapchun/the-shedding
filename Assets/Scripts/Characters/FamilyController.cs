@@ -80,6 +80,7 @@ namespace TheShedding.Characters
 
         public override void OnAttackInput()
         {
+            if (!IsAlive()) return;
             if (!IsAttackReady) return;
             if (IsStunned) return;
             if (IsLying) return;
@@ -95,6 +96,7 @@ namespace TheShedding.Characters
 
         public override void OnSkillInput()
         {
+            if (!IsAlive()) return;
             if (!IsSkillReady) return;
             if (IsStunned) return;
 

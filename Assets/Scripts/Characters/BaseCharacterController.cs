@@ -96,6 +96,7 @@ namespace TheShedding.Characters
         // PlayerInputReader가 매 프레임 호출
         public virtual void Move(Vector2 input, bool sprintPressed)
         {
+            if (!IsAlive()) return;
             bool isMoving    = input != Vector2.zero;
             bool isLimping   = CurrentStatusEffect == StatusEffect.Limp || CurrentStatusEffect == StatusEffect.LimpAndBleed;
             bool isSprinting = isMoving && !isLimping && sprintPressed;
