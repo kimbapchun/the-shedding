@@ -11,6 +11,8 @@ namespace TheShedding.Characters
 
         public bool IsFlashlightOn { get; private set; }
 
+        private static readonly Collider[] FlashlightBuffer = new Collider[16];
+
         protected override void Awake()
         {
             moveSpeed = 5f;
@@ -28,12 +30,12 @@ namespace TheShedding.Characters
             // 플래시라이트가 켜진 동안 범위 내 가족을 지속 스턴
             if (IsFlashlightOn)
             {
-                Collider[] hits = Physics.OverlapSphere(
-                    transform.position, flashRange, familyLayer);
+                int count = Physics.OverlapSphereNonAlloc(
+                    transform.position, flashRange, FlashlightBuffer, familyLayer);
 
-                foreach (var col in hits)
+                for (int i = 0; i < count; i++)
                 {
-                    if (col.TryGetComponent<FamilyController>(out var family))
+                    if (FlashlightBuffer[i].TryGetComponent<FamilyController>(out var family))
                         family.ApplyFlashlightStun(flashStunDuration);
                 }
             }
