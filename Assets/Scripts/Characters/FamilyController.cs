@@ -13,9 +13,6 @@ namespace TheShedding.Characters
         [Header("Skill")]
         [SerializeField] protected float skillCooldownDuration = 3f;
 
-        [Header("Trap Slow")]
-        [SerializeField] private float trapSlowMultiplier = 0.5f;
-
         [Header("Flashlight Stun")]
         [SerializeField] private float defaultStunDuration = 2f;
 
@@ -23,10 +20,8 @@ namespace TheShedding.Characters
 
         protected float attackCooldownEndTime;
         protected float skillCooldownEndTime;
-        private float trapSlowEndTime;
         private float stunEndTime;
 
-        public bool IsTrapped    => Time.time < trapSlowEndTime;
         private bool IsStunned   => Time.time < stunEndTime;
         protected bool IsAttackReady => Time.time >= attackCooldownEndTime;
         protected bool IsSkillReady  => Time.time >= skillCooldownEndTime;
@@ -52,19 +47,6 @@ namespace TheShedding.Characters
                 return;
             }
             base.Move(input, sprintPressed);
-        }
-
-        // ── 함정 감속 ─────────────────────────────────────────────────────
-
-        public void ApplyTrapSlow(float duration)
-        {
-            trapSlowEndTime = Time.time + duration;
-        }
-
-        protected override float GetSpeedMultiplier()
-        {
-            if (IsTrapped) return trapSlowMultiplier;
-            return base.GetSpeedMultiplier();
         }
 
         // ── 플래시 스턴 ───────────────────────────────────────────────────

@@ -16,6 +16,9 @@ namespace TheShedding.Characters
         [SerializeField] private float sittingSpeedMultiplier = 0.6f;
         [SerializeField] private float lyingSpeedMultiplier = 0.4f;
         [SerializeField] public int BodyScale = 2;
+
+        [Header("Trap")]
+        [SerializeField] private float trapSlowMultiplier = 0.5f;
         public bool CanPassNarrowPath => BodyScale <= 2;
 
         [Header("Life")]
@@ -30,6 +33,8 @@ namespace TheShedding.Characters
         public int CurrentLifeSegments { get; protected set; }
         public StatusEffect CurrentStatusEffect { get; protected set; }
         protected float statusEffectEndTime;
+        private float trapSlowEndTime;
+        public bool IsTrapped => Time.time < trapSlowEndTime;
         public bool IsSitting { get; protected set; }
         public bool IsLying { get; protected set; }
 
@@ -145,11 +150,17 @@ namespace TheShedding.Characters
         {
             if (IsLying)   return lyingSpeedMultiplier;
             if (IsSitting) return sittingSpeedMultiplier;
+            if (IsTrapped) return trapSlowMultiplier;
             return CurrentStatusEffect switch
             {
                 StatusEffect.LimpAndBleed => BleedSpeedMultiplier,
                 _ => 1f
             };
+        }
+
+        public void ApplyTrapSlow(float duration)
+        {
+            trapSlowEndTime = Time.time + duration;
         }
 
         // ── 상호작용 ──────────────────────────────────────────────────────
