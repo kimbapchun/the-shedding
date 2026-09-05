@@ -40,6 +40,8 @@ namespace TheShedding.Characters
             base.Update();
         }
 
+        protected override bool CanAct() => base.CanAct() && !IsStunned;
+
         // ── 이동 (스턴 중 차단) ───────────────────────────────────────────
 
         public override void Move(Vector2 input, bool sprintPressed)

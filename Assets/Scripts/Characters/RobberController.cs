@@ -33,6 +33,9 @@ namespace TheShedding.Characters
             base.Update();
         }
 
+        protected override bool CanAct() =>
+            base.CanAct() && CurrentStatusEffect != StatusEffect.KnockedDown;
+
         // ── 버둥거림 게이지 ───────────────────────────────────────────────
 
         public void AddStruggleProgress(float amount)

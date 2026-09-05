@@ -151,6 +151,8 @@ namespace TheShedding.Characters
 
         public void TryInteract()
         {
+            if (!CanAct()) return;
+
             Collider[] hits = Physics.OverlapSphere(
                 transform.position, interactRadius, interactableLayer);
 
@@ -223,6 +225,7 @@ namespace TheShedding.Characters
         }
 
         public bool IsAlive() => CurrentLifeSegments > 0;
+        protected virtual bool CanAct() => IsAlive();
 
         protected virtual void OnDamageTaken(int amount) { }
         protected virtual void OnHealTaken(int amount) { }
