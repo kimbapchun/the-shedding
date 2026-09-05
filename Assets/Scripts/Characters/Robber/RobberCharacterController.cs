@@ -23,6 +23,8 @@ namespace TheShedding.Characters
         {
             base.Update();
 
+            if (!CanAct()) return;
+
             // 플래시라이트가 켜진 동안 범위 내 가족을 지속 스턴
             if (IsFlashlightOn)
             {

@@ -26,7 +26,6 @@ namespace TheShedding.Characters
 
         protected override void Update()
         {
-            // KnockedDown 중에는 서브클래스(플래시라이트 등) 로직도 차단
             if (CurrentStatusEffect == StatusEffect.KnockedDown)
                 return;
 
