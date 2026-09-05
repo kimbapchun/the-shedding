@@ -44,7 +44,6 @@ namespace TheShedding.Characters
 
         // ── 상수 ─────────────────────────────────────────────────────────
 
-        private const float LIMP_SPEED_MULTIPLIER  = 0.75f;
         private const float BLEED_SPEED_MULTIPLIER = 0.5f;
 
         // ── Unity 생명주기 ────────────────────────────────────────────────
@@ -107,7 +106,6 @@ namespace TheShedding.Characters
         {
             return currentStatusEffect switch
             {
-                StatusEffect.Limp         => LIMP_SPEED_MULTIPLIER,
                 StatusEffect.LimpAndBleed => BLEED_SPEED_MULTIPLIER,
                 _ => 1f
             };
