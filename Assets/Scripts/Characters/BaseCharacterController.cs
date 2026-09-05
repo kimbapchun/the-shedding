@@ -95,7 +95,9 @@ namespace TheShedding.Characters
             float multiplier = GetSpeedMultiplier();
             if (isSprinting) multiplier *= runSpeedMultiplier;
 
-            Vector3 velocity = new Vector3(input.x, 0f, input.y) * moveSpeed * multiplier;
+            Vector3 moveDir  = GetMoveDirection(input);
+            Vector3 velocity = moveDir * moveSpeed * multiplier;
+            velocity.y = rb.linearVelocity.y;
             rb.linearVelocity = velocity;
 
             if (animator != null)
@@ -105,11 +107,27 @@ namespace TheShedding.Characters
                 animator.SetBool("isLimping",  isMoving && isLimping);
             }
 
-            if (velocity != Vector3.zero)
+            if (isMoving)
             {
-                Quaternion toRotation = Quaternion.LookRotation(velocity, Vector3.up);
+                Quaternion toRotation = Quaternion.LookRotation(moveDir, Vector3.up);
                 transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
             }
+        }
+
+        private Vector3 GetMoveDirection(Vector2 input)
+        {
+            Transform cam = Camera.main?.transform;
+            if (cam == null)
+                return new Vector3(input.x, 0f, input.y);
+
+            Vector3 forward = cam.forward;
+            Vector3 right   = cam.right;
+            forward.y = 0f;
+            right.y   = 0f;
+            forward.Normalize();
+            right.Normalize();
+
+            return forward * input.y + right * input.x;
         }
 
         protected virtual float GetSpeedMultiplier()
