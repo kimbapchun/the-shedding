@@ -13,8 +13,6 @@ namespace TheShedding.Characters
         [Header("Skill")]
         [SerializeField] protected float skillCooldownDuration = 3f;
 
-        [Header("Flashlight Stun")]
-        [SerializeField] private float defaultStunDuration = 2f;
 
         private static readonly int HashIsAttacking = Animator.StringToHash("isAttacking");
 
@@ -53,8 +51,7 @@ namespace TheShedding.Characters
 
         public void ApplyFlashlightStun(float duration)
         {
-            float d = duration > 0f ? duration : defaultStunDuration;
-            stunEndTime = Time.time + d;
+            stunEndTime = Time.time + duration;
             StopMovement();
         }
 
