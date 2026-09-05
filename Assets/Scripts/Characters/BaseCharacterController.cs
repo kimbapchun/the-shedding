@@ -13,6 +13,8 @@ namespace TheShedding.Characters
         [SerializeField] protected float moveSpeed = 5f;
         [SerializeField] private float runSpeedMultiplier = 1.5f;
         [SerializeField] private float turnSpeed = 10f;
+        [SerializeField] private float sittingSpeedMultiplier = 0.6f;
+        [SerializeField] private float lyingSpeedMultiplier = 0.4f;
         [SerializeField] public int BodyScale = 2;
         public bool CanPassNarrowPath => BodyScale <= 2;
 
@@ -99,7 +101,7 @@ namespace TheShedding.Characters
             if (!IsAlive()) return;
             bool isMoving    = input != Vector2.zero;
             bool isLimping   = CurrentStatusEffect == StatusEffect.Limp || CurrentStatusEffect == StatusEffect.LimpAndBleed;
-            bool isSprinting = isMoving && !isLimping && sprintPressed;
+            bool isSprinting = isMoving && !isLimping && !IsSitting && !IsLying && sprintPressed;
 
             float multiplier = GetSpeedMultiplier();
             if (isSprinting) multiplier *= runSpeedMultiplier;
@@ -141,6 +143,8 @@ namespace TheShedding.Characters
 
         protected virtual float GetSpeedMultiplier()
         {
+            if (IsLying)   return lyingSpeedMultiplier;
+            if (IsSitting) return sittingSpeedMultiplier;
             return CurrentStatusEffect switch
             {
                 StatusEffect.LimpAndBleed => BleedSpeedMultiplier,
