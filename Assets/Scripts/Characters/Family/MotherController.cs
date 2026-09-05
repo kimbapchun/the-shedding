@@ -52,6 +52,13 @@ namespace TheShedding.Characters
 
         private void UpdateTrapPreview()
         {
+            if (!CanAct())
+            {
+                if (trapPreviewInstance != null)
+                    trapPreviewInstance.SetActive(false);
+                return;
+            }
+
             int idx = (int)selectedTrapType;
             bool canPlace = IsSkillReady
                 && trapPrefabs != null
