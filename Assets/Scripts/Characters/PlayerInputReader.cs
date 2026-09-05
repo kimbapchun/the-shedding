@@ -10,6 +10,9 @@ namespace TheShedding.Characters
         private BaseCharacterController controller;
         private PlayerInput playerInput;
 
+        private Vector2 moveInput;
+        private bool sprintInput;
+
         private InputAction moveAction;
         private InputAction sprintAction;
         private InputAction attackAction;
@@ -60,10 +63,13 @@ namespace TheShedding.Characters
 
         private void Update()
         {
-            controller.Move(
-                moveAction.ReadValue<Vector2>(),
-                sprintAction.ReadValue<float>() > 0f
-            );
+            moveInput  = moveAction.ReadValue<Vector2>();
+            sprintInput = sprintAction.ReadValue<float>() > 0f;
+        }
+
+        private void FixedUpdate()
+        {
+            controller.Move(moveInput, sprintInput);
         }
 
         private void OnAttackPerformed(InputAction.CallbackContext ctx)   => controller.OnAttackInput();
