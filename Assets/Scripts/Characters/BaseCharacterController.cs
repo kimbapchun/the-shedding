@@ -196,7 +196,7 @@ namespace TheShedding.Characters
         protected virtual int CalculateDamage(int rawAmount) => rawAmount;
 
         // 반영
-        public virtual void ApplyDamage(int amount)
+        protected virtual void ApplyDamage(int amount)
         {
             if (!IsAlive()) return;
             CurrentLifeSegments = Mathf.Max(0, CurrentLifeSegments - amount);
