@@ -46,6 +46,14 @@ namespace TheShedding.Characters
 
         private const float BleedSpeedMultiplier = 0.5f;
 
+        // ── 애니메이터 파라미터 해시 ──────────────────────────────────────
+
+        protected static readonly int HashIsWalking   = Animator.StringToHash("isWalking");
+        protected static readonly int HashIsSprinting = Animator.StringToHash("isSprinting");
+        protected static readonly int HashIsLimping   = Animator.StringToHash("isLimping");
+        protected static readonly int HashIsSitting   = Animator.StringToHash("isSitting");
+        protected static readonly int HashIsLying     = Animator.StringToHash("isLying");
+
         // ── Unity 생명주기 ────────────────────────────────────────────────
 
         protected virtual void Awake()
@@ -79,9 +87,9 @@ namespace TheShedding.Characters
             rb.linearVelocity = Vector3.zero;
             if (animator != null)
             {
-                animator.SetBool("isWalking",   false);
-                animator.SetBool("isSprinting", false);
-                animator.SetBool("isLimping",   false);
+                animator.SetBool(HashIsWalking,   false);
+                animator.SetBool(HashIsSprinting, false);
+                animator.SetBool(HashIsLimping,   false);
             }
         }
 
@@ -102,9 +110,9 @@ namespace TheShedding.Characters
 
             if (animator != null)
             {
-                animator.SetBool("isSprinting", isSprinting);
-                animator.SetBool("isWalking",  isMoving && !isLimping && !isSprinting);
-                animator.SetBool("isLimping",  isMoving && isLimping);
+                animator.SetBool(HashIsSprinting, isSprinting);
+                animator.SetBool(HashIsWalking,   isMoving && !isLimping && !isSprinting);
+                animator.SetBool(HashIsLimping,   isMoving && isLimping);
             }
 
             if (isMoving)
@@ -231,11 +239,11 @@ namespace TheShedding.Characters
             {
                 IsLying = false;
                 rb.linearVelocity = Vector3.zero;
-                if (animator != null) animator.SetBool("isLying", false);
+                if (animator != null) animator.SetBool(HashIsLying, false);
             }
 
             if (animator != null)
-                animator.SetBool("isSitting", sitting);
+                animator.SetBool(HashIsSitting, sitting);
         }
 
         public virtual void SetLyingState(bool lying)
@@ -247,11 +255,11 @@ namespace TheShedding.Characters
             {
                 IsSitting = false;
                 rb.linearVelocity = Vector3.zero;
-                if (animator != null) animator.SetBool("isSitting", false);
+                if (animator != null) animator.SetBool(HashIsSitting, false);
             }
 
             if (animator != null)
-                animator.SetBool("isLying", lying);
+                animator.SetBool(HashIsLying, lying);
         }
 
         // ── 입력 진입점 (PlayerInputReader → 서브클래스 override) ─────────

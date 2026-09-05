@@ -19,6 +19,8 @@ namespace TheShedding.Characters
         [Header("Flashlight Stun")]
         [SerializeField] private float defaultStunDuration = 2f;
 
+        private static readonly int HashIsAttacking = Animator.StringToHash("isAttacking");
+
         protected float attackCooldownEndTime;
         protected float skillCooldownEndTime;
         private float trapSlowEndTime;
@@ -81,7 +83,7 @@ namespace TheShedding.Characters
             if (IsLying) return;
 
             attackCooldownEndTime = Time.time + attackCooldownDuration;
-            animator?.SetTrigger("isAttacking");
+            animator?.SetTrigger(HashIsAttacking);
             TryAttack();
         }
 
