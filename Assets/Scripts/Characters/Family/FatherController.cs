@@ -36,7 +36,7 @@ namespace TheShedding.Characters
             return hit;
         }
 
-        // 우클릭 스킬: 없음
+        public override void OnSkillInput() { }
         protected override bool UseSkill() => false;
 
         protected override void OnDrawGizmosSelected()
