@@ -13,8 +13,8 @@ namespace TheShedding.Characters
         [SerializeField] protected float moveSpeed = 5f;
         [SerializeField] private float runSpeedMultiplier = 1.5f;
         [SerializeField] private float turnSpeed = 10f;
-        [SerializeField] public int bodyScale = 2;
-        [SerializeField] public bool canPassNarrowPath;
+        [SerializeField] public int BodyScale = 2;
+        [SerializeField] public bool CanPassNarrowPath;
 
         [Header("Life")]
         [SerializeField] protected int maxLifeSegments = 3;
@@ -25,11 +25,11 @@ namespace TheShedding.Characters
 
         // ── 런타임 상태 ──────────────────────────────────────────────────
 
-        public int currentLifeSegments { get; protected set; }
-        public StatusEffect currentStatusEffect { get; protected set; }
+        public int CurrentLifeSegments { get; protected set; }
+        public StatusEffect CurrentStatusEffect { get; protected set; }
         protected float statusEffectEndTime;
-        public bool isSitting { get; protected set; }
-        public bool isLying { get; protected set; }
+        public bool IsSitting { get; protected set; }
+        public bool IsLying { get; protected set; }
 
         // ── 이벤트 ───────────────────────────────────────────────────────
 
@@ -44,7 +44,7 @@ namespace TheShedding.Characters
 
         // ── 상수 ─────────────────────────────────────────────────────────
 
-        private const float BLEED_SPEED_MULTIPLIER = 0.5f;
+        private const float BleedSpeedMultiplier = 0.5f;
 
         // ── Unity 생명주기 ────────────────────────────────────────────────
 
@@ -58,8 +58,8 @@ namespace TheShedding.Characters
             if (animator != null)
                 animator.applyRootMotion = false;
 
-            currentLifeSegments = maxLifeSegments;
-            canPassNarrowPath = bodyScale <= 2;
+            CurrentLifeSegments = maxLifeSegments;
+            CanPassNarrowPath = BodyScale <= 2;
         }
 
         protected virtual void OnEnable() { }
@@ -90,7 +90,7 @@ namespace TheShedding.Characters
         public virtual void Move(Vector2 input, bool sprintPressed)
         {
             bool isMoving    = input != Vector2.zero;
-            bool isLimping   = currentStatusEffect == StatusEffect.Limp || currentStatusEffect == StatusEffect.LimpAndBleed;
+            bool isLimping   = CurrentStatusEffect == StatusEffect.Limp || CurrentStatusEffect == StatusEffect.LimpAndBleed;
             bool isSprinting = isMoving && !isLimping && sprintPressed;
 
             float multiplier = GetSpeedMultiplier();
@@ -115,9 +115,9 @@ namespace TheShedding.Characters
 
         protected virtual float GetSpeedMultiplier()
         {
-            return currentStatusEffect switch
+            return CurrentStatusEffect switch
             {
-                StatusEffect.LimpAndBleed => BLEED_SPEED_MULTIPLIER,
+                StatusEffect.LimpAndBleed => BleedSpeedMultiplier,
                 _ => 1f
             };
         }
@@ -152,10 +152,10 @@ namespace TheShedding.Characters
 
         public void ApplyStatusEffect(StatusEffect type, float duration)
         {
-            if (currentStatusEffect == StatusEffect.KnockedDown && type != StatusEffect.None)
+            if (CurrentStatusEffect == StatusEffect.KnockedDown && type != StatusEffect.None)
                 return;
 
-            currentStatusEffect = type;
+            CurrentStatusEffect = type;
             statusEffectEndTime = Time.time + duration;
             OnStatusChanged?.Invoke(type);
             OnStatusEffectApplied(type);
@@ -172,8 +172,8 @@ namespace TheShedding.Characters
         public virtual void ApplyDamage(int amount)
         {
             if (!IsAlive()) return;
-            currentLifeSegments = Mathf.Max(0, currentLifeSegments - amount);
-            OnLifeChanged?.Invoke(currentLifeSegments);
+            CurrentLifeSegments = Mathf.Max(0, CurrentLifeSegments - amount);
+            OnLifeChanged?.Invoke(CurrentLifeSegments);
             OnDamageTaken(amount);
             if (!IsAlive())
             {
@@ -186,8 +186,8 @@ namespace TheShedding.Characters
         public virtual void ApplyHeal(int amount)
         {
             if (!IsAlive()) return;
-            currentLifeSegments = Mathf.Min(currentLifeSegments + amount, maxLifeSegments);
-            OnLifeChanged?.Invoke(currentLifeSegments);
+            CurrentLifeSegments = Mathf.Min(CurrentLifeSegments + amount, maxLifeSegments);
+            OnLifeChanged?.Invoke(CurrentLifeSegments);
             OnHealTaken(amount);
         }
 
@@ -197,7 +197,7 @@ namespace TheShedding.Characters
             ApplyDamage(CalculateDamage(rawAmount));
         }
 
-        public bool IsAlive() => currentLifeSegments > 0;
+        public bool IsAlive() => CurrentLifeSegments > 0;
 
         protected virtual void OnDamageTaken(int amount) { }
         protected virtual void OnHealTaken(int amount) { }
@@ -207,12 +207,12 @@ namespace TheShedding.Characters
 
         public virtual void SetSittingState(bool sitting)
         {
-            if (currentStatusEffect == StatusEffect.KnockedDown) return;
+            if (CurrentStatusEffect == StatusEffect.KnockedDown) return;
 
-            isSitting = sitting;
+            IsSitting = sitting;
             if (sitting)
             {
-                isLying = false;
+                IsLying = false;
                 rb.linearVelocity = Vector3.zero;
                 if (animator != null) animator.SetBool("isLying", false);
             }
@@ -223,12 +223,12 @@ namespace TheShedding.Characters
 
         public virtual void SetLyingState(bool lying)
         {
-            if (currentStatusEffect == StatusEffect.KnockedDown) return;
+            if (CurrentStatusEffect == StatusEffect.KnockedDown) return;
 
-            isLying = lying;
+            IsLying = lying;
             if (lying)
             {
-                isSitting = false;
+                IsSitting = false;
                 rb.linearVelocity = Vector3.zero;
                 if (animator != null) animator.SetBool("isSitting", false);
             }

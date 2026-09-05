@@ -9,12 +9,12 @@ namespace TheShedding.Characters
         [SerializeField] private float flashStunDuration = 2f;
         [SerializeField] private LayerMask familyLayer;
 
-        public bool isFlashlightOn { get; private set; }
+        public bool IsFlashlightOn { get; private set; }
 
         protected override void Awake()
         {
             moveSpeed = 5f;
-            bodyScale = 2;
+            BodyScale = 2;
             maxLifeSegments = 3;
             base.Awake();
         }
@@ -24,7 +24,7 @@ namespace TheShedding.Characters
             base.Update();
 
             // 플래시라이트가 켜진 동안 범위 내 가족을 지속 스턴
-            if (isFlashlightOn)
+            if (IsFlashlightOn)
             {
                 Collider[] hits = Physics.OverlapSphere(
                     transform.position, flashRange, familyLayer);
@@ -41,12 +41,12 @@ namespace TheShedding.Characters
 
         public override void OnSkillInput()
         {
-            isFlashlightOn = !isFlashlightOn;
+            IsFlashlightOn = !IsFlashlightOn;
         }
 
         private void OnDrawGizmosSelected()
         {
-            Gizmos.color = isFlashlightOn
+            Gizmos.color = IsFlashlightOn
                 ? new Color(1f, 1f, 0f, 0.6f)
                 : new Color(1f, 1f, 0f, 0.2f);
             Gizmos.DrawWireSphere(transform.position, flashRange);

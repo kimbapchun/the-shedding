@@ -15,7 +15,7 @@ namespace TheShedding.Characters
         protected override void Awake()
         {
             moveSpeed = 6f;
-            bodyScale = 1;
+            BodyScale = 1;
             maxLifeSegments = 2;
             attackCooldownDuration = 0.8f;
             skillCooldownDuration = 5f;
@@ -34,8 +34,8 @@ namespace TheShedding.Characters
             {
                 if (!col.TryGetComponent<BaseCharacterController>(out var target)) continue;
 
-                if (target.currentStatusEffect == StatusEffect.KnockedDown)
-                    target.TakeDamage(target.currentLifeSegments);
+                if (target.CurrentStatusEffect == StatusEffect.KnockedDown)
+                    target.TakeDamage(target.CurrentLifeSegments);
                 else
                     target.ApplyStatusEffect(StatusEffect.LimpAndBleed, limpAndBleedDuration);
 

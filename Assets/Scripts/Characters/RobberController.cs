@@ -14,7 +14,7 @@ namespace TheShedding.Characters
 
         public override void Move(Vector2 input, bool sprintPressed)
         {
-            if (currentStatusEffect == StatusEffect.KnockedDown)
+            if (CurrentStatusEffect == StatusEffect.KnockedDown)
             {
                 StopMovement();
                 return;
@@ -27,7 +27,7 @@ namespace TheShedding.Characters
         protected override void Update()
         {
             // KnockedDown 중에는 서브클래스(플래시라이트 등) 로직도 차단
-            if (currentStatusEffect == StatusEffect.KnockedDown)
+            if (CurrentStatusEffect == StatusEffect.KnockedDown)
                 return;
 
             base.Update();
@@ -37,7 +37,7 @@ namespace TheShedding.Characters
 
         public void AddStruggleProgress(float amount)
         {
-            if (currentStatusEffect != StatusEffect.KnockedDown) return;
+            if (CurrentStatusEffect != StatusEffect.KnockedDown) return;
 
             struggleGauge += amount;
             if (struggleGauge >= struggleGaugeMax)
@@ -52,7 +52,7 @@ namespace TheShedding.Characters
         // 붕대·햄버거 등 회복 아이템이 공통으로 호출
         public void Recover()
         {
-            if (currentStatusEffect == StatusEffect.KnockedDown) return;
+            if (CurrentStatusEffect == StatusEffect.KnockedDown) return;
             ApplyHeal(1);
             ApplyStatusEffect(StatusEffect.None, 0f);
         }

@@ -12,7 +12,7 @@ namespace TheShedding.Characters
         protected override void Awake()
         {
             moveSpeed = 3.5f;
-            bodyScale = 3;
+            BodyScale = 3;
             maxLifeSegments = 3;
             attackCooldownDuration = 1f;
             base.Awake();

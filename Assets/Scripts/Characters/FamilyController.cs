@@ -32,7 +32,7 @@ namespace TheShedding.Characters
         protected override void Update()
         {
             // 상태이상 자동 회복
-            if (currentStatusEffect != StatusEffect.None && Time.time >= statusEffectEndTime)
+            if (CurrentStatusEffect != StatusEffect.None && Time.time >= statusEffectEndTime)
                 ApplyStatusEffect(StatusEffect.None, 0f);
 
             base.Update();
@@ -78,7 +78,7 @@ namespace TheShedding.Characters
         {
             if (!IsAttackReady) return;
             if (IsStunned) return;
-            if (isLying) return;
+            if (IsLying) return;
 
             attackCooldownEndTime = Time.time + attackCooldownDuration;
             animator?.SetTrigger("isAttacking");

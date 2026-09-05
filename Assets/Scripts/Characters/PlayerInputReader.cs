@@ -69,8 +69,8 @@ namespace TheShedding.Characters
         private void OnAttackPerformed(InputAction.CallbackContext ctx)   => controller.OnAttackInput();
         private void OnSkillPerformed(InputAction.CallbackContext ctx)    => controller.OnSkillInput();
         private void OnInteractPerformed(InputAction.CallbackContext ctx) => controller.TryInteract();
-        private void OnSitPerformed(InputAction.CallbackContext ctx)      => controller.SetSittingState(!controller.isSitting);
-        private void OnLiePerformed(InputAction.CallbackContext ctx)      => controller.SetLyingState(!controller.isLying);
+        private void OnSitPerformed(InputAction.CallbackContext ctx)      => controller.SetSittingState(!controller.IsSitting);
+        private void OnLiePerformed(InputAction.CallbackContext ctx)      => controller.SetLyingState(!controller.IsLying);
         private void OnPreviousPerformed(InputAction.CallbackContext ctx) => controller.OnPreviousItem();
         private void OnNextPerformed(InputAction.CallbackContext ctx)     => controller.OnNextItem();
     }

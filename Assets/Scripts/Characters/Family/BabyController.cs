@@ -11,7 +11,7 @@ namespace TheShedding.Characters
         protected override void Awake()
         {
             moveSpeed = 8f;
-            bodyScale = 1;
+            BodyScale = 1;
             maxLifeSegments = 2;
             skillCooldownDuration = 2f;
             base.Awake();
