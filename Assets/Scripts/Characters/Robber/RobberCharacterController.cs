@@ -44,8 +44,9 @@ namespace TheShedding.Characters
             IsFlashlightOn = !IsFlashlightOn;
         }
 
-        private void OnDrawGizmosSelected()
+        protected override void OnDrawGizmosSelected()
         {
+            base.OnDrawGizmosSelected();
             Gizmos.color = IsFlashlightOn
                 ? new Color(1f, 1f, 0f, 0.6f)
                 : new Color(1f, 1f, 0f, 0.2f);

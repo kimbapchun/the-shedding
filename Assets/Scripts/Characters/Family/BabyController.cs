@@ -41,8 +41,9 @@ namespace TheShedding.Characters
             return false;
         }
 
-        private void OnDrawGizmosSelected()
+        protected override void OnDrawGizmosSelected()
         {
+            base.OnDrawGizmosSelected();
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(transform.position, stealRange);
         }

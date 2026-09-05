@@ -39,8 +39,9 @@ namespace TheShedding.Characters
         // 우클릭 스킬: 없음
         protected override bool UseSkill() => false;
 
-        private void OnDrawGizmosSelected()
+        protected override void OnDrawGizmosSelected()
         {
+            base.OnDrawGizmosSelected();
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, attackRange);
         }

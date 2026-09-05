@@ -285,7 +285,7 @@ namespace TheShedding.Characters
 
         // ── 에디터 Gizmo ──────────────────────────────────────────────────
 
-        private void OnDrawGizmosSelected()
+        protected virtual void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, interactRadius);
