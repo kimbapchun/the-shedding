@@ -72,7 +72,7 @@ namespace TheShedding.Characters
                 return;
             }
 
-            // 함정 타입이 바뀌었으면 프리뷰 재생성
+            // TODO: 인벤토리 시스템 이후 타입 전환 경로 추가 시, 타입 변경 감지로 교체
             if (trapPreviewInstance == null)
                 CreatePreview(idx);
 
