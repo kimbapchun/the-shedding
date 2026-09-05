@@ -14,7 +14,7 @@ namespace TheShedding.Characters
         [SerializeField] private float runSpeedMultiplier = 1.5f;
         [SerializeField] private float turnSpeed = 10f;
         [SerializeField] public int BodyScale = 2;
-        [SerializeField] public bool CanPassNarrowPath;
+        public bool CanPassNarrowPath => BodyScale <= 2;
 
         [Header("Life")]
         [SerializeField] protected int maxLifeSegments = 3;
@@ -59,7 +59,6 @@ namespace TheShedding.Characters
                 animator.applyRootMotion = false;
 
             CurrentLifeSegments = maxLifeSegments;
-            CanPassNarrowPath = BodyScale <= 2;
         }
 
         protected virtual void OnEnable() { }
