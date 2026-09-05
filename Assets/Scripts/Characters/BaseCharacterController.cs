@@ -188,7 +188,18 @@ namespace TheShedding.Characters
             OnStatusEffectApplied(type);
         }
 
-        protected virtual void OnStatusEffectApplied(StatusEffect type) { }
+        protected virtual void OnStatusEffectApplied(StatusEffect type)
+        {
+            if (type != StatusEffect.KnockedDown) return;
+
+            IsSitting = false;
+            IsLying   = false;
+            if (animator != null)
+            {
+                animator.SetBool(HashIsSitting, false);
+                animator.SetBool(HashIsLying,   false);
+            }
+        }
 
         // ── 데미지 / 생사 ─────────────────────────────────────────────────
 
@@ -235,7 +246,7 @@ namespace TheShedding.Characters
 
         public virtual void SetSittingState(bool sitting)
         {
-            if (CurrentStatusEffect == StatusEffect.KnockedDown) return;
+            if (!CanAct()) return;
 
             IsSitting = sitting;
             if (sitting)
@@ -251,7 +262,7 @@ namespace TheShedding.Characters
 
         public virtual void SetLyingState(bool lying)
         {
-            if (CurrentStatusEffect == StatusEffect.KnockedDown) return;
+            if (!CanAct()) return;
 
             IsLying = lying;
             if (lying)
