@@ -75,6 +75,17 @@ namespace TheShedding.Characters
 
         // ── 이동 ─────────────────────────────────────────────────────────
 
+        protected void StopMovement()
+        {
+            rb.linearVelocity = Vector3.zero;
+            if (animator != null)
+            {
+                animator.SetBool("isWalking",   false);
+                animator.SetBool("isSprinting", false);
+                animator.SetBool("isLimping",   false);
+            }
+        }
+
         // PlayerInputReader가 매 프레임 호출
         public virtual void Move(Vector2 input, bool sprintPressed)
         {

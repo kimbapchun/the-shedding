@@ -16,7 +16,7 @@ namespace TheShedding.Characters
         {
             if (currentStatusEffect == StatusEffect.KnockedDown)
             {
-                rb.linearVelocity = Vector3.zero;
+                StopMovement();
                 return;
             }
             base.Move(input, sprintPressed);

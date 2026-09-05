@@ -44,7 +44,7 @@ namespace TheShedding.Characters
         {
             if (IsStunned)
             {
-                rb.linearVelocity = Vector3.zero;
+                StopMovement();
                 return;
             }
             base.Move(input, sprintPressed);
@@ -69,7 +69,7 @@ namespace TheShedding.Characters
         {
             float d = duration > 0f ? duration : defaultStunDuration;
             stunEndTime = Time.time + d;
-            rb.linearVelocity = Vector3.zero;
+            StopMovement();
         }
 
         // ── 기본 공격 (PlayerInputReader → OnAttackInput) ─────────────────
