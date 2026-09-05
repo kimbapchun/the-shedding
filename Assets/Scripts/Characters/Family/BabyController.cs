@@ -17,7 +17,8 @@ namespace TheShedding.Characters
             base.Awake();
         }
 
-        // 아기는 기본 공격 없음
+        public override void OnAttackInput() { }
+
         protected override bool TryAttack() => false;
 
         // 우클릭 스킬: 훔치기

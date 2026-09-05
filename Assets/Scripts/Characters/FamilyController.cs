@@ -80,9 +80,9 @@ namespace TheShedding.Characters
             if (IsStunned) return;
             if (isLying) return;
 
+            attackCooldownEndTime = Time.time + attackCooldownDuration;
             animator?.SetTrigger("isAttacking");
-            if (TryAttack())
-                attackCooldownEndTime = Time.time + attackCooldownDuration;
+            TryAttack();
         }
 
         protected abstract bool TryAttack();
