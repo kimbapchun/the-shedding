@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 91e8d1f82312f457ca6eeeb5c1767701
+guid: dc2e70a397dbb438090ef2ca56670aa9
 ModelImporter:
   serializedVersion: 24501
   internalIDToNameTable: []
@@ -49,9 +49,9 @@ ModelImporter:
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
+      keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
-      heightFromFeet: 0
+      heightFromFeet: 1
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
@@ -59,7 +59,7 @@ ModelImporter:
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 0.9
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -301,13 +301,13 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: dad mesh(Clone)
+    - name: Dad_Mesh(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Armature
-      parentName: dad mesh(Clone)
+      parentName: Dad_Mesh(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
       scale: {x: 1, y: 1, z: 1}
@@ -431,8 +431,8 @@ ModelImporter:
       position: {x: 0.00016479981, y: 0.0781786, z: 0.14979081}
       rotation: {x: -0.000000013606039, y: 0.85518694, z: 0.51831895, w: -0.0009410421}
       scale: {x: 1, y: 0.99999964, z: 0.9999997}
-    - name: dad mesh
-      parentName: dad mesh(Clone)
+    - name: Dad_Mesh
+      parentName: Dad_Mesh(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
       scale: {x: 1, y: 1, z: 1}
@@ -448,7 +448,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: d18dd2bede7534fd58a11d1eda52967a, type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1

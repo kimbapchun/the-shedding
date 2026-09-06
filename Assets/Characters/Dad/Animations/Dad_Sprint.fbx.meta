@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2101aac81d78942d0afa5f9f2da0877f
+guid: d35c3b38819a34453816a6c89e7df1b6
 ModelImporter:
   serializedVersion: 24501
   internalIDToNameTable: []
@@ -32,11 +32,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Dad_Walk
+      name: Dad_Sprint
       takeName: Scene
       internalID: -623603649343465320
       firstFrame: 1
-      lastFrame: 32
+      lastFrame: 19
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
