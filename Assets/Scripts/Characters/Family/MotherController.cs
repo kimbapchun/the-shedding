@@ -125,13 +125,8 @@ namespace TheShedding.Characters
 
         protected override bool UseSkill()
         {
-            int idx = (int)selectedTrapType;
-            if (trapPrefabs == null || idx >= trapPrefabs.Length || trapPrefabs[idx] == null)
-                return false;
-
-            OnTrapPlaced?.Invoke(selectedTrapType, GetPlacementPosition());
-            DestroyPreview();
-            return true;
+            // TODO: 함정 시스템 구현 후 OnTrapPlaced 구독자 연동
+            return false;
         }
 
         protected override void OnDrawGizmosSelected()
