@@ -59,9 +59,8 @@ namespace TheShedding.Characters
 
         public override void OnAttackInput()
         {
-            if (!IsAlive()) return;
+            if (!CanAct()) return;
             if (!IsAttackReady) return;
-            if (IsStunned) return;
             if (IsLying) return;
 
             attackCooldownEndTime = Time.time + attackCooldownDuration;
@@ -75,9 +74,8 @@ namespace TheShedding.Characters
 
         public override void OnSkillInput()
         {
-            if (!IsAlive()) return;
+            if (!CanAct()) return;
             if (!IsSkillReady) return;
-            if (IsStunned) return;
 
             if (UseSkill())
                 skillCooldownEndTime = Time.time + skillCooldownDuration;

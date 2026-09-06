@@ -12,6 +12,8 @@ namespace TheShedding.Characters
         [Header("Bark")]
         [SerializeField] private float barkRadius = 8f;
 
+        private static readonly Collider[] AttackBuffer = new Collider[8];
+
         protected override void Awake()
         {
             moveSpeed = 6f;
@@ -26,19 +28,20 @@ namespace TheShedding.Characters
         // KnockedDown 강도 → 즉사 / 일반 강도 → LimpAndBleed 부여
         protected override bool TryAttack()
         {
-            Collider[] hits = Physics.OverlapSphere(
-                transform.position, biteRange, attackTargetLayer);
+            int count = Physics.OverlapSphereNonAlloc(
+                transform.position, biteRange, AttackBuffer, attackTargetLayer);
 
             bool hit = false;
-            foreach (var col in hits)
+            for (int i = 0; i < count; i++)
             {
+                var col = AttackBuffer[i];
                 if (col.gameObject == gameObject) continue;
                 if (!col.TryGetComponent<BaseCharacterController>(out var target)) continue;
 
                 if (target.CurrentStatusEffect == StatusEffect.KnockedDown)
                     target.TakeDamage(target.CurrentLifeSegments);
                 else
-                    target.ApplyStatusEffect(StatusEffect.LimpAndBleed, limpAndBleedDuration);
+                    target.TakeStatusEffect(StatusEffect.LimpAndBleed, limpAndBleedDuration);
 
                 hit = true;
             }
@@ -50,7 +53,7 @@ namespace TheShedding.Characters
         {
             // TODO: SoundDetectionSystem 구현 후 연동
             //       SoundDetectionSystem.RevealNearbyNoise(transform.position, barkRadius)
-            return true;
+            return false;
         }
 
         protected override void OnDrawGizmosSelected()

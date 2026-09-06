@@ -9,6 +9,8 @@ namespace TheShedding.Characters
         [SerializeField] private LayerMask attackTargetLayer;
         [SerializeField] private int attackDamage = 1;
 
+        private static readonly Collider[] AttackBuffer = new Collider[8];
+
         protected override void Awake()
         {
             moveSpeed = 3.5f;
@@ -21,13 +23,13 @@ namespace TheShedding.Characters
         // 기본 공격 (좌클릭): 근접 타격
         protected override bool TryAttack()
         {
-            Collider[] hits = Physics.OverlapSphere(
-                transform.position, attackRange, attackTargetLayer);
+            int count = Physics.OverlapSphereNonAlloc(
+                transform.position, attackRange, AttackBuffer, attackTargetLayer);
 
             bool hit = false;
-            foreach (var col in hits)
+            for (int i = 0; i < count; i++)
             {
-                if (col.TryGetComponent<RobberController>(out var target))
+                if (AttackBuffer[i].TryGetComponent<RobberController>(out var target))
                 {
                     target.TakeDamage(attackDamage);
                     hit = true;

@@ -17,6 +17,8 @@ namespace TheShedding.Characters
         private TrapType selectedTrapType;
         private GameObject trapPreviewInstance;
 
+        private static readonly Collider[] AttackBuffer = new Collider[8];
+
         public event Action<TrapType, Vector3> OnTrapPlaced;
 
         protected override void Awake()
@@ -106,13 +108,13 @@ namespace TheShedding.Characters
 
         protected override bool TryAttack()
         {
-            Collider[] hits = Physics.OverlapSphere(
-                transform.position, attackRange, attackTargetLayer);
+            int count = Physics.OverlapSphereNonAlloc(
+                transform.position, attackRange, AttackBuffer, attackTargetLayer);
 
             bool hit = false;
-            foreach (var col in hits)
+            for (int i = 0; i < count; i++)
             {
-                if (col.TryGetComponent<RobberController>(out var target))
+                if (AttackBuffer[i].TryGetComponent<RobberController>(out var target))
                 {
                     target.TakeDamage(attackDamage);
                     hit = true;

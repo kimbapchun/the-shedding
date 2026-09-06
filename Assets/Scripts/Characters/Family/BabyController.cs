@@ -8,6 +8,8 @@ namespace TheShedding.Characters
         [SerializeField] private float stealRange = 0.8f;
         [SerializeField] private LayerMask stealTargetLayer;
 
+        private static readonly Collider[] StealBuffer = new Collider[8];
+
         protected override void Awake()
         {
             moveSpeed = 8f;
@@ -26,14 +28,15 @@ namespace TheShedding.Characters
 
         public bool TryStealItem()
         {
-            Collider[] hits = Physics.OverlapSphere(
-                transform.position, stealRange, stealTargetLayer);
+            int count = Physics.OverlapSphereNonAlloc(
+                transform.position, stealRange, StealBuffer, stealTargetLayer);
 
             RobberController nearest = null;
             float minDist = float.MaxValue;
 
-            foreach (var col in hits)
+            for (int i = 0; i < count; i++)
             {
+                var col = StealBuffer[i];
                 if (col.gameObject == gameObject) continue;
                 if (!col.TryGetComponent<RobberController>(out var robber)) continue;
 

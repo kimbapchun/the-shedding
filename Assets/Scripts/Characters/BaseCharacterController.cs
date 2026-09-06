@@ -61,6 +61,9 @@ namespace TheShedding.Characters
         protected static readonly int HashIsSitting   = Animator.StringToHash("isSitting");
         protected static readonly int HashIsLying     = Animator.StringToHash("isLying");
 
+        // ── 물리 버퍼 (NonAlloc) ─────────────────────────────────────────
+        private static readonly Collider[] InteractBuffer = new Collider[8];
+
         // ── Unity 생명주기 ────────────────────────────────────────────────
 
         protected virtual void Awake()
@@ -169,14 +172,15 @@ namespace TheShedding.Characters
         {
             if (!CanAct()) return;
 
-            Collider[] hits = Physics.OverlapSphere(
-                transform.position, interactRadius, interactableLayer);
+            int count = Physics.OverlapSphereNonAlloc(
+                transform.position, interactRadius, InteractBuffer, interactableLayer);
 
             IInteractable closest = null;
             float minDist = float.MaxValue;
 
-            foreach (var hit in hits)
+            for (int i = 0; i < count; i++)
             {
+                var hit = InteractBuffer[i];
                 if (!hit.TryGetComponent<IInteractable>(out var interactable)) continue;
                 if (!interactable.CanInteract(this)) continue;
 
@@ -193,7 +197,12 @@ namespace TheShedding.Characters
 
         // ── 상태이상 ──────────────────────────────────────────────────────
 
-        public void ApplyStatusEffect(StatusEffect type, float duration)
+        public void TakeStatusEffect(StatusEffect type, float duration)
+        {
+            ApplyStatusEffect(type, duration);
+        }
+
+        protected void ApplyStatusEffect(StatusEffect type, float duration)
         {
             if (CurrentStatusEffect == StatusEffect.KnockedDown && type != StatusEffect.None)
                 return;
