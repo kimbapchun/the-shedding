@@ -45,6 +45,7 @@ namespace TheShedding.Characters
 
         public override void OnSkillInput()
         {
+            if (!CanAct()) return;
             IsFlashlightOn = !IsFlashlightOn;
         }
 
