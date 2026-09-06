@@ -90,6 +90,7 @@ namespace TheShedding.Characters
                 col.enabled = false;
 
             // TODO: 반투명 머티리얼 적용 (에디터에서 별도 머티리얼 지정 필요)
+            // TODO: 함정 프리팹에 스크립트·파티클·오디오 추가 시 전용 프리뷰 프리팹으로 교체
         }
 
         private void DestroyPreview()
