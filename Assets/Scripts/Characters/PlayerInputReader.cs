@@ -20,6 +20,7 @@ namespace TheShedding.Characters
         private InputAction interactAction;
         private InputAction sitAction;
         private InputAction lieAction;
+        private InputAction jumpAction;
         private InputAction previousAction;
         private InputAction nextAction;
 
@@ -35,6 +36,7 @@ namespace TheShedding.Characters
             interactAction = playerInput.actions["Interact"];
             sitAction      = playerInput.actions["Sit"];
             lieAction      = playerInput.actions["Lie"];
+            jumpAction     = playerInput.actions["Jump"];
             previousAction = playerInput.actions["Previous"];
             nextAction     = playerInput.actions["Next"];
         }
@@ -43,6 +45,7 @@ namespace TheShedding.Characters
         {
             attackAction.performed   += OnAttackPerformed;
             skillAction.performed    += OnSkillPerformed;
+            jumpAction.performed     += OnJumpPerformed;
             interactAction.performed += OnInteractPerformed;
             sitAction.performed      += OnSitPerformed;
             lieAction.performed      += OnLiePerformed;
@@ -54,6 +57,7 @@ namespace TheShedding.Characters
         {
             attackAction.performed   -= OnAttackPerformed;
             skillAction.performed    -= OnSkillPerformed;
+            jumpAction.performed     -= OnJumpPerformed;
             interactAction.performed -= OnInteractPerformed;
             sitAction.performed      -= OnSitPerformed;
             lieAction.performed      -= OnLiePerformed;
@@ -74,6 +78,7 @@ namespace TheShedding.Characters
 
         private void OnAttackPerformed(InputAction.CallbackContext ctx)   => controller.OnAttackInput();
         private void OnSkillPerformed(InputAction.CallbackContext ctx)    => controller.OnSkillInput();
+        private void OnJumpPerformed(InputAction.CallbackContext ctx)     => controller.OnJumpInput();
         private void OnInteractPerformed(InputAction.CallbackContext ctx) => controller.TryInteract();
         private void OnSitPerformed(InputAction.CallbackContext ctx)      => controller.SetSittingState(!controller.IsSitting);
         private void OnLiePerformed(InputAction.CallbackContext ctx)      => controller.SetLyingState(!controller.IsLying);

@@ -60,6 +60,7 @@ namespace TheShedding.Characters
         protected static readonly int HashIsLimping   = Animator.StringToHash("isLimping");
         protected static readonly int HashIsSitting   = Animator.StringToHash("isSitting");
         protected static readonly int HashIsLying     = Animator.StringToHash("isLying");
+        protected static readonly int HashIsJumping   = Animator.StringToHash("isJumping");
 
         // ── 물리 버퍼 (NonAlloc) ─────────────────────────────────────────
         private static readonly Collider[] InteractBuffer = new Collider[8];
@@ -305,6 +306,11 @@ namespace TheShedding.Characters
 
         public virtual void OnAttackInput() { }
         public virtual void OnSkillInput() { }
+        public virtual void OnJumpInput()
+        {
+            if (!CanAct()) return;
+            animator?.SetTrigger(HashIsJumping);
+        }
         public virtual void OnPreviousItem() { }
         public virtual void OnNextItem() { }
 
