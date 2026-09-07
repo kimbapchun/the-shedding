@@ -15,9 +15,9 @@ namespace TheShedding
         [SerializeField] private float maxPitch = 60f;
 
         [Header("Position")]
-        [SerializeField] private float standingPivotHeight = 1.5f;
-        [SerializeField] private float sittingPivotHeight  = 0.9f;
-        [SerializeField] private float lyingPivotHeight    = 0.3f;
+        [SerializeField] private float standingPivotHeight = 4f;
+        [SerializeField] private float sittingPivotHeight  = 2.5f;
+        [SerializeField] private float lyingPivotHeight    = 1.0f;
         [SerializeField] private float smoothSpeed = 10f;
         [SerializeField] private float pivotHeightSpeed = 2f;
 
