@@ -33,7 +33,7 @@ namespace TheShedding.Characters
             base.Update();
         }
 
-        protected override bool CanAct() => base.CanAct() && !IsStunned;
+        protected override bool CanAct() => base.CanAct() && !IsStunned && CurrentStatusEffect != StatusEffect.KnockedDown;
 
         // ── 이동 (스턴 중 차단) ───────────────────────────────────────────
 
