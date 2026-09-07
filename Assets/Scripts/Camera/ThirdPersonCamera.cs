@@ -30,8 +30,27 @@ namespace TheShedding
         private float yaw;
         private float pitch = 20f;
 
+        public void SetTarget(BaseCharacterController controller)
+        {
+            target = controller;
+            currentPivotHeight = standingPivotHeight;
+        }
+
+        public void ApplySettings(CameraSettings settings)
+        {
+            standingPivotHeight = settings.standingPivotHeight;
+            sittingPivotHeight  = settings.sittingPivotHeight;
+            lyingPivotHeight    = settings.lyingPivotHeight;
+            distance            = settings.distance;
+            GetComponent<Camera>().fieldOfView = settings.fov;
+            currentPivotHeight  = standingPivotHeight;
+        }
+
         private void Start()
         {
+            if (target == null)
+                target = FindObjectOfType<BaseCharacterController>();
+
             yaw   = transform.eulerAngles.y;
             pitch = transform.eulerAngles.x;
             currentPivotHeight = standingPivotHeight;
