@@ -30,9 +30,12 @@ namespace TheShedding
         private float yaw;
         private float pitch = 20f;
 
-        public void SetTarget(BaseCharacterController controller)
+        private InputAction lookAction;
+
+        public void SetTarget(BaseCharacterController controller, PlayerInput input)
         {
             target = controller;
+            lookAction = input.actions["Look"];
             currentPivotHeight = standingPivotHeight;
         }
 
@@ -61,9 +64,9 @@ namespace TheShedding
 
         private void LateUpdate()
         {
-            if (target == null) return;
+            if (target == null || lookAction == null) return;
 
-            Vector2 delta = Mouse.current.delta.ReadValue();
+            Vector2 delta = lookAction.ReadValue<Vector2>();
             yaw   += delta.x * sensitivity;
             pitch -= delta.y * sensitivity;
             pitch  = Mathf.Clamp(pitch, minPitch, maxPitch);
