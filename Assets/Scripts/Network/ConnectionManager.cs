@@ -282,17 +282,18 @@ namespace TheShedding.Network
         {
             const string reason = "연결 시간이 초과되었습니다. 호스트가 실행 중인지 확인하세요.";
 
+            // Shutdown()의 정리는 프레임 끝으로 밀리지만, 상태를 먼저 확정해야 그때 불리는
+            // HandleStopped가 이 끊김을 새 사건으로 다시 판단하지 않는다.
             if (m_IsReconnecting)
             {
-                // 순서를 뒤집으면 Shutdown()이 부르는 OnClientStopped가 아직 Connecting인
-                // 상태를 보고 이 끊김을 새로 판단해버린다.
                 TryReconnectOrFail(canReconnect: true, reason: reason);
-                m_NetworkManager.Shutdown();
-                return;
+            }
+            else
+            {
+                Fail(reason);
             }
 
             m_NetworkManager.Shutdown();
-            Fail(reason);
         }
 
         private void AttemptReconnect()
