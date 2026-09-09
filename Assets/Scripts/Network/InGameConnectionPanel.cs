@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,6 +18,9 @@ namespace TheShedding.Network
         [SerializeField] private GameObject panel;
 
         [SerializeField] private Button leaveButton;
+
+        [Tooltip("재접속 중임을 알리는 텍스트. 없어도 동작한다.")]
+        [SerializeField] private TMP_Text statusText;
 
         private ConnectionManager m_Connection;
 
@@ -71,9 +75,16 @@ namespace TheShedding.Network
             var inLobby = loader != null &&
                           SceneManager.GetActiveScene().name == loader.LobbySceneName;
 
-            var connected = m_Connection.State == ConnectionState.Connected ||
-                            m_Connection.State == ConnectionState.Reconnecting;
+            var state = m_Connection.State;
+            var reconnecting = state == ConnectionState.Reconnecting;
+            var connected = state == ConnectionState.Connected || reconnecting;
             panel.SetActive(!inLobby && connected);
+
+            if (statusText != null)
+            {
+                // 재접속 중에는 패널이 그대로라 화면이 멈춘 것처럼 보인다.
+                statusText.text = reconnecting ? "재접속 시도 중..." : string.Empty;
+            }
         }
     }
 }
