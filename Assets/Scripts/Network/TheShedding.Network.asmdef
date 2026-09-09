@@ -1,0 +1,19 @@
+{
+    "name": "TheShedding.Network",
+    "rootNamespace": "TheShedding.Network",
+    "references": [
+        "Unity.Netcode.Runtime",
+        "UnityEngine.UI",
+        "Unity.TextMeshPro",
+        "TheShedding.Gameplay"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
