@@ -48,6 +48,7 @@ namespace TheShedding.Characters
 
         protected Rigidbody rb;
         protected Animator animator;
+        private Camera cam;
 
         // ── 상수 ─────────────────────────────────────────────────────────
 
@@ -71,6 +72,7 @@ namespace TheShedding.Characters
         {
             rb = GetComponent<Rigidbody>();
             animator = GetComponent<Animator>();
+            cam = Camera.main;
 
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
@@ -136,12 +138,11 @@ namespace TheShedding.Characters
 
         private Vector3 GetMoveDirection(Vector2 input)
         {
-            Transform cam = Camera.main?.transform;
             if (cam == null)
                 return new Vector3(input.x, 0f, input.y);
 
-            Vector3 forward = cam.forward;
-            Vector3 right   = cam.right;
+            Vector3 forward = cam.transform.forward;
+            Vector3 right   = cam.transform.right;
             forward.y = 0f;
             right.y   = 0f;
             forward.Normalize();
@@ -260,6 +261,8 @@ namespace TheShedding.Characters
         {
             ApplyDamage(CalculateDamage(rawAmount));
         }
+
+        public void SetCamera(Camera camera) { cam = camera; }
 
         public bool IsAlive() => CurrentLifeSegments > 0;
         protected virtual bool CanAct() => IsAlive();
