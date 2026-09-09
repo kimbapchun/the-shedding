@@ -4,6 +4,7 @@ using TheShedding.Characters;
 
 namespace TheShedding
 {
+    [RequireComponent(typeof(Camera))]
     public class ThirdPersonCamera : MonoBehaviour
     {
         [SerializeField] private BaseCharacterController target;
@@ -31,6 +32,12 @@ namespace TheShedding
         private float pitch;
 
         private InputAction lookAction;
+        private Camera cam;
+
+        private void Awake()
+        {
+            cam = GetComponent<Camera>();
+        }
 
         public void SetTarget(BaseCharacterController controller, PlayerInput input)
         {
@@ -45,7 +52,7 @@ namespace TheShedding
             sittingPivotHeight  = settings.sittingPivotHeight;
             lyingPivotHeight    = settings.lyingPivotHeight;
             distance            = settings.distance;
-            GetComponent<Camera>().fieldOfView = settings.fov;
+            cam.fieldOfView = settings.fov;
             currentPivotHeight  = standingPivotHeight;
         }
 
