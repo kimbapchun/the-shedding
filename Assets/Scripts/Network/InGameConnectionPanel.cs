@@ -11,7 +11,7 @@ namespace TheShedding.Network
     /// NetworkManager의 자식으로 두어 씬 전환에도 살아남게 한다.
     /// 게임 씬 파일을 건드리지 않아 맵 작업과 병합 충돌이 나지 않는 이점도 있다.
     /// </summary>
-    public class InGameUI : MonoBehaviour
+    public class InGameConnectionPanel : MonoBehaviour
     {
         [Tooltip("게임 중에만 보여줄 패널. 이 컴포넌트가 붙은 오브젝트가 아니라 자식이어야 한다.")]
         [SerializeField] private GameObject panel;
@@ -26,7 +26,7 @@ namespace TheShedding.Network
 
             if (m_Connection == null)
             {
-                Debug.LogError("[InGameUI] ConnectionManager를 찾지 못했습니다. " +
+                Debug.LogError("[InGameConnectionPanel] ConnectionManager를 찾지 못했습니다. " +
                                "NetworkManager 오브젝트에 붙어 있는지 확인하세요.");
                 enabled = false;
                 return;

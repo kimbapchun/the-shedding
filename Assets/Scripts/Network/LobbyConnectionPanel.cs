@@ -7,9 +7,9 @@ namespace TheShedding.Network
     /// <summary>
     /// 부트스트랩 씬의 로비 UI. NGO를 전혀 모르고 ConnectionManager의 상태만 보고 갱신한다.
     /// 씬 전환 시 이 오브젝트는 파괴되지만 매니저들은 살아남으므로,
-    /// 로비로 돌아오면 새 LobbyUI가 기존 매니저에 다시 붙는다.
+    /// 로비로 돌아오면 새 패널이 기존 매니저에 다시 붙는다.
     /// </summary>
-    public class LobbyUI : MonoBehaviour
+    public class LobbyConnectionPanel : MonoBehaviour
     {
         [SerializeField] private Button hostButton;
         [SerializeField] private Button clientButton;
@@ -29,7 +29,7 @@ namespace TheShedding.Network
 
             if (m_Connection == null)
             {
-                Debug.LogError("[LobbyUI] ConnectionManager를 찾지 못했습니다. " +
+                Debug.LogError("[LobbyConnectionPanel] ConnectionManager를 찾지 못했습니다. " +
                                "NetworkManager 오브젝트에 ConnectionManager가 붙어 있는지 확인하세요.");
                 enabled = false;
                 return;
@@ -88,7 +88,7 @@ namespace TheShedding.Network
         {
             if (m_SceneLoader == null)
             {
-                Debug.LogError("[LobbyUI] NetworkSceneLoader를 찾지 못했습니다. " +
+                Debug.LogError("[LobbyConnectionPanel] NetworkSceneLoader를 찾지 못했습니다. " +
                                "NetworkManager 오브젝트에 붙어 있는지 확인하세요.");
                 return;
             }
