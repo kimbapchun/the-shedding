@@ -28,7 +28,7 @@ namespace TheShedding
         [SerializeField] private LayerMask collisionMask = ~0;
 
         private float yaw;
-        private float pitch = 20f;
+        private float pitch;
 
         private InputAction lookAction;
 
@@ -54,8 +54,15 @@ namespace TheShedding
             if (target == null)
                 target = FindObjectOfType<BaseCharacterController>();
 
+            if (lookAction == null && target != null)
+            {
+                var playerInput = target.GetComponent<PlayerInput>();
+                if (playerInput != null)
+                    lookAction = playerInput.actions["Look"];
+            }
+
             yaw   = transform.eulerAngles.y;
-            pitch = transform.eulerAngles.x;
+            pitch = Mathf.DeltaAngle(0f, transform.eulerAngles.x);
             currentPivotHeight = standingPivotHeight;
 
             Cursor.lockState = CursorLockMode.Locked;
