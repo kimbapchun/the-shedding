@@ -113,3 +113,15 @@ ProjectSettings/Packages/com.unity.probuilder/Settings.json
 
 # ProBuilder auto-generated data (material palettes, etc.)
 /[Aa]ssets/ProBuilder Data/
+
+# Multiplayer Play Mode 가상 플레이어 설정 (개발자별)
+ProjectSettings/VirtualProjectsConfig.json
+
+# Multiplayer Tools (Network Profiler) 자동 생성 설정 (개발자별)
+ProjectSettings/Packages/com.unity.multiplayer.tools/
+
+# Unity AI Assistant 자동 생성 설정 (개발자별)
+ProjectSettings/Packages/com.unity.ai.assistant/
+
+# Local-only notes, not for commit
+*.local.md
