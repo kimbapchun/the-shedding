@@ -25,7 +25,7 @@ namespace TheShedding
 
         [Header("Collision")]
         [SerializeField] private float collisionRadius = 0.3f;
-        [SerializeField] private LayerMask collisionMask = ~0;
+        [SerializeField] private LayerMask collisionMask;
 
         private float yaw;
         private float pitch;
@@ -95,7 +95,7 @@ namespace TheShedding
 
         private float GetCollisionDistance(Vector3 pivot, Vector3 direction)
         {
-            if (Physics.SphereCast(pivot, collisionRadius, direction, out RaycastHit hit, distance, collisionMask))
+            if (Physics.SphereCast(pivot, collisionRadius, direction, out RaycastHit hit, distance, collisionMask, QueryTriggerInteraction.Ignore))
                 return Mathf.Max(hit.distance - collisionRadius, 0f);
 
             return distance;
