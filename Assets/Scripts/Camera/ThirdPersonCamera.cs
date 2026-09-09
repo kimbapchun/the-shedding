@@ -89,7 +89,10 @@ namespace TheShedding
             float   actualDist = GetCollisionDistance(pivot, direction);
             Vector3 desired    = pivot + direction * actualDist;
 
-            transform.position = Vector3.Lerp(transform.position, desired, smoothSpeed * Time.deltaTime);
+            float currentDist  = Vector3.Distance(transform.position, pivot);
+            transform.position = actualDist < currentDist
+                ? desired
+                : Vector3.Lerp(transform.position, desired, smoothSpeed * Time.deltaTime);
             transform.rotation = rotation;
         }
 
