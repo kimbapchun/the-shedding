@@ -17,6 +17,13 @@ namespace TheShedding.Network
         [Tooltip("Connecting 상태가 이 시간을 넘기면 실패로 처리한다.")]
         [SerializeField] private float connectTimeoutSeconds = 10f;
 
+        [Header("재연결")]
+        [Tooltip("예기치 않게 끊겼을 때 자동으로 재접속을 시도할 최대 횟수.")]
+        [SerializeField] private int maxReconnectAttempts = 3;
+
+        [Tooltip("재접속 시도 사이에 기다리는 시간(초).")]
+        [SerializeField] private float reconnectRetryIntervalSeconds = 2f;
+
         /// <summary>연결 상태가 실제로 바뀔 때만 발행.</summary>
         public event Action<ConnectionState> OnStateChanged;
 
@@ -41,6 +48,13 @@ namespace TheShedding.Network
         private float m_ConnectDeadline;
 
         private string m_LastFailureReason;
+
+        private int m_ReconnectAttempt;
+
+        /// <summary>이게 없으면 사용자가 처음 누른 접속 시도의 타임아웃까지 재시도해버린다.</summary>
+        private bool m_IsReconnecting;
+
+        private float m_ReconnectRetryDeadline;
 
         private void Awake()
         {
@@ -80,19 +94,25 @@ namespace TheShedding.Network
 
         private void Update()
         {
-            if (State != ConnectionState.Connecting)
-            {
-                return;
-            }
-
-            // StartClient()는 서버가 없어도 true를 돌려주므로, 직접 시간을 재지 않으면
-            // 영원히 Connecting에 멈춘다.
             // unscaledTime을 쓰는 이유: timeScale은 무시해야 하고(게임을 멈춰도 연결은 진행 중),
             // realtimeSinceStartup은 에디터 Pause 시간까지 세서 재개 즉시 타임아웃이 터진다.
-            if (Time.unscaledTime >= m_ConnectDeadline)
+            switch (State)
             {
-                m_NetworkManager.Shutdown();
-                Fail("연결 시간이 초과되었습니다. 호스트가 실행 중인지 확인하세요.");
+                case ConnectionState.Connecting:
+                    // StartClient()는 서버가 없어도 true를 돌려주므로, 직접 시간을 재지 않으면
+                    // 영원히 Connecting에 멈춘다.
+                    if (Time.unscaledTime >= m_ConnectDeadline)
+                    {
+                        HandleConnectTimeout();
+                    }
+                    break;
+
+                case ConnectionState.Reconnecting:
+                    if (Time.unscaledTime >= m_ReconnectRetryDeadline)
+                    {
+                        AttemptReconnect();
+                    }
+                    break;
             }
         }
 
@@ -144,6 +164,7 @@ namespace TheShedding.Network
             }
 
             m_LastFailureReason = null;
+            ResetReconnectState();
 
             // 상태를 먼저 바꿔두면 Shutdown()이 부를 HandleStopped가 "이미 정리됨"으로 보고
             // 빠져나간다. 그래서 직접 끊은 경우엔 실패 메시지가 뜨지 않는다.
@@ -169,6 +190,7 @@ namespace TheShedding.Network
         {
             if (m_NetworkManager.IsHost)
             {
+                ResetReconnectState();
                 SetState(ConnectionState.Connected);
             }
         }
@@ -178,6 +200,7 @@ namespace TheShedding.Network
         {
             if (clientId == m_NetworkManager.LocalClientId)
             {
+                ResetReconnectState();
                 SetState(ConnectionState.Connected);
             }
         }
@@ -190,24 +213,45 @@ namespace TheShedding.Network
                 return;
             }
 
-            HandleStopped();
+            HandleStopped(ShouldRetryAfterDisconnect());
         }
 
+        /// <summary>
+        /// 호스트가 나가면(ClosedByRemote) 방이 사라지므로 재시도는 시간 낭비다.
+        /// 연결이 조용히 죽은 경우만 호스트가 살아 있을 수 있어 재시도할 가치가 있다.
+        /// 단 호스트가 크래시로 사라져도 이 값으로 보여서 그때는 헛시도를 하게 된다.
+        /// </summary>
+        private bool ShouldRetryAfterDisconnect()
+        {
+            return m_NetworkManager.NetworkConfig.NetworkTransport.DisconnectEvent
+                == NetworkTransport.DisconnectEvents.ProtocolTimeout;
+        }
+
+        /// <summary>내 서버가 죽은 경우라 재접속할 상대 자체가 없다.</summary>
         private void HandleServerStopped(bool wasHost)
         {
-            HandleStopped();
+            HandleStopped(canReconnect: false);
         }
 
         /// <summary>여기까지 온 것은 의도하지 않게 끊긴 경우뿐이다(Disconnect()는 위에서 걸러진다).</summary>
-        private void HandleStopped()
+        private void HandleStopped(bool canReconnect)
         {
-            if (State == ConnectionState.Disconnected)
+            // Reconnecting이면 재접속 흐름이 스스로 부른 Shutdown()의 결과다. 이때
+            // DisconnectEvent가 TransportShutdown이라, 다시 판단하면 재시도가 취소된다.
+            if (State == ConnectionState.Disconnected || State == ConnectionState.Reconnecting)
             {
                 return;
             }
 
-            // DisconnectReason은 서버가 보낸 사유와 NGO의 영문 진단 문자열을 같은 자리에서
-            // 반환한다. 구분할 공개 API가 없어 진단 문자열의 고정 접두사로 판별한다.
+            TryReconnectOrFail(canReconnect, DescribeDisconnectReason());
+        }
+
+        /// <summary>
+        /// DisconnectReason은 서버가 보낸 사유와 NGO의 영문 진단 문자열을 같은 자리에서
+        /// 반환한다. 구분할 공개 API가 없어 진단 문자열의 고정 접두사로 판별한다.
+        /// </summary>
+        private string DescribeDisconnectReason()
+        {
             var reason = m_NetworkManager.DisconnectReason;
             var isDiagnostic = string.IsNullOrEmpty(reason) || reason.StartsWith("[Disconnect Event]");
 
@@ -216,7 +260,61 @@ namespace TheShedding.Network
                 Debug.Log($"[ConnectionManager] 끊김 상세: {reason}");
             }
 
-            Fail(isDiagnostic ? "연결이 끊어졌습니다." : reason);
+            return isDiagnostic ? "연결이 끊어졌습니다." : reason;
+        }
+
+        private void TryReconnectOrFail(bool canReconnect, string reason)
+        {
+            if (canReconnect && m_ReconnectAttempt < maxReconnectAttempts)
+            {
+                m_LastFailureReason = reason;
+                m_IsReconnecting = true;
+                m_ReconnectRetryDeadline = Time.unscaledTime + reconnectRetryIntervalSeconds;
+                SetState(ConnectionState.Reconnecting);
+                return;
+            }
+
+            ResetReconnectState();
+            Fail(reason);
+        }
+
+        private void HandleConnectTimeout()
+        {
+            const string reason = "연결 시간이 초과되었습니다. 호스트가 실행 중인지 확인하세요.";
+
+            if (m_IsReconnecting)
+            {
+                // 순서를 뒤집으면 Shutdown()이 부르는 OnClientStopped가 아직 Connecting인
+                // 상태를 보고 이 끊김을 새로 판단해버린다.
+                TryReconnectOrFail(canReconnect: true, reason: reason);
+                m_NetworkManager.Shutdown();
+                return;
+            }
+
+            m_NetworkManager.Shutdown();
+            Fail(reason);
+        }
+
+        private void AttemptReconnect()
+        {
+            m_ReconnectAttempt++;
+            m_ConnectDeadline = Time.unscaledTime + connectTimeoutSeconds;
+            SetState(ConnectionState.Connecting);
+            ApplyConnectionPayload();
+
+            Debug.Log($"[ConnectionManager] 재접속 시도 {m_ReconnectAttempt}/{maxReconnectAttempts}");
+
+            // 시도조차 못 한 경우도 타임아웃과 같은 경로로 처리한다.
+            if (!m_NetworkManager.StartClient())
+            {
+                HandleConnectTimeout();
+            }
+        }
+
+        private void ResetReconnectState()
+        {
+            m_ReconnectAttempt = 0;
+            m_IsReconnecting = false;
         }
 
         // ── 내부 ─────────────────────────────────────────────────────────

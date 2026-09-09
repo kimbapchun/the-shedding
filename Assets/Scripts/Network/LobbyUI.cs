@@ -113,6 +113,7 @@ namespace TheShedding.Network
                 ConnectionState.Disconnected => "연결 없음",
                 ConnectionState.Connecting => "연결 중...",
                 ConnectionState.Connected => "연결됨",
+                ConnectionState.Reconnecting => "재접속 시도 중...",
                 _ => state.ToString()
             };
         }

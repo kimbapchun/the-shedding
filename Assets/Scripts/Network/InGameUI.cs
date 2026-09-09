@@ -71,7 +71,9 @@ namespace TheShedding.Network
             var inLobby = loader != null &&
                           SceneManager.GetActiveScene().name == loader.LobbySceneName;
 
-            panel.SetActive(!inLobby && m_Connection.State == ConnectionState.Connected);
+            var connected = m_Connection.State == ConnectionState.Connected ||
+                            m_Connection.State == ConnectionState.Reconnecting;
+            panel.SetActive(!inLobby && connected);
         }
     }
 }
