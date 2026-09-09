@@ -168,8 +168,8 @@ namespace TheShedding.Network
 
             // 상태를 먼저 바꿔두면 Shutdown()이 부를 HandleStopped가 "이미 정리됨"으로 보고
             // 빠져나간다. 그래서 직접 끊은 경우엔 실패 메시지가 뜨지 않는다.
-            m_NetworkManager.Shutdown();
             SetState(ConnectionState.Disconnected);
+            m_NetworkManager.Shutdown();
         }
 
         /// <summary>
