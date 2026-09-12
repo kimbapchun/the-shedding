@@ -5,7 +5,11 @@
         "Unity.Netcode.Runtime",
         "UnityEngine.UI",
         "Unity.TextMeshPro",
-        "TheShedding.Gameplay"
+        "TheShedding.Gameplay",
+        "Unity.Networking.Transport",
+        "Unity.Services.Core",
+        "Unity.Services.Authentication",
+        "Unity.Services.Multiplayer"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

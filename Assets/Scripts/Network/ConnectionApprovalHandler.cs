@@ -20,6 +20,8 @@ namespace TheShedding.Network
         [Tooltip("호스트를 포함한 최대 접속 인원.")]
         [SerializeField] private int maxPlayers = 5;
 
+        public int MaxPlayers => maxPlayers;
+
         private NetworkManager m_NetworkManager;
 
         /// <summary>승인된 접속의 clientId → 식별자. 재접속한 사람을 알아보는 근거가 된다.</summary>

@@ -1,6 +1,8 @@
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 
 namespace TheShedding.Network
@@ -10,6 +12,8 @@ namespace TheShedding.Network
     /// NetworkManager와 같은 GameObject에 붙여야 씬 전환에도 함께 살아남는다.
     /// </summary>
     [RequireComponent(typeof(NetworkManager))]
+    [RequireComponent(typeof(UnityTransport))]
+    [RequireComponent(typeof(ConnectionApprovalHandler))]
     public class ConnectionManager : MonoBehaviour
     {
         public static ConnectionManager Instance { get; private set; }
@@ -42,7 +46,18 @@ namespace TheShedding.Network
         /// </summary>
         public string LocalPlayerId { get; private set; }
 
+        /// <summary>호스트가 다른 사람에게 알려줄 Relay 참가 코드. 클라이언트는 자기가 입력한 코드.</summary>
+        public string JoinCode { get; private set; }
+
         private NetworkManager m_NetworkManager;
+        private UnityTransport m_Transport;
+        private ConnectionApprovalHandler m_Approval;
+
+        /// <summary>
+        /// Relay 할당을 기다리는 사이 사용자가 끊거나 타임아웃이 나면 그 결과는 버려야 한다.
+        /// 시작할 때마다 올려두고, await 뒤에 값이 달라졌으면 뒤늦게 온 응답으로 본다.
+        /// </summary>
+        private int m_AttemptId;
 
         /// <summary>연결 시도 마감 시각 (협업 규칙 B — 남은 시간이 아니라 끝나는 시점).</summary>
         private float m_ConnectDeadline;
@@ -67,6 +82,8 @@ namespace TheShedding.Network
 
             Instance = this;
             m_NetworkManager = GetComponent<NetworkManager>();
+            m_Transport = GetComponent<UnityTransport>();
+            m_Approval = GetComponent<ConnectionApprovalHandler>();
             LocalPlayerId = Guid.NewGuid().ToString("N");
         }
 
@@ -118,33 +135,67 @@ namespace TheShedding.Network
 
         // ── 외부 진입점 ──────────────────────────────────────────────────
 
-        /// <summary>호스트(서버 + 클라이언트 겸용)로 시작한다.</summary>
-        public void StartHost()
+        /// <summary>Relay 방을 만들고 호스트(서버 + 클라이언트 겸용)로 시작한다. 참가 코드는 JoinCode에 담긴다.</summary>
+        public async void StartHost()
         {
             if (!CanStart())
             {
                 return;
             }
 
+            JoinCode = null;
             BeginConnecting();
+            var attemptId = m_AttemptId;
+
+            string joinCode;
+            try
+            {
+                joinCode = await RelayConnector.AllocateHostAsync(m_Transport, m_Approval.MaxPlayers - 1);
+            }
+            catch (Exception e)
+            {
+                FailRelayIfCurrent(attemptId, "방을 만들지 못했습니다.", e);
+                return;
+            }
+
+            if (attemptId != m_AttemptId)
+            {
+                return;
+            }
+
+            JoinCode = joinCode;
             ApplyConnectionPayload();
 
             // StartHost()는 소켓 바인딩까지 동기적으로 하므로 여기서 바로 실패를 알 수 있다.
             if (!m_NetworkManager.StartHost())
             {
-                Fail("호스트를 시작하지 못했습니다. 포트가 이미 사용 중일 수 있습니다.");
+                Fail("호스트를 시작하지 못했습니다.");
             }
         }
 
-        /// <summary>UnityTransport에 설정된 주소로 접속을 시도한다.</summary>
-        public void StartClient()
+        /// <summary>참가 코드로 Relay 방에 접속을 시도한다.</summary>
+        public async void StartClient(string joinCode)
         {
             if (!CanStart())
             {
                 return;
             }
 
+            joinCode = joinCode?.Trim().ToUpperInvariant();
+            if (string.IsNullOrEmpty(joinCode))
+            {
+                Fail("참가 코드를 입력하세요.");
+                return;
+            }
+
+            JoinCode = joinCode;
             BeginConnecting();
+
+            if (!await TryJoinRelayAsync(m_AttemptId, "방을 찾지 못했습니다. 참가 코드를 확인하세요."))
+            {
+                return;
+            }
+
             ApplyConnectionPayload();
 
             // 여기서의 false는 "시도조차 못 했다"는 뜻. 서버가 없어서 실패하는 경우는
@@ -152,6 +203,44 @@ namespace TheShedding.Network
             if (!m_NetworkManager.StartClient())
             {
                 Fail("클라이언트를 시작하지 못했습니다.");
+            }
+        }
+
+        /// <summary>
+        /// Relay 합류 후에도 같은 시도인지 확인한다. false면 이미 실패 처리됐거나 사용자가 취소한 것이다.
+        /// </summary>
+        private async Task<bool> TryJoinRelayAsync(int attemptId, string failureReason)
+        {
+            try
+            {
+                await RelayConnector.JoinAsync(m_Transport, JoinCode);
+            }
+            catch (Exception e)
+            {
+                FailRelayIfCurrent(attemptId, failureReason, e);
+                return false;
+            }
+
+            return attemptId == m_AttemptId;
+        }
+
+        /// <summary>뒤늦게 온 실패는 이미 다른 상태로 넘어간 뒤라 화면에 띄우면 안 된다.</summary>
+        private void FailRelayIfCurrent(int attemptId, string reason, Exception e)
+        {
+            Debug.LogWarning($"[ConnectionManager] Relay 오류: {e.Message}");
+
+            if (attemptId != m_AttemptId)
+            {
+                return;
+            }
+
+            if (m_IsReconnecting)
+            {
+                TryReconnectOrFail(canReconnect: true, reason: reason);
+            }
+            else
+            {
+                Fail(reason);
             }
         }
 
@@ -296,14 +385,21 @@ namespace TheShedding.Network
             m_NetworkManager.Shutdown();
         }
 
-        private void AttemptReconnect()
+        private async void AttemptReconnect()
         {
             m_ReconnectAttempt++;
             m_ConnectDeadline = Time.unscaledTime + connectTimeoutSeconds;
             SetState(ConnectionState.Connecting);
-            ApplyConnectionPayload();
 
             Debug.Log($"[ConnectionManager] 재접속 시도 {m_ReconnectAttempt}/{maxReconnectAttempts}");
+
+            // 끊긴 Relay 합류는 재사용할 수 없어 같은 코드로 새로 받는다.
+            if (!await TryJoinRelayAsync(m_AttemptId, "방에 다시 들어가지 못했습니다."))
+            {
+                return;
+            }
+
+            ApplyConnectionPayload();
 
             // 시도조차 못 한 경우도 타임아웃과 같은 경로로 처리한다.
             if (!m_NetworkManager.StartClient())
@@ -364,6 +460,8 @@ namespace TheShedding.Network
                 return;
             }
 
+            // 상태가 바뀌면 진행 중이던 Relay 요청의 결과는 더 이상 유효하지 않다.
+            m_AttemptId++;
             State = next;
             OnStateChanged?.Invoke(next);
         }

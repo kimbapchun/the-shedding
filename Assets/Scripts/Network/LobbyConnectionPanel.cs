@@ -15,6 +15,7 @@ namespace TheShedding.Network
         [SerializeField] private Button clientButton;
         [SerializeField] private Button disconnectButton;
         [SerializeField] private Button startGameButton;
+        [SerializeField] private TMP_InputField joinCodeInput;
         [SerializeField] private TMP_Text statusText;
 
         private ConnectionManager m_Connection;
@@ -36,7 +37,7 @@ namespace TheShedding.Network
             }
 
             hostButton.onClick.AddListener(m_Connection.StartHost);
-            clientButton.onClick.AddListener(m_Connection.StartClient);
+            clientButton.onClick.AddListener(HandleClientClicked);
             disconnectButton.onClick.AddListener(m_Connection.Disconnect);
             startGameButton.onClick.AddListener(HandleStartGameClicked);
 
@@ -71,7 +72,7 @@ namespace TheShedding.Network
             // 매니저가 이 오브젝트보다 오래 살기 때문에, 해제하지 않으면 다음 상태 변화 때
             // 파괴된 객체를 호출하려다 MissingReferenceException이 난다.
             hostButton.onClick.RemoveListener(m_Connection.StartHost);
-            clientButton.onClick.RemoveListener(m_Connection.StartClient);
+            clientButton.onClick.RemoveListener(HandleClientClicked);
             disconnectButton.onClick.RemoveListener(m_Connection.Disconnect);
             startGameButton.onClick.RemoveListener(HandleStartGameClicked);
 
@@ -82,6 +83,11 @@ namespace TheShedding.Network
             {
                 m_SceneLoader.OnSceneLoadFailed -= HandleConnectionFailed;
             }
+        }
+
+        private void HandleClientClicked()
+        {
+            m_Connection.StartClient(joinCodeInput.text);
         }
 
         private void HandleStartGameClicked()
@@ -102,6 +108,7 @@ namespace TheShedding.Network
 
             hostButton.interactable = idle;
             clientButton.interactable = idle;
+            joinCodeInput.interactable = idle;
             disconnectButton.interactable = !idle;
 
             // 클라이언트가 눌러도 NetworkSceneLoader가 막지만, 애초에 누를 수 없게 둔다.
@@ -112,7 +119,7 @@ namespace TheShedding.Network
             {
                 ConnectionState.Disconnected => "연결 없음",
                 ConnectionState.Connecting => "연결 중...",
-                ConnectionState.Connected => "연결됨",
+                ConnectionState.Connected => $"연결됨 · 참가 코드: {m_Connection.JoinCode}",
                 ConnectionState.Reconnecting => "재접속 시도 중...",
                 _ => state.ToString()
             };
