@@ -64,6 +64,8 @@ namespace TheShedding.Characters
         protected static readonly int HashIsJumping   = Animator.StringToHash("isJumping");
         protected static readonly int HashIsDead      = Animator.StringToHash("isDead");
 
+        private static readonly int JumpStateHash = Animator.StringToHash("Jump");
+
         // ── 물리 버퍼 (NonAlloc) ─────────────────────────────────────────
         private static readonly Collider[] InteractBuffer = new Collider[8];
 
@@ -88,7 +90,7 @@ namespace TheShedding.Characters
 
         private void OnAnimatorMove()
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
+            if (animator.GetCurrentAnimatorStateInfo(0).shortNameHash == JumpStateHash)
             {
                 Vector3 pos = rb.position;
                 pos.y += animator.deltaPosition.y;
