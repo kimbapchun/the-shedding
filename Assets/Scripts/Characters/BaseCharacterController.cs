@@ -62,6 +62,7 @@ namespace TheShedding.Characters
         protected static readonly int HashIsSitting   = Animator.StringToHash("isSitting");
         protected static readonly int HashIsLying     = Animator.StringToHash("isLying");
         protected static readonly int HashIsJumping   = Animator.StringToHash("isJumping");
+        protected static readonly int HashIsDead      = Animator.StringToHash("isDead");
 
         // ── 물리 버퍼 (NonAlloc) ─────────────────────────────────────────
         private static readonly Collider[] InteractBuffer = new Collider[8];
@@ -77,7 +78,7 @@ namespace TheShedding.Characters
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
             if (animator != null)
-                animator.applyRootMotion = false;
+                animator.applyRootMotion = true;
 
             CurrentLifeSegments = maxLifeSegments;
         }
@@ -85,11 +86,23 @@ namespace TheShedding.Characters
         protected virtual void OnEnable() { }
         protected virtual void OnDisable() { }
 
+        private void OnAnimatorMove()
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Jump"))
+            {
+                Vector3 pos = rb.position;
+                pos.y += animator.deltaPosition.y;
+                rb.MovePosition(pos);
+            }
+        }
+
         protected virtual void Update()
         {
 #if UNITY_EDITOR
             if (Keyboard.current.pKey.isPressed)
                 ApplyStatusEffect(StatusEffect.Limp, 0.5f);
+            if (Keyboard.current.oKey.wasPressedThisFrame)
+                TakeDamage(CurrentLifeSegments);
 #endif
         }
 
@@ -269,7 +282,10 @@ namespace TheShedding.Characters
 
         protected virtual void OnDamageTaken(int amount) { }
         protected virtual void OnHealTaken(int amount) { }
-        protected virtual void OnDeath() { }
+        protected virtual void OnDeath()
+        {
+            animator?.SetBool(HashIsDead, true);
+        }
 
         // ── 앉기 / 눕기 ───────────────────────────────────────────────────
 
