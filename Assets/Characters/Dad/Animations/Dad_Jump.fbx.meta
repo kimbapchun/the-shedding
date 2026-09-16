@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d7f5b032bcd8c4e0296ef538e6882198
+guid: 1ec8187a094e94ed78581716b049f87d
 ModelImporter:
   serializedVersion: 24501
   internalIDToNameTable: []
@@ -36,7 +36,7 @@ ModelImporter:
       takeName: Scene
       internalID: -623603649343465320
       firstFrame: 1
-      lastFrame: 75
+      lastFrame: 50
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -448,7 +448,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: b85278ed46f0f4cb19d1bdc973dce019, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
