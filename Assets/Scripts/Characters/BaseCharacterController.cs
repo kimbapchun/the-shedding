@@ -37,6 +37,7 @@ namespace TheShedding.Characters
         public bool IsTrapped => Time.time < trapSlowEndTime;
         public bool IsSitting { get; protected set; }
         public bool IsLying { get; protected set; }
+        private bool wasJumping;
 
         // ── 이벤트 ───────────────────────────────────────────────────────
 
@@ -90,7 +91,23 @@ namespace TheShedding.Characters
 
         private void OnAnimatorMove()
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).shortNameHash == JumpStateHash)
+            bool isJumping = animator.GetCurrentAnimatorStateInfo(0).shortNameHash == JumpStateHash;
+
+            // Jump 중에는 애니메이션 Y를 그대로 따라가야 하므로 중력을 꺼둔다.
+            // 켜두면 linearVelocity.y가 계속 누적되어 착지 순간 급락한다.
+            if (isJumping != wasJumping)
+            {
+                rb.useGravity = !isJumping;
+                if (isJumping)
+                {
+                    Vector3 v = rb.linearVelocity;
+                    v.y = 0f;
+                    rb.linearVelocity = v;
+                }
+            }
+            wasJumping = isJumping;
+
+            if (isJumping)
             {
                 Vector3 pos = rb.position;
                 pos.y += animator.deltaPosition.y;
