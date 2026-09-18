@@ -37,6 +37,7 @@ namespace TheShedding.Characters
         public bool IsTrapped => Time.time < trapSlowEndTime;
         public bool IsSitting { get; protected set; }
         public bool IsLying { get; protected set; }
+        private bool wasJumping;
 
         // ── 이벤트 ───────────────────────────────────────────────────────
 
@@ -62,6 +63,9 @@ namespace TheShedding.Characters
         protected static readonly int HashIsSitting   = Animator.StringToHash("isSitting");
         protected static readonly int HashIsLying     = Animator.StringToHash("isLying");
         protected static readonly int HashIsJumping   = Animator.StringToHash("isJumping");
+        protected static readonly int HashIsDead      = Animator.StringToHash("isDead");
+
+        private static readonly int JumpStateHash = Animator.StringToHash("Jump");
 
         // ── 물리 버퍼 (NonAlloc) ─────────────────────────────────────────
         private static readonly Collider[] InteractBuffer = new Collider[8];
@@ -77,7 +81,7 @@ namespace TheShedding.Characters
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
             if (animator != null)
-                animator.applyRootMotion = false;
+                animator.applyRootMotion = true;
 
             CurrentLifeSegments = maxLifeSegments;
         }
@@ -85,11 +89,39 @@ namespace TheShedding.Characters
         protected virtual void OnEnable() { }
         protected virtual void OnDisable() { }
 
+        private void OnAnimatorMove()
+        {
+            bool isJumping = animator.GetCurrentAnimatorStateInfo(0).shortNameHash == JumpStateHash;
+
+            // Jump 중에는 애니메이션 Y를 그대로 따라가야 하므로 중력을 꺼둔다.
+            // 켜두면 linearVelocity.y가 계속 누적되어 착지 순간 급락한다.
+            if (isJumping != wasJumping)
+            {
+                rb.useGravity = !isJumping;
+                if (isJumping)
+                {
+                    Vector3 v = rb.linearVelocity;
+                    v.y = 0f;
+                    rb.linearVelocity = v;
+                }
+            }
+            wasJumping = isJumping;
+
+            if (isJumping)
+            {
+                Vector3 pos = rb.position;
+                pos.y += animator.deltaPosition.y;
+                rb.MovePosition(pos);
+            }
+        }
+
         protected virtual void Update()
         {
 #if UNITY_EDITOR
             if (Keyboard.current.pKey.isPressed)
                 ApplyStatusEffect(StatusEffect.Limp, 0.5f);
+            if (Keyboard.current.oKey.wasPressedThisFrame)
+                TakeDamage(CurrentLifeSegments);
 #endif
         }
 
@@ -269,7 +301,11 @@ namespace TheShedding.Characters
 
         protected virtual void OnDamageTaken(int amount) { }
         protected virtual void OnHealTaken(int amount) { }
-        protected virtual void OnDeath() { }
+        protected virtual void OnDeath()
+        {
+            StopMovement();
+            animator?.SetBool(HashIsDead, true);
+        }
 
         // ── 앉기 / 눕기 ───────────────────────────────────────────────────
 
