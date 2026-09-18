@@ -303,6 +303,7 @@ namespace TheShedding.Characters
         protected virtual void OnHealTaken(int amount) { }
         protected virtual void OnDeath()
         {
+            StopMovement();
             animator?.SetBool(HashIsDead, true);
         }
 
