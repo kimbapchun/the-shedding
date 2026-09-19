@@ -147,29 +147,38 @@ namespace TheShedding.Network
             BeginConnecting();
             var attemptId = m_AttemptId;
 
-            string joinCode;
+            const string failureReason = "호스트를 시작하지 못했습니다.";
+
             try
             {
-                joinCode = await RelayConnector.AllocateHostAsync(m_Transport, m_Approval.MaxPlayers - 1);
+                string joinCode;
+                try
+                {
+                    joinCode = await RelayConnector.AllocateHostAsync(m_Transport, m_Approval.MaxPlayers - 1);
+                }
+                catch (Exception e)
+                {
+                    FailRelayIfCurrent(attemptId, "방을 만들지 못했습니다.", e);
+                    return;
+                }
+
+                if (attemptId != m_AttemptId)
+                {
+                    return;
+                }
+
+                JoinCode = joinCode;
+                ApplyConnectionPayload();
+
+                // StartHost()는 소켓 바인딩까지 동기적으로 하므로 여기서 바로 실패를 알 수 있다.
+                if (!m_NetworkManager.StartHost())
+                {
+                    Fail(failureReason);
+                }
             }
             catch (Exception e)
             {
-                FailRelayIfCurrent(attemptId, "방을 만들지 못했습니다.", e);
-                return;
-            }
-
-            if (attemptId != m_AttemptId)
-            {
-                return;
-            }
-
-            JoinCode = joinCode;
-            ApplyConnectionPayload();
-
-            // StartHost()는 소켓 바인딩까지 동기적으로 하므로 여기서 바로 실패를 알 수 있다.
-            if (!m_NetworkManager.StartHost())
-            {
-                Fail("호스트를 시작하지 못했습니다.");
+                FailUnexpected(attemptId, failureReason, e);
             }
         }
 
@@ -190,19 +199,29 @@ namespace TheShedding.Network
 
             JoinCode = joinCode;
             BeginConnecting();
+            var attemptId = m_AttemptId;
 
-            if (!await TryJoinRelayAsync(m_AttemptId, "방을 찾지 못했습니다. 참가 코드를 확인하세요."))
+            const string failureReason = "클라이언트를 시작하지 못했습니다.";
+
+            try
             {
-                return;
+                if (!await TryJoinRelayAsync(attemptId, "방을 찾지 못했습니다. 참가 코드를 확인하세요."))
+                {
+                    return;
+                }
+
+                ApplyConnectionPayload();
+
+                // 여기서의 false는 "시도조차 못 했다"는 뜻. 서버가 없어서 실패하는 경우는
+                // Update()의 타임아웃이 잡는다.
+                if (!m_NetworkManager.StartClient())
+                {
+                    Fail(failureReason);
+                }
             }
-
-            ApplyConnectionPayload();
-
-            // 여기서의 false는 "시도조차 못 했다"는 뜻. 서버가 없어서 실패하는 경우는
-            // Update()의 타임아웃이 잡는다.
-            if (!m_NetworkManager.StartClient())
+            catch (Exception e)
             {
-                Fail("클라이언트를 시작하지 못했습니다.");
+                FailUnexpected(attemptId, failureReason, e);
             }
         }
 
@@ -234,6 +253,28 @@ namespace TheShedding.Network
                 return;
             }
 
+            FailCurrent(reason);
+        }
+
+        /// <summary>
+        /// async void 진입점의 최후 방어선. 미처리 예외는 SynchronizationContext로 새어 나가
+        /// 플레이 모드를 죽이므로, 여기서 잡아 평범한 연결 실패로 되돌린다.
+        /// </summary>
+        private void FailUnexpected(int attemptId, string reason, Exception e)
+        {
+            Debug.LogException(e);
+
+            if (attemptId != m_AttemptId)
+            {
+                return;
+            }
+
+            FailCurrent(reason);
+        }
+
+        /// <summary>재접속 중이라면 실패를 화면에 띄우기 전에 남은 시도 기회를 먼저 쓴다.</summary>
+        private void FailCurrent(string reason)
+        {
             if (m_IsReconnecting)
             {
                 TryReconnectOrFail(canReconnect: true, reason: reason);
@@ -393,18 +434,27 @@ namespace TheShedding.Network
 
             Debug.Log($"[ConnectionManager] 재접속 시도 {m_ReconnectAttempt}/{maxReconnectAttempts}");
 
-            // 끊긴 Relay 합류는 재사용할 수 없어 같은 코드로 새로 받는다.
-            if (!await TryJoinRelayAsync(m_AttemptId, "방에 다시 들어가지 못했습니다."))
+            var attemptId = m_AttemptId;
+
+            try
             {
-                return;
+                // 끊긴 Relay 합류는 재사용할 수 없어 같은 코드로 새로 받는다.
+                if (!await TryJoinRelayAsync(attemptId, "방에 다시 들어가지 못했습니다."))
+                {
+                    return;
+                }
+
+                ApplyConnectionPayload();
+
+                // 시도조차 못 한 경우도 타임아웃과 같은 경로로 처리한다.
+                if (!m_NetworkManager.StartClient())
+                {
+                    HandleConnectTimeout();
+                }
             }
-
-            ApplyConnectionPayload();
-
-            // 시도조차 못 한 경우도 타임아웃과 같은 경로로 처리한다.
-            if (!m_NetworkManager.StartClient())
+            catch (Exception e)
             {
-                HandleConnectTimeout();
+                FailUnexpected(attemptId, "방에 다시 들어가지 못했습니다.", e);
             }
         }
 
