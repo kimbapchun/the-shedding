@@ -25,7 +25,7 @@ namespace TheShedding.Network
             await EnsureSignedInAsync();
 
             var allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
-            Apply(transport, allocation.ToRelayServerData(k_ConnectionType));
+            ApplyRelayServerData(transport, allocation.ToRelayServerData(k_ConnectionType));
 
             return await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
         }
@@ -36,10 +36,10 @@ namespace TheShedding.Network
             await EnsureSignedInAsync();
 
             var allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
-            Apply(transport, allocation.ToRelayServerData(k_ConnectionType));
+            ApplyRelayServerData(transport, allocation.ToRelayServerData(k_ConnectionType));
         }
 
-        private static void Apply(UnityTransport transport, Unity.Networking.Transport.Relay.RelayServerData data)
+        private static void ApplyRelayServerData(UnityTransport transport, Unity.Networking.Transport.Relay.RelayServerData data)
         {
             transport.UseWebSockets = k_ConnectionType == "wss";
             transport.SetRelayServerData(data);
