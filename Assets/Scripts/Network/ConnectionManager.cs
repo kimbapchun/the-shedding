@@ -498,6 +498,9 @@ namespace TheShedding.Network
             // 이벤트보다 먼저 보관해야, 상태 변화를 듣고 씬을 바꾸는 쪽이 새 화면에서 꺼내 쓸 수 있다.
             m_LastFailureReason = reason;
 
+            // 실패가 확정된 코드로 재접속이 나가지 않도록, 유일한 실패 통로인 여기서 비운다.
+            JoinCode = null;
+
             SetState(ConnectionState.Disconnected);
             OnConnectionFailed?.Invoke(reason);
         }
