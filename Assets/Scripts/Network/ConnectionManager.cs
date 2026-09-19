@@ -243,15 +243,16 @@ namespace TheShedding.Network
             return attemptId == m_AttemptId;
         }
 
-        /// <summary>뒤늦게 온 실패는 이미 다른 상태로 넘어간 뒤라 화면에 띄우면 안 된다.</summary>
+        /// <summary>뒤늦게 온 실패는 이미 다른 상태로 넘어간 뒤라 화면에도, 로그에도 남기지 않는다.</summary>
         private void FailRelayIfCurrent(int attemptId, string reason, Exception e)
         {
-            Debug.LogWarning($"[ConnectionManager] Relay 오류: {e.Message}");
-
+            // 사용자가 연결 도중 Disconnect를 누른 것뿐인데 경고가 찍히면 실제 문제와 구분할 수 없다.
             if (attemptId != m_AttemptId)
             {
                 return;
             }
+
+            Debug.LogWarning($"[ConnectionManager] Relay 오류: {e.Message}");
 
             FailCurrent(reason);
         }
