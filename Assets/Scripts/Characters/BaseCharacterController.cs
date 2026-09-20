@@ -1,4 +1,5 @@
 using System;
+using TheShedding.InventorySystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -350,8 +351,17 @@ namespace TheShedding.Characters
             if (!CanAct()) return;
             animator?.SetTrigger(HashIsJumping);
         }
-        public virtual void OnPreviousItem() { }
-        public virtual void OnNextItem() { }
+        // 인벤토리를 가진 캐릭터는 자동으로 선택 슬롯을 순회한다.
+        // 서브클래스가 다른 동작을 원하면 override로 대체한다.
+        public virtual void OnPreviousItem()
+        {
+            if (this is IInventoryOwner owner) owner.Inventory?.SelectPrevious();
+        }
+
+        public virtual void OnNextItem()
+        {
+            if (this is IInventoryOwner owner) owner.Inventory?.SelectNext();
+        }
 
         // ── 에디터 Gizmo ──────────────────────────────────────────────────
 

@@ -54,9 +54,6 @@ namespace TheShedding.Characters
             IsFlashlightOn = !IsFlashlightOn;
         }
 
-        public override void OnPreviousItem() => Inventory?.SelectPrevious();
-        public override void OnNextItem()     => Inventory?.SelectNext();
-
         // RobberController.Recover()를 인벤토리와 연동해 오버라이드
         public override void Recover()
         {

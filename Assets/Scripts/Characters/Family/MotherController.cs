@@ -61,9 +61,6 @@ namespace TheShedding.Characters
             UpdateTrapPreview();
         }
 
-        public override void OnPreviousItem() => Inventory?.SelectPrevious();
-        public override void OnNextItem()     => Inventory?.SelectNext();
-
         // ── 함정 설치 위치 ────────────────────────────────────────────────
 
         private Vector3 GetPlacementPosition()

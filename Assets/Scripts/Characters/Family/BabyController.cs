@@ -31,9 +31,6 @@ namespace TheShedding.Characters
         public override void OnAttackInput() { }
         protected override bool TryAttack() => false;
 
-        public override void OnPreviousItem() => Inventory?.SelectPrevious();
-        public override void OnNextItem()     => Inventory?.SelectNext();
-
         protected override bool UseSkill() => TryStealItem();
 
         public bool TryStealItem()
