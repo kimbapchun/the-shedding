@@ -42,16 +42,7 @@ namespace TheShedding.Interactables
             if (itemData == null) return false;
             if (interactor is not IInventoryOwner owner) return false;
             if (owner.Inventory == null || owner.Inventory.IsFull) return false;
-            return CanPickUp(interactor);
-        }
-
-        // 아이템 타입별 픽업 가능 캐릭터 제한. 새 타입이 늘면 ItemData로 이 판정을
-        // 위임하는 방향으로 리팩터링한다.
-        private bool CanPickUp(BaseCharacterController interactor)
-        {
-            if (itemData is HouseItemData or ConsumableItemData)
-                return interactor is RobberController;
-            return false;
+            return itemData.CanBePickedUpBy(interactor);
         }
 
         // ── 반영 ─────────────────────────────────────────────────────────

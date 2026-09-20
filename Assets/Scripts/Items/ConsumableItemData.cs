@@ -1,3 +1,4 @@
+using TheShedding.Characters;
 using UnityEngine;
 
 namespace TheShedding.Items
@@ -6,5 +7,8 @@ namespace TheShedding.Items
     public class ConsumableItemData : ItemData
     {
         public int healAmount = 1;
+
+        public override bool CanBePickedUpBy(BaseCharacterController interactor)
+            => interactor is RobberController;
     }
 }

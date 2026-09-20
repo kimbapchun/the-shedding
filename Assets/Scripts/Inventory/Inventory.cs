@@ -38,6 +38,7 @@ namespace TheShedding.InventorySystem
 
         public bool AddItem(int id)
         {
+            if (id == NoSelection) return false;   // sentinel과 겹치는 id는 목록 정합성을 해친다
             if (IsFull) return false;
             int index = itemIds.Count;
             itemIds.Add(id);
