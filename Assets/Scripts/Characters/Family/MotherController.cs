@@ -22,12 +22,9 @@ namespace TheShedding.Characters
         public Inventory Inventory { get; private set; }
         public event Action<TrapType, Vector3> OnTrapPlaced;
 
-        private TrapItemData SelectedTrap =>
-            (Inventory != null && itemDatabase != null)
-                ? itemDatabase.Get(Inventory.SelectedItemId) as TrapItemData
-                : null;
+        // 선택이 바뀔 때만 갱신되는 캐시. Update에서 매 프레임 database 조회를 피한다.
+        private TrapItemData selectedTrap;
         private GameObject trapPreviewInstance;
-        private TrapItemData lastPreviewedTrap;
 
         private static readonly Collider[] AttackBuffer = new Collider[8];
 
@@ -42,9 +39,19 @@ namespace TheShedding.Characters
             base.Awake();
         }
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            if (Inventory == null) return;
+            Inventory.OnSelectedItemChanged += HandleSelectionChanged;
+            HandleSelectionChanged(Inventory.SelectedItemId);
+        }
+
         protected override void OnDisable()
         {
             base.OnDisable();
+            if (Inventory != null)
+                Inventory.OnSelectedItemChanged -= HandleSelectionChanged;
             DestroyPreview();
         }
 
@@ -64,30 +71,31 @@ namespace TheShedding.Characters
 
         // ── 프리뷰 ────────────────────────────────────────────────────────
 
+        private void HandleSelectionChanged(int id)
+        {
+            var next = itemDatabase != null ? itemDatabase.Get(id) as TrapItemData : null;
+            if (selectedTrap == next) return;
+            selectedTrap = next;
+
+            DestroyPreview();
+            if (selectedTrap != null && selectedTrap.previewPrefab != null)
+                CreatePreview(selectedTrap.previewPrefab);
+        }
+
         private void UpdateTrapPreview()
         {
-            var trap = SelectedTrap;
+            if (trapPreviewInstance == null) return;
 
-            if (!CanAct() || trap == null || trap.previewPrefab == null || !IsSkillReady)
-            {
-                if (trapPreviewInstance != null) trapPreviewInstance.SetActive(false);
-                return;
-            }
-
-            if (lastPreviewedTrap != trap)
-            {
-                DestroyPreview();
-                CreatePreview(trap.previewPrefab);
-                lastPreviewedTrap = trap;
-            }
-
-            trapPreviewInstance.SetActive(true);
-            trapPreviewInstance.transform.position = GetPlacementPosition();
+            bool show = CanAct() && selectedTrap != null && IsSkillReady;
+            trapPreviewInstance.SetActive(show);
+            if (show)
+                trapPreviewInstance.transform.position = GetPlacementPosition();
         }
 
         private void CreatePreview(GameObject prefab)
         {
             trapPreviewInstance = Instantiate(prefab);
+            trapPreviewInstance.SetActive(false);
             foreach (var col in trapPreviewInstance.GetComponentsInChildren<Collider>())
                 col.enabled = false;
             // TODO: 반투명 머티리얼 적용
@@ -98,7 +106,6 @@ namespace TheShedding.Characters
             if (trapPreviewInstance == null) return;
             Destroy(trapPreviewInstance);
             trapPreviewInstance = null;
-            lastPreviewedTrap = null;
         }
 
         // ── 기본 공격 (좌클릭): 칼 공격 ──────────────────────────────────
@@ -124,11 +131,10 @@ namespace TheShedding.Characters
 
         protected override bool UseSkill()
         {
-            var trap = SelectedTrap;
-            if (trap == null) return false;
-            if (!Inventory.RemoveItem(trap.id)) return false;
+            if (selectedTrap == null) return false;
+            if (!Inventory.RemoveItem(selectedTrap.id)) return false;
 
-            OnTrapPlaced?.Invoke(trap.trapType, GetPlacementPosition());
+            OnTrapPlaced?.Invoke(selectedTrap.trapType, GetPlacementPosition());
             return true;
         }
 
