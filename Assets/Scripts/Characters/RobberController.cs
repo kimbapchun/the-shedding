@@ -52,7 +52,7 @@ namespace TheShedding.Characters
         // ── 아이템 회복 ───────────────────────────────────────────────────
 
         // 붕대·햄버거 등 회복 아이템이 공통으로 호출
-        public void Recover()
+        public virtual void Recover()
         {
             if (CurrentStatusEffect == StatusEffect.KnockedDown) return;
             ApplyHeal(1);
