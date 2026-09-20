@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace TheShedding.Characters
 {
+    [RequireComponent(typeof(Inventory))]
     public sealed class MotherController : FamilyController, IInventoryOwner
     {
         [Header("Mother Attack")]

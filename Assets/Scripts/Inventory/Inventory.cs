@@ -13,20 +13,24 @@ namespace TheShedding.InventorySystem
     /// </summary>
     public class Inventory : MonoBehaviour
     {
+        /// <summary>선택 슬롯이 비어 있음을 나타내는 sentinel. ItemData.id는 이 값과 달라야 한다.</summary>
+        public const int NoSelection = -1;
+
         [SerializeField] private int capacity = 5;
 
         private readonly List<int> itemIds = new();
-        private int selectedId;
+        private int selectedId = NoSelection;
 
-        public event Action<int> OnItemAdded;
-        public event Action<int> OnItemRemoved;
-        public event Action<int> OnSelectedItemChanged;
+        public event Action<int, int> OnItemAdded;         // (id, index)
+        public event Action<int, int> OnItemRemoved;       // (id, index)
+        public event Action<int>      OnSelectedItemChanged;
 
-        public IReadOnlyList<int> ItemIds => itemIds;
-        public int SelectedItemId => selectedId;
-        public int Count           => itemIds.Count;
-        public int Capacity        => capacity;
-        public bool IsFull         => itemIds.Count >= capacity;
+        public IReadOnlyList<int> ItemIds       => itemIds;
+        public int                SelectedItemId => selectedId;
+        public bool               HasSelection  => selectedId != NoSelection;
+        public int                Count         => itemIds.Count;
+        public int                Capacity      => capacity;
+        public bool               IsFull        => itemIds.Count >= capacity;
 
         public bool Contains(int id) => itemIds.Contains(id);
 
@@ -35,8 +39,9 @@ namespace TheShedding.InventorySystem
         public bool AddItem(int id)
         {
             if (IsFull) return false;
+            int index = itemIds.Count;
             itemIds.Add(id);
-            OnItemAdded?.Invoke(id);
+            OnItemAdded?.Invoke(id, index);
             EnsureSelectionValid();
             return true;
         }
@@ -46,7 +51,7 @@ namespace TheShedding.InventorySystem
             int idx = itemIds.IndexOf(id);
             if (idx < 0) return false;
             itemIds.RemoveAt(idx);
-            OnItemRemoved?.Invoke(id);
+            OnItemRemoved?.Invoke(id, idx);
             EnsureSelectionValid();
             return true;
         }
@@ -56,16 +61,16 @@ namespace TheShedding.InventorySystem
         public void SelectNext()
         {
             if (itemIds.Count == 0) return;
-            int idx = Mathf.Max(0, itemIds.IndexOf(selectedId));
-            idx = (idx + 1) % itemIds.Count;
+            int idx = itemIds.IndexOf(selectedId);
+            idx = idx < 0 ? 0 : (idx + 1) % itemIds.Count;
             SetSelected(itemIds[idx]);
         }
 
         public void SelectPrevious()
         {
             if (itemIds.Count == 0) return;
-            int idx = Mathf.Max(0, itemIds.IndexOf(selectedId));
-            idx = (idx - 1 + itemIds.Count) % itemIds.Count;
+            int idx = itemIds.IndexOf(selectedId);
+            idx = idx < 0 ? 0 : (idx - 1 + itemIds.Count) % itemIds.Count;
             SetSelected(itemIds[idx]);
         }
 
@@ -84,12 +89,12 @@ namespace TheShedding.InventorySystem
         }
 
         // 목록이 바뀌었을 때 선택 값이 여전히 목록에 있는지 확인한다.
-        // 없으면 목록의 첫 항목으로, 목록이 비면 0으로 초기화한다.
+        // 없으면 목록의 첫 항목으로, 목록이 비면 NoSelection으로 초기화한다.
         private void EnsureSelectionValid()
         {
             if (itemIds.Count == 0)
             {
-                SetSelected(0);
+                SetSelected(NoSelection);
                 return;
             }
             if (!itemIds.Contains(selectedId))

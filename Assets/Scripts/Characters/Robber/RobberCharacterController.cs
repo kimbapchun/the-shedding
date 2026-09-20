@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace TheShedding.Characters
 {
+    [RequireComponent(typeof(Inventory))]
     public sealed class RobberCharacterController : RobberController, IInventoryOwner
     {
         [Header("Flashlight")]
