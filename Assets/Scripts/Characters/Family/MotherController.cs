@@ -23,7 +23,7 @@ namespace TheShedding.Characters
         public event Action<TrapType, Vector3> OnTrapPlaced;
 
         // 선택이 바뀔 때만 갱신되는 캐시. Update에서 매 프레임 database 조회를 피한다.
-        private TrapItemData selectedTrap;
+        private TrapItem selectedTrap;
         private GameObject trapPreviewInstance;
 
         private static readonly Collider[] AttackBuffer = new Collider[8];
@@ -70,7 +70,7 @@ namespace TheShedding.Characters
 
         private void HandleSelectionChanged(int id)
         {
-            var next = itemDatabase != null ? itemDatabase.Get(id) as TrapItemData : null;
+            var next = itemDatabase != null ? itemDatabase.Get(id) as TrapItem : null;
             if (selectedTrap == next) return;
             selectedTrap = next;
 

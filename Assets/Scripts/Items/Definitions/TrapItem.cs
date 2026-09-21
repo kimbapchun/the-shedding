@@ -4,7 +4,7 @@ using UnityEngine;
 namespace TheShedding.Items
 {
     [CreateAssetMenu(menuName = "TheShedding/Items/Trap")]
-    public class TrapItemData : ItemData
+    public class TrapItem : ItemData
     {
         public TrapType   trapType;
         public GameObject placementPrefab;

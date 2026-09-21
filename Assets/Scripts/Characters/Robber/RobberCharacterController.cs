@@ -59,7 +59,7 @@ namespace TheShedding.Characters
         {
             if (CurrentStatusEffect == StatusEffect.KnockedDown) return;
             if (Inventory == null || itemDatabase == null) return;
-            if (!Inventory.TryRemoveFirstOfType<ConsumableItemData>(itemDatabase, out var item)) return;
+            if (!Inventory.TryRemoveFirstOfType<ConsumableItem>(itemDatabase, out var item)) return;
             ApplyHeal(item.healAmount);
             ApplyStatusEffect(StatusEffect.None, 0f);
         }

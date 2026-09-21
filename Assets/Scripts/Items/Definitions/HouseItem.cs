@@ -3,11 +3,9 @@ using UnityEngine;
 
 namespace TheShedding.Items
 {
-    [CreateAssetMenu(menuName = "TheShedding/Items/Consumable")]
-    public class ConsumableItemData : ItemData
+    [CreateAssetMenu(menuName = "TheShedding/Items/House")]
+    public class HouseItem : ItemData
     {
-        public int healAmount = 1;
-
         public override bool CanBePickedUpBy(BaseCharacterController interactor)
             => interactor is RobberController;
     }
