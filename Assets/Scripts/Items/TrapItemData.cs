@@ -9,5 +9,8 @@ namespace TheShedding.Items
         public TrapType   trapType;
         public GameObject placementPrefab;
         public GameObject previewPrefab;
+
+        public override bool CanBePickedUpBy(BaseCharacterController interactor)
+            => interactor is MotherController;
     }
 }

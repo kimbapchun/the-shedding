@@ -56,7 +56,7 @@ namespace TheShedding.Characters
 
             // 뼈다귀가 있으면 강도에게 교환. 강도 인벤에 못 넣으면 아기 인벤으로 되돌린다.
             if (Inventory == null) return true;
-            if (!Inventory.TryRemoveFirstOfType<SpecialItemData>(itemDatabase, out var bone)) return true;
+            if (!Inventory.TryRemoveFirstOfType<BoneItemData>(itemDatabase, out var bone)) return true;
             if (!nearest.Inventory.AddItem(bone.id))
                 Inventory.AddItem(bone.id);
 
