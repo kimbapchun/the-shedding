@@ -198,6 +198,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6977561039660053094}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5631487761737127648}
   m_SourcePrefab: {fileID: 100100000, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
 --- !u!95 &2180709342692546882 stripped
 Animator:
@@ -507,4 +510,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc3ddfbfbcc4967ac653fb75e7af4d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TheShedding.Network::TheShedding.Network.PlayerNetworkAuthority
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &-5631487761737127648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4893323654112024962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b393093d4b8fe4944b7da60001d1368f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TheShedding.Network::TheShedding.Network.LocalPlayerCameraBinder
   ShowTopMostFoldoutHeaderGroup: 1
