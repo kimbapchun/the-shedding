@@ -128,10 +128,13 @@ namespace TheShedding.Characters
 
         protected override bool UseSkill()
         {
-            if (selectedTrap == null) return false;
-            if (!Inventory.RemoveItem(selectedTrap.id)) return false;
+            // RemoveItem이 EnsureSelectionValid를 동기로 부르면 HandleSelectionChanged가 실행되어
+            // selectedTrap이 다음 아이템으로 바뀐다. 이벤트 발화 전에 로컬 스냅샷을 잡아둔다.
+            var trap = selectedTrap;
+            if (trap == null) return false;
+            if (!Inventory.RemoveItem(trap.id)) return false;
 
-            OnTrapPlaced?.Invoke(selectedTrap.trapType, GetPlacementPosition());
+            OnTrapPlaced?.Invoke(trap.trapType, GetPlacementPosition());
             return true;
         }
 
