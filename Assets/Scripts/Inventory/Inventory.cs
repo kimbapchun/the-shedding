@@ -19,18 +19,19 @@ namespace TheShedding.InventorySystem
         [SerializeField] private int capacity = 5;
 
         private readonly List<int> itemIds = new();
-        private int selectedId = NoSelection;
+        private int selectedIndex = NoSelection;
 
-        public event Action<int, int> OnItemAdded;         // (id, index)
-        public event Action<int, int> OnItemRemoved;       // (id, index)
-        public event Action<int>      OnSelectedItemChanged;
+        public event Action<int, int> OnItemAdded;             // (id, index)
+        public event Action<int, int> OnItemRemoved;           // (id, index)
+        public event Action<int>      OnSelectedItemChanged;   // 현재 선택된 아이템 id (없으면 NoSelection)
 
-        public IReadOnlyList<int> ItemIds       => itemIds;
-        public int                SelectedItemId => selectedId;
-        public bool               HasSelection  => selectedId != NoSelection;
-        public int                Count         => itemIds.Count;
-        public int                Capacity      => capacity;
-        public bool               IsFull        => itemIds.Count >= capacity;
+        public IReadOnlyList<int> ItemIds        => itemIds;
+        public int                SelectedIndex  => selectedIndex;
+        public int                SelectedItemId => HasSelection ? itemIds[selectedIndex] : NoSelection;
+        public bool               HasSelection   => selectedIndex >= 0 && selectedIndex < itemIds.Count;
+        public int                Count          => itemIds.Count;
+        public int                Capacity       => capacity;
+        public bool               IsFull         => itemIds.Count >= capacity;
 
         public bool Contains(int id) => itemIds.Contains(id);
 
@@ -43,7 +44,9 @@ namespace TheShedding.InventorySystem
             int index = itemIds.Count;
             itemIds.Add(id);
             OnItemAdded?.Invoke(id, index);
-            EnsureSelectionValid();
+            // 비어 있던 인벤이면 방금 추가한 항목을 자동 선택
+            if (selectedIndex == NoSelection)
+                SetSelectedIndex(0);
             return true;
         }
 
@@ -51,9 +54,14 @@ namespace TheShedding.InventorySystem
         {
             int idx = itemIds.IndexOf(id);
             if (idx < 0) return false;
+
+            int prevIndex = selectedIndex;
+            int prevId = SelectedItemId;
             itemIds.RemoveAt(idx);
             OnItemRemoved?.Invoke(id, idx);
-            EnsureSelectionValid();
+            AdjustSelectionAfterRemoval(idx);
+            if (prevIndex != selectedIndex || prevId != SelectedItemId)
+                OnSelectedItemChanged?.Invoke(SelectedItemId);
             return true;
         }
 
@@ -62,44 +70,57 @@ namespace TheShedding.InventorySystem
         public void SelectNext()
         {
             if (itemIds.Count == 0) return;
-            int idx = itemIds.IndexOf(selectedId);
-            idx = idx < 0 ? 0 : (idx + 1) % itemIds.Count;
-            SetSelected(itemIds[idx]);
+            int next = selectedIndex < 0 ? 0 : (selectedIndex + 1) % itemIds.Count;
+            SetSelectedIndex(next);
         }
 
         public void SelectPrevious()
         {
             if (itemIds.Count == 0) return;
-            int idx = itemIds.IndexOf(selectedId);
-            idx = idx < 0 ? 0 : (idx - 1 + itemIds.Count) % itemIds.Count;
-            SetSelected(itemIds[idx]);
+            int prev = selectedIndex < 0
+                ? itemIds.Count - 1
+                : (selectedIndex - 1 + itemIds.Count) % itemIds.Count;
+            SetSelectedIndex(prev);
         }
 
         public bool Select(int id)
         {
-            if (!itemIds.Contains(id)) return false;
-            SetSelected(id);
+            int idx = itemIds.IndexOf(id);
+            if (idx < 0) return false;
+            SetSelectedIndex(idx);
             return true;
         }
 
-        private void SetSelected(int id)
+        public bool SelectAt(int index)
         {
-            if (selectedId == id) return;
-            selectedId = id;
-            OnSelectedItemChanged?.Invoke(id);
+            if (index < 0 || index >= itemIds.Count) return false;
+            SetSelectedIndex(index);
+            return true;
         }
 
-        // 목록이 바뀌었을 때 선택 값이 여전히 목록에 있는지 확인한다.
-        // 없으면 목록의 첫 항목으로, 목록이 비면 NoSelection으로 초기화한다.
-        private void EnsureSelectionValid()
+        private void SetSelectedIndex(int index)
+        {
+            if (selectedIndex == index) return;
+            selectedIndex = index;
+            OnSelectedItemChanged?.Invoke(SelectedItemId);
+        }
+
+        // 제거 위치에 따라 선택 인덱스만 조정 (이벤트 발화는 RemoveItem이 책임진다).
+        // - 앞이 삭제되면 한 칸 밀림 (id는 유지될 수 있음)
+        // - 선택 위치가 삭제되면 그 자리에 다음 아이템이 옴 (id가 바뀔 수 있음)
+        // - 마지막 자리를 삭제했으면 목록 끝으로 클램프
+        // - 뒤가 삭제되면 무영향
+        private void AdjustSelectionAfterRemoval(int removedIndex)
         {
             if (itemIds.Count == 0)
             {
-                SetSelected(NoSelection);
+                selectedIndex = NoSelection;
                 return;
             }
-            if (!itemIds.Contains(selectedId))
-                SetSelected(itemIds[0]);
+            if (removedIndex < selectedIndex)
+                selectedIndex--;
+            else if (removedIndex == selectedIndex && selectedIndex >= itemIds.Count)
+                selectedIndex = itemIds.Count - 1;
         }
     }
 }
