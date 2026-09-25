@@ -14,11 +14,7 @@ namespace TheShedding.Interactables
     {
         [SerializeField] private ItemData itemData;
 
-        [Tooltip("에디터 단독 실행 등 IItemSpawner 없이도 로컬에서 사라지도록 허용할지. " +
-                 "네트워크 환경에서는 반드시 false여야 다른 클라이언트와 상태가 어긋나지 않는다.")]
-        [SerializeField] private bool allowLocalFallback = true;
-
-        // 씬/스포너가 주입한다. null이면 allowLocalFallback 여부에 따라 동작이 갈린다.
+        // 씬에 배치된 IItemSpawner(Local/Network)가 초기화 시점에 주입한다.
         public IItemSpawner Spawner { get; set; }
 
         public int ItemId => itemData != null ? itemData.id : 0;
@@ -50,31 +46,18 @@ namespace TheShedding.Interactables
         public void Interact(BaseCharacterController interactor)
         {
             if (!CanInteract(interactor)) return;
-            var owner = (IInventoryOwner)interactor;
 
-            // Spawner 없이 진입한 경우, 로컬에서 조용히 SetActive만 하면 네트워크 환경에선
-            // 다른 클라이언트 화면에 아이템이 남아 상호작용 UI가 어긋난다. 인벤에 넣기 전에 판단한다.
-            if (Spawner == null && !allowLocalFallback)
+            if (Spawner == null)
             {
                 Debug.LogError(
-                    $"[ItemPickup] '{name}' Spawner가 주입되지 않았습니다. " +
-                    "allowLocalFallback=false이므로 픽업을 취소합니다.", this);
+                    $"[ItemPickup] '{name}' Spawner 미주입 — 픽업 취소. " +
+                    "씬에 LocalItemSpawner 또는 NetworkItemSpawner가 배치돼 있는지 확인하세요.", this);
                 return;
             }
 
+            var owner = (IInventoryOwner)interactor;
             if (!owner.Inventory.AddItem(itemData.id)) return;
-
-            if (Spawner != null)
-            {
-                Spawner.NotifyPickedUp(this, interactor);
-            }
-            else
-            {
-                Debug.LogWarning(
-                    $"[ItemPickup] '{name}' Spawner 미주입 — 로컬 fallback으로 SetActive(false). " +
-                    "네트워크 환경에서는 반드시 Spawner를 주입해야 한다.", this);
-                gameObject.SetActive(false);
-            }
+            Spawner.NotifyPickedUp(this, interactor);
         }
 
         public string GetInteractPrompt(BaseCharacterController interactor)
