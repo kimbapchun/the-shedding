@@ -53,6 +53,7 @@ namespace TheShedding.Characters
             if (Inventory != null)
                 Inventory.OnSelectedItemChanged -= HandleSelectionChanged;
             DestroyPreview();
+            selectedTrap = null;
         }
 
         protected override void Update()
