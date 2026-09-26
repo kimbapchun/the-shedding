@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace TheShedding.Characters
 {
-    // 강도 공통 추상 계층
     public abstract class RobberController : BaseCharacterController
     {
         [Header("KnockedDown Recovery")]

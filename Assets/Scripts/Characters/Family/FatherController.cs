@@ -20,7 +20,6 @@ namespace TheShedding.Characters
             base.Awake();
         }
 
-        // 기본 공격 (좌클릭): 근접 타격
         protected override bool TryAttack()
         {
             int count = Physics.OverlapSphereNonAlloc(

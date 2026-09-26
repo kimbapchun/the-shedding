@@ -54,7 +54,6 @@ namespace TheShedding.Characters
             IsFlashlightOn = !IsFlashlightOn;
         }
 
-        // RobberController.Recover()를 인벤토리와 연동해 오버라이드
         public override void Recover()
         {
             if (CurrentStatusEffect == StatusEffect.KnockedDown) return;

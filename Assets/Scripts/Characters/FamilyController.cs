@@ -2,9 +2,6 @@ using UnityEngine;
 
 namespace TheShedding.Characters
 {
-    // 렙틸리언 가족 공통 추상 계층
-    // - 상태이상: 시간이 지나면 자동 회복
-    // - 플래시 스턴: 강도의 플래시라이트에 의해 일시 행동 불가
     public abstract class FamilyController : BaseCharacterController
     {
         [Header("Attack")]
@@ -26,7 +23,6 @@ namespace TheShedding.Characters
 
         protected override void Update()
         {
-            // 상태이상 자동 회복
             if (CurrentStatusEffect != StatusEffect.None && Time.time >= statusEffectEndTime)
                 ApplyStatusEffect(StatusEffect.None, 0f);
 
