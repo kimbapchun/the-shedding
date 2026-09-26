@@ -1,15 +1,22 @@
+using TheShedding.InventorySystem;
+using TheShedding.Items;
 using UnityEngine;
 
 namespace TheShedding.Characters
 {
-    public sealed class RobberCharacterController : RobberController
+    [RequireComponent(typeof(Inventory))]
+    public sealed class RobberCharacterController : RobberController, IInventoryOwner
     {
         [Header("Flashlight")]
         [SerializeField] private float flashRange = 5f;
         [SerializeField] private float flashStunDuration = 2f;
         [SerializeField] private LayerMask familyLayer;
 
+        [Header("Inventory")]
+        [SerializeField] private ItemDatabase itemDatabase;
+
         public bool IsFlashlightOn { get; private set; }
+        public Inventory Inventory { get; private set; }
 
         private static readonly Collider[] FlashlightBuffer = new Collider[16];
 
@@ -18,6 +25,7 @@ namespace TheShedding.Characters
             moveSpeed = 5f;
             BodyScale = 2;
             maxLifeSegments = 3;
+            Inventory = GetComponent<Inventory>();
             base.Awake();
         }
 
@@ -27,7 +35,6 @@ namespace TheShedding.Characters
 
             if (!CanAct()) return;
 
-            // 플래시라이트가 켜진 동안 범위 내 가족을 지속 스턴
             if (IsFlashlightOn)
             {
                 int count = Physics.OverlapSphereNonAlloc(
@@ -41,12 +48,17 @@ namespace TheShedding.Characters
             }
         }
 
-        // ── 스킬 (PlayerInputReader → OnSkillInput): 플래시라이트 토글 ────
-
         public override void OnSkillInput()
         {
             if (!CanAct()) return;
             IsFlashlightOn = !IsFlashlightOn;
+        }
+
+        public void UseHealItem()
+        {
+            if (Inventory == null || itemDatabase == null) return;
+            if (!Inventory.TryRemoveFirstOfType<ConsumableItem>(itemDatabase, out var item)) return;
+            Recover(item.healAmount);
         }
 
         protected override void OnDrawGizmosSelected()

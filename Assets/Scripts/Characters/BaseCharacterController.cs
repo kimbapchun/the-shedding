@@ -1,4 +1,5 @@
 using System;
+using TheShedding.InventorySystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -138,7 +139,6 @@ namespace TheShedding.Characters
             }
         }
 
-        // PlayerInputReader가 매 프레임 호출
         public virtual void Move(Vector2 input, bool sprintPressed)
         {
             if (!IsAlive()) return;
@@ -262,10 +262,9 @@ namespace TheShedding.Characters
 
         // ── 데미지 / 생사 ─────────────────────────────────────────────────
 
-        // 판정: 실제 적용할 데미지 계산 (방어력 등 추가 시 override)
+        // 방어력 등 추가 시 override
         protected virtual int CalculateDamage(int rawAmount) => rawAmount;
 
-        // 반영
         protected virtual void ApplyDamage(int amount)
         {
             if (!IsAlive()) return;
@@ -279,7 +278,6 @@ namespace TheShedding.Characters
             }
         }
 
-        // 회복
         public virtual void ApplyHeal(int amount)
         {
             if (!IsAlive()) return;
@@ -288,7 +286,6 @@ namespace TheShedding.Characters
             OnHealTaken(amount);
         }
 
-        // 외부 호출: 판정 → 반영
         public void TakeDamage(int rawAmount)
         {
             ApplyDamage(CalculateDamage(rawAmount));
@@ -350,8 +347,16 @@ namespace TheShedding.Characters
             if (!CanAct()) return;
             animator?.SetTrigger(HashIsJumping);
         }
-        public virtual void OnPreviousItem() { }
-        public virtual void OnNextItem() { }
+        // 인벤 있는 캐릭터는 자동으로 슬롯 순회. 다른 동작 필요하면 서브클래스가 override.
+        public virtual void OnPreviousItem()
+        {
+            if (this is IInventoryOwner owner) owner.Inventory?.SelectPrevious();
+        }
+
+        public virtual void OnNextItem()
+        {
+            if (this is IInventoryOwner owner) owner.Inventory?.SelectNext();
+        }
 
         // ── 에디터 Gizmo ──────────────────────────────────────────────────
 
