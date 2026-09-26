@@ -51,14 +51,16 @@ namespace TheShedding.Characters
                 if (dist < minDist) { minDist = dist; nearest = robber; }
             }
 
-            if (nearest?.Inventory == null || itemDatabase == null) return false;
-            if (!nearest.Inventory.TryRemoveFirstOfType<HouseItem>(itemDatabase, out _)) return false;
+            if (nearest?.Inventory == null || itemDatabase == null || Inventory == null) return false;
+            if (Inventory.IsFull && !Inventory.HasOfType<BoneItem>(itemDatabase)) return false;
 
-            // 뼈다귀가 있으면 강도에게 교환. 강도 인벤에 못 넣으면 아기 인벤으로 되돌린다.
-            if (Inventory == null) return true;
-            if (!Inventory.TryRemoveFirstOfType<BoneItem>(itemDatabase, out var bone)) return true;
-            if (!nearest.Inventory.AddItem(bone.id))
-                Inventory.AddItem(bone.id);
+            if (!nearest.Inventory.TryRemoveFirstOfType<HouseItem>(itemDatabase, out var stolen))
+                return false;
+
+            if (Inventory.TryRemoveFirstOfType<BoneItem>(itemDatabase, out var bone))
+                nearest.Inventory.AddItem(bone.id);
+
+            Inventory.AddItem(stolen.id);
 
             return true;
         }
