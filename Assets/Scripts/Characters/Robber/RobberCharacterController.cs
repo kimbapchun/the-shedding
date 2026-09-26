@@ -54,13 +54,11 @@ namespace TheShedding.Characters
             IsFlashlightOn = !IsFlashlightOn;
         }
 
-        public override void Recover()
+        public void UseHealItem()
         {
-            if (CurrentStatusEffect == StatusEffect.KnockedDown) return;
             if (Inventory == null || itemDatabase == null) return;
             if (!Inventory.TryRemoveFirstOfType<ConsumableItem>(itemDatabase, out var item)) return;
-            ApplyHeal(item.healAmount);
-            ApplyStatusEffect(StatusEffect.None, 0f);
+            Recover(item.healAmount);
         }
 
         protected override void OnDrawGizmosSelected()
