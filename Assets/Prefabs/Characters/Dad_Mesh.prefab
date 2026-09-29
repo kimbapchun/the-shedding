@@ -14,15 +14,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 19.275377
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.29999894
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.818869
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
       propertyPath: m_LocalRotation.w
@@ -183,7 +183,30 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4568916519933159476}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2275930614317249397}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4988336419088647597}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5485646894307219823}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7386955986881026413}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6977561039660053094}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5631487761737127648}
   m_SourcePrefab: {fileID: 100100000, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
+--- !u!95 &2180709342692546882 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
+  m_PrefabInstance: {fileID: 5704365547677820115}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4893323654112024962 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
@@ -312,3 +335,192 @@ CapsuleCollider:
   m_Height: 3.2135248
   m_Direction: 1
   m_Center: {x: 0, y: 1.5705047, z: -0.25696325}
+--- !u!114 &2275930614317249397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4893323654112024962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 2148106846
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  m_InScenePlacedDisabledByDefault: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  m_InScenePlaced: 0
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &4988336419088647597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4893323654112024962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkTransformExpanded: 0
+  AutoOwnerAuthorityTickOffset: 1
+  PositionInterpolationType: 0
+  RotationInterpolationType: 0
+  ScaleInterpolationType: 0
+  PositionLerpSmoothing: 1
+  PositionMaxInterpolationTime: 0.1
+  RotationLerpSmoothing: 1
+  RotationMaxInterpolationTime: 0.1
+  ScaleLerpSmoothing: 1
+  ScaleMaxInterpolationTime: 0.1
+  AuthorityMode: 1
+  TickSyncChildren: 0
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  SwitchTransformSpaceWhenParented: 0
+  Interpolate: 1
+  SlerpPosition: 0
+--- !u!114 &5485646894307219823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4893323654112024962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkRigidbody
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkRigidbodyBaseExpanded: 0
+  UseRigidBodyForMotion: 1
+  AutoUpdateKinematicState: 1
+  AutoSetKinematicOnDespawn: 1
+--- !u!114 &7386955986881026413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4893323654112024962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkAnimator
+  ShowTopMostFoldoutHeaderGroup: 1
+  NetworkAnimatorExpanded: 0
+  AuthorityMode: 1
+  m_Animator: {fileID: 2180709342692546882}
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 2081823275
+    DestinationState: 1080829965
+    TransitionDuration: 0.25
+    TriggerNameHash: 973584577
+    TransitionIndex: 2
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 2081823275
+    DestinationState: 125937960
+    TransitionDuration: 0.25
+    TriggerNameHash: -357477766
+    TransitionIndex: 6
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -240455170
+    DestinationState: -1946439909
+    TransitionDuration: 0.25
+    TriggerNameHash: 973584577
+    TransitionIndex: 2
+  AnimatorParameterEntries:
+    ParameterEntries:
+    - name: isAttacking
+      NameHash: 973584577
+      Synchronize: 1
+      ParameterType: 9
+    - name: isLimping
+      NameHash: -42621536
+      Synchronize: 1
+      ParameterType: 4
+    - name: isLying
+      NameHash: -361844476
+      Synchronize: 1
+      ParameterType: 4
+    - name: isSitting
+      NameHash: -1905186013
+      Synchronize: 1
+      ParameterType: 4
+    - name: isSprinting
+      NameHash: 1125312739
+      Synchronize: 1
+      ParameterType: 4
+    - name: isWalking
+      NameHash: -830007593
+      Synchronize: 1
+      ParameterType: 4
+    - name: isJumping
+      NameHash: -357477766
+      Synchronize: 1
+      ParameterType: 9
+    - name: isDead
+      NameHash: 1276664872
+      Synchronize: 1
+      ParameterType: 4
+  AnimatorParametersExpanded: 0
+--- !u!114 &6977561039660053094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4893323654112024962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fc3ddfbfbcc4967ac653fb75e7af4d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TheShedding.Network::TheShedding.Network.PlayerNetworkAuthority
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &-5631487761737127648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4893323654112024962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b393093d4b8fe4944b7da60001d1368f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TheShedding.Network::TheShedding.Network.LocalPlayerCameraBinder
+  ShowTopMostFoldoutHeaderGroup: 1

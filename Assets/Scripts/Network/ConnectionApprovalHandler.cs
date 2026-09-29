@@ -81,7 +81,8 @@ namespace TheShedding.Network
             NetworkManager.ConnectionApprovalRequest request,
             NetworkManager.ConnectionApprovalResponse response)
         {
-            // 플레이어 오브젝트 생성은 6단계에서 캐릭터를 붙일 때 켠다.
+            // 캐릭터는 PlayerSpawner가 게임 씬 로딩이 끝난 뒤에 직접 스폰한다.
+            // 여기서 켜면 아직 로비에 있는 시점에 스폰되어 스폰 지점을 쓸 수 없다.
             response.CreatePlayerObject = false;
 
             var playerId = Encoding.UTF8.GetString(request.Payload ?? new byte[0]);

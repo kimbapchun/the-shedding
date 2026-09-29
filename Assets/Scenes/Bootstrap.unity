@@ -252,6 +252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TheShedding.Network.InGameUI
   panel: {fileID: 1331917167}
   leaveButton: {fileID: 1185115961}
+  statusText: {fileID: 0}
 --- !u!114 &257905925
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,6 +331,7 @@ GameObject:
   - component: {fileID: 499716748}
   - component: {fileID: 499716749}
   - component: {fileID: 499716750}
+  - component: {fileID: 499716751}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -441,6 +443,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TheShedding.Network.ConnectionManager
   connectTimeoutSeconds: 10
+  maxReconnectAttempts: 3
+  reconnectRetryIntervalSeconds: 2
 --- !u!114 &499716749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,6 +472,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TheShedding.Network.ConnectionApprovalHandler
   maxPlayers: 5
+--- !u!114 &499716751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 499716744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12b67303bc17348d78510b59898d8755, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TheShedding.Network::TheShedding.Network.PlayerSpawner
+  characterPrefab: {fileID: 4893323654112024962, guid: 0f7b4805cb2294518858dbf8904cd782, type: 3}
 --- !u!1 &1137855457
 GameObject:
   m_ObjectHideFlags: 0
