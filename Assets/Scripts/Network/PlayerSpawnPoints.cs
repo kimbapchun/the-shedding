@@ -85,11 +85,11 @@ namespace TheShedding.Network
         {
             var usable = new List<Transform>(spawnPoints.Count);
 
-            for (var i = 0; i < spawnPoints.Count; i++)
+            foreach (var point in spawnPoints)
             {
-                if (spawnPoints[i] != null)
+                if (point != null)
                 {
-                    usable.Add(spawnPoints[i]);
+                    usable.Add(point);
                 }
             }
 
@@ -99,10 +99,8 @@ namespace TheShedding.Network
         private void OnDrawGizmos()
         {
             // 에디터에서 지점이 어디를 보고 있는지 알아야 캐릭터가 벽을 보고 서는 일을 막는다.
-            for (var i = 0; i < spawnPoints.Count; i++)
+            foreach (var point in spawnPoints)
             {
-                var point = spawnPoints[i];
-
                 if (point == null)
                 {
                     continue;

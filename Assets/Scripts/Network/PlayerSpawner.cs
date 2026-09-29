@@ -57,11 +57,6 @@ namespace TheShedding.Network
                 m_SceneLoader.OnSceneLoadCompleted -= HandleSceneLoadCompleted;
             }
 
-            if (m_NetworkManager == null)
-            {
-                return;
-            }
-
             m_NetworkManager.OnClientConnectedCallback -= HandleClientConnected;
             m_NetworkManager.OnClientDisconnectCallback -= HandleClientDisconnect;
             m_NetworkManager.OnServerStopped -= HandleServerStopped;
@@ -161,11 +156,6 @@ namespace TheShedding.Network
 
         private void SpawnFor(ulong clientId)
         {
-            if (characterPrefab == null)
-            {
-                return;
-            }
-
             // 씬 로딩 완료와 접속 콜백이 같은 클라이언트에 대해 둘 다 올 수 있다.
             if (m_SpawnIndexByClientId.ContainsKey(clientId))
             {
