@@ -24,8 +24,7 @@ namespace TheShedding.Characters
             base.Awake();
         }
 
-        // 기본 공격 (좌클릭): 물기
-        // KnockedDown 강도 → 즉사 / 일반 강도 → LimpAndBleed 부여
+        // KnockedDown 강도는 즉사, 일반 강도는 LimpAndBleed 부여
         protected override bool TryAttack()
         {
             int count = Physics.OverlapSphereNonAlloc(
@@ -48,11 +47,9 @@ namespace TheShedding.Characters
             return hit;
         }
 
-        // 우클릭 스킬: 짖기
         protected override bool UseSkill()
         {
-            // TODO: SoundDetectionSystem 구현 후 연동
-            //       SoundDetectionSystem.RevealNearbyNoise(transform.position, barkRadius)
+            // TODO: SoundDetectionSystem.RevealNearbyNoise(transform.position, barkRadius)
             return false;
         }
 
