@@ -339,14 +339,14 @@ namespace TheShedding.Tests
         [Test]
         public void ReportPlayerDied_ignored_for_unassigned_player()
         {
-            gm.RegisterPlayer("p1"); // 역할 없음, 그대로 유지
+            gm.RegisterPlayer("p1");
             gm.RegisterPlayer("p2");
-            gm.RegisterPlayer("p3");
-            gm.TrySelectRole("p2", Role.Father);
-            gm.TrySelectRole("p3", Role.Robber);
+            gm.TrySelectRole("p1", Role.Father);
+            gm.TrySelectRole("p2", Role.Robber);
             gm.BeginRound();
 
-            gm.ReportPlayerDied("p1"); // Unassigned → 영향 없음
+            // 등록·역할 둘 다 없는 playerId → GetRole이 Unassigned 반환 → 조용히 무시
+            gm.ReportPlayerDied("ghost");
             Assert.AreEqual(GameState.InProgress, gm.State);
         }
 
