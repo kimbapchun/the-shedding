@@ -305,7 +305,7 @@ namespace TheShedding.Tests
         }
 
         [Test]
-        public void ReportPlayerDied_ignores_non_robber()
+        public void RobberWin_when_single_family_dies()
         {
             gm.RegisterPlayer("p1");
             gm.RegisterPlayer("p2");
@@ -313,7 +313,40 @@ namespace TheShedding.Tests
             gm.TrySelectRole("p2", Role.Robber);
             gm.BeginRound();
 
-            gm.ReportPlayerDied("p1"); // 가족 사망은 집계 안 됨
+            gm.ReportPlayerDied("p1"); // 가족 전원(1명) 사망 → RobberWin
+            Assert.AreEqual(GameState.RobberWin, gm.State);
+        }
+
+        [Test]
+        public void RobberWin_waits_until_all_family_dead()
+        {
+            // 4명 → Required=1
+            for (int i = 1; i <= 4; i++) gm.RegisterPlayer($"p{i}");
+            gm.TrySelectRole("p1", Role.Father);
+            gm.TrySelectRole("p2", Role.Mother);
+            gm.TrySelectRole("p3", Role.Baby);
+            gm.TrySelectRole("p4", Role.Robber);
+            gm.BeginRound();
+
+            gm.ReportPlayerDied("p1");
+            Assert.AreEqual(GameState.InProgress, gm.State);
+            gm.ReportPlayerDied("p2");
+            Assert.AreEqual(GameState.InProgress, gm.State);
+            gm.ReportPlayerDied("p3"); // 가족 3/3 사망 → RobberWin
+            Assert.AreEqual(GameState.RobberWin, gm.State);
+        }
+
+        [Test]
+        public void ReportPlayerDied_ignored_for_unassigned_player()
+        {
+            gm.RegisterPlayer("p1"); // 역할 없음, 그대로 유지
+            gm.RegisterPlayer("p2");
+            gm.RegisterPlayer("p3");
+            gm.TrySelectRole("p2", Role.Father);
+            gm.TrySelectRole("p3", Role.Robber);
+            gm.BeginRound();
+
+            gm.ReportPlayerDied("p1"); // Unassigned → 영향 없음
             Assert.AreEqual(GameState.InProgress, gm.State);
         }
 

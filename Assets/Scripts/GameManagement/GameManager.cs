@@ -64,6 +64,7 @@ namespace TheShedding.GameManagement
         private readonly Dictionary<string, Role> rolesByPlayer = new();
         private readonly HashSet<string> registeredPlayerIds = new();
         private readonly HashSet<string> deadRobbers = new();
+        private readonly HashSet<string> deadFamily = new();
 
         // ── Unity 생명주기 ────────────────────────────────────────────────
 
@@ -177,6 +178,7 @@ namespace TheShedding.GameManagement
             if (!AreAllPlayersReady()) return false;
 
             deadRobbers.Clear();
+            deadFamily.Clear();
             SetStolenCount(0);
             SetRoundEndTime(Time.time + roundDurationSeconds);
             SetState(GameState.InProgress);
@@ -188,6 +190,7 @@ namespace TheShedding.GameManagement
             SetState(GameState.Waiting);
             SetStolenCount(0);
             deadRobbers.Clear();
+            deadFamily.Clear();
 
             // Dictionary 순회 중 변경을 피하기 위해 스냅샷을 뜨고 비운다.
             if (rolesByPlayer.Count == 0) return;
@@ -202,9 +205,12 @@ namespace TheShedding.GameManagement
         public void ReportPlayerDied(string playerId)
         {
             if (State != GameState.InProgress) return;
-            if (GetRole(playerId) != Role.Robber) return;
+            var role = GetRole(playerId);
+            if (role == Role.Unassigned) return;
 
-            deadRobbers.Add(playerId);
+            if (role == Role.Robber) deadRobbers.Add(playerId);
+            else                     deadFamily.Add(playerId);
+
             CheckVictory();
         }
 
@@ -236,7 +242,7 @@ namespace TheShedding.GameManagement
         {
             if (State != GameState.InProgress) return;
 
-            // 강도 전원 사망 → 가족승. 강도가 한 명도 없을 때 자동 가족승이 되지 않도록 >0 가드.
+            // 강도 전원 사망 → 가족승. 강도 0명일 때 자동 가족승이 되지 않도록 >0 가드.
             int robberCount = CountByRole(Role.Robber);
             if (robberCount > 0 && deadRobbers.Count >= robberCount)
             {
@@ -244,10 +250,27 @@ namespace TheShedding.GameManagement
                 return;
             }
 
+            // 가족 전원 사망 → 강도승. 가족 0명일 때 자동 강도승이 되지 않도록 >0 가드.
+            int familyCount = CountFamily();
+            if (familyCount > 0 && deadFamily.Count >= familyCount)
+            {
+                SetState(GameState.RobberWin);
+                return;
+            }
+
             if (StolenCount >= stolenCountGoal)
             {
                 SetState(GameState.RobberWin);
             }
+        }
+
+        private int CountFamily()
+        {
+            // Role.Robber 외의 모든 할당된 역할이 가족. Unassigned는 rolesByPlayer에 없음.
+            int count = 0;
+            foreach (var r in rolesByPlayer.Values)
+                if (r != Role.Robber) count++;
+            return count;
         }
 
         // ── 상태 변경 통로 (이벤트 발행 일원화) ────────────────────────────
