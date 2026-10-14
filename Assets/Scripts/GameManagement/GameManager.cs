@@ -11,7 +11,7 @@ namespace TheShedding.GameManagement
     /// NetworkVariable, ServerRpc 등)은 별도 네트워크 어댑터가 담당한다 (local.md D-4).
     /// 어댑터는 이 클래스의 메서드를 호출하고 이벤트를 구독해 양방향 중계한다.
     /// </summary>
-    public class GameManager : MonoBehaviour
+    public sealed class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
 
@@ -149,11 +149,14 @@ namespace TheShedding.GameManagement
         public bool AreAllPlayersReady()
         {
             if (registeredPlayerIds.Count == 0) return false;
+            // 한 번의 iterate로 "전원 역할 쥠" + "강도 수 == RequiredRobbers"를 함께 확인한다.
+            int robbers = 0;
             foreach (var pid in registeredPlayerIds)
-                if (!rolesByPlayer.ContainsKey(pid)) return false;
-            // 강도 수가 플레이어 수 기반 필수 인원과 정확히 일치해야 시작 가능 (강제).
-            if (CountByRole(Role.Robber) != RequiredRobbers) return false;
-            return true;
+            {
+                if (!rolesByPlayer.TryGetValue(pid, out var role)) return false;
+                if (role == Role.Robber) robbers++;
+            }
+            return robbers == RequiredRobbers;
         }
 
         private int GetCapacity(Role role) => role == Role.Robber ? RequiredRobbers : 1;
@@ -167,12 +170,17 @@ namespace TheShedding.GameManagement
 
         // ── 라운드 흐름 (어댑터가 씬 로딩 완료에 맞춰 호출) ───────────────
 
-        public void BeginRound()
+        /// <summary>라운드 시작. 성공 시 <c>true</c>. State가 Waiting이 아니거나 ready가 아니면 <c>false</c>.</summary>
+        public bool BeginRound()
         {
+            if (State != GameState.Waiting) return false;
+            if (!AreAllPlayersReady()) return false;
+
             deadRobbers.Clear();
             SetStolenCount(0);
             SetRoundEndTime(Time.time + roundDurationSeconds);
             SetState(GameState.InProgress);
+            return true;
         }
 
         public void ResetForNewRound()
@@ -204,10 +212,20 @@ namespace TheShedding.GameManagement
         {
             if (State != GameState.InProgress) return;
             if (GetRole(playerId) != Role.Robber) return;
-            if (itemDatabase == null) return;
+
+            if (itemDatabase == null)
+            {
+                Debug.LogWarning("[GameManager] itemDatabase 미할당 — Stolen 집계 안 됨", this);
+                return;
+            }
 
             var data = itemDatabase.Get(itemId);
-            if (data == null || !data.countsAsStolen) return;
+            if (data == null)
+            {
+                Debug.LogWarning($"[GameManager] itemId={itemId}가 ItemDatabase에 없음", this);
+                return;
+            }
+            if (!data.countsAsStolen) return; // 일반 아이템은 정상 흐름 (조용히 무시)
 
             // 아기가 훔쳐가면 강도 Inventory에서 Remove가 발생해 음수 delta로 자동 감산된다.
             SetStolenCount(Mathf.Max(0, StolenCount + delta));

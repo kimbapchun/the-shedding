@@ -220,6 +220,57 @@ namespace TheShedding.Tests
         }
 
         // ═══════════════════════════════════════════════════════════════════
+        //  BeginRound  — ready 가드
+        // ═══════════════════════════════════════════════════════════════════
+
+        [Test]
+        public void BeginRound_returns_true_when_ready()
+        {
+            gm.RegisterPlayer("p1");
+            gm.TrySelectRole("p1", Role.Robber);
+            Assert.IsTrue(gm.BeginRound());
+            Assert.AreEqual(GameState.InProgress, gm.State);
+        }
+
+        [Test]
+        public void BeginRound_returns_false_when_not_waiting()
+        {
+            gm.RegisterPlayer("p1");
+            gm.TrySelectRole("p1", Role.Robber);
+            gm.BeginRound();
+            Assert.IsFalse(gm.BeginRound()); // 라운드 중 재호출 거절
+        }
+
+        [Test]
+        public void BeginRound_returns_false_when_no_players()
+        {
+            Assert.IsFalse(gm.BeginRound());
+            Assert.AreEqual(GameState.Waiting, gm.State);
+        }
+
+        [Test]
+        public void BeginRound_returns_false_when_role_missing()
+        {
+            gm.RegisterPlayer("p1"); // 역할 안 쥠
+            Assert.IsFalse(gm.BeginRound());
+            Assert.AreEqual(GameState.Waiting, gm.State);
+        }
+
+        [Test]
+        public void BeginRound_returns_false_when_robber_count_mismatch()
+        {
+            // 5명 → Required=2, 강도 1명만 선택
+            for (int i = 1; i <= 5; i++) gm.RegisterPlayer($"p{i}");
+            gm.TrySelectRole("p1", Role.Father);
+            gm.TrySelectRole("p2", Role.Mother);
+            gm.TrySelectRole("p3", Role.Baby);
+            gm.TrySelectRole("p4", Role.Dog);
+            gm.TrySelectRole("p5", Role.Robber);
+            Assert.IsFalse(gm.BeginRound());
+            Assert.AreEqual(GameState.Waiting, gm.State);
+        }
+
+        // ═══════════════════════════════════════════════════════════════════
         //  CheckVictory  — 다중 강도 승패
         // ═══════════════════════════════════════════════════════════════════
 
