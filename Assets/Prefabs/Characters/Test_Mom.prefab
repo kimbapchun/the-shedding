@@ -204,6 +204,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7666268382443369928}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 395152727087819470}
   m_SourcePrefab: {fileID: 100100000, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
 --- !u!95 &2412269792747467155 stripped
 Animator:
@@ -544,3 +547,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: TheShedding.Network::TheShedding.Network.LocalPlayerCameraBinder
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &395152727087819470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8994223783213773139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0ed6d18bb414c68a3244dae412396d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TheShedding.Gameplay::TheShedding.UI.InventoryTestUI
+  inventory: {fileID: 8668144186664654217}
+  itemDatabase: {fileID: 11400000, guid: 725ac3f5459264a5884f06e6f2d48ca3, type: 2}
+  origin: {x: 20, y: 20}
+  slotSize: {x: 90, y: 90}
+  slotGap: 8
+  emptyColor: {r: 0.15, g: 0.15, b: 0.15, a: 0.85}
+  filledColor: {r: 0.25, g: 0.55, b: 0.85, a: 0.95}
+  selectedColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+  selectedBorderThickness: 4
+  enableHotkeys: 1
