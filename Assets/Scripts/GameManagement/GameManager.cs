@@ -31,6 +31,11 @@ namespace TheShedding.GameManagement
                  "기본값 4: 1~4명=1강도, 5~8명=2강도.")]
         [SerializeField, Min(1)] private int playersPerRobber = 4;
 
+        [Header("Disconnect")]
+        [Tooltip("라운드 중 접속이 끊긴 플레이어가 재접속할 수 있는 유예 시간(초). " +
+                 "이 시간이 지나면 자동 사망 처리된다. 기획 임시값 60초.")]
+        [SerializeField, Min(0f)] private float reconnectGraceSeconds = 60f;
+
         /// <summary>현재 등록된 플레이어 수에 따른 필수 강도 인원 (올림, 최소 1).</summary>
         public int RequiredRobbers =>
             Mathf.Max(1, Mathf.CeilToInt(registeredPlayerIds.Count / (float)playersPerRobber));
@@ -58,6 +63,16 @@ namespace TheShedding.GameManagement
         /// <summary>해당 플레이어가 역할을 놓았다(변경·해제·언레지스터). (playerId, previousRole)</summary>
         public event Action<string, Role> OnRoleUnassigned;
 
+        /// <summary>라운드 중 플레이어 접속이 끊김. 유예 시간 내 재접하지 않으면 사망 처리된다.
+        /// (playerId, Time.time 기준 데드라인) — 어댑터가 다른 클라에 전파해 카운트다운 UI를 띄운다.</summary>
+        public event Action<string, float> OnPlayerDisconnected;
+
+        /// <summary>유예 시간 내 재접속 성공. (playerId)</summary>
+        public event Action<string> OnPlayerReconnected;
+
+        /// <summary>유예 만료로 사망 처리됨. (playerId) — 승패 상태 전이보다 먼저 발행된다.</summary>
+        public event Action<string> OnPlayerDisconnectExpired;
+
         // ── 내부 상태 ─────────────────────────────────────────────────────
 
         /// <summary>플레이어 → 역할. 역방향 매핑이 자연스러워 다중 강도도 그대로 지원된다.</summary>
@@ -65,6 +80,12 @@ namespace TheShedding.GameManagement
         private readonly HashSet<string> registeredPlayerIds = new();
         private readonly HashSet<string> deadRobbers = new();
         private readonly HashSet<string> deadFamily = new();
+
+        /// <summary>playerId → Time.time 기준 복귀 데드라인. InProgress에서만 채워진다.</summary>
+        private readonly Dictionary<string, float> disconnectDeadlines = new();
+
+        /// <summary>Update에서 Dictionary 수정을 피하기 위한 재사용 버퍼.</summary>
+        private readonly List<string> expiredBuffer = new();
 
         // ── Unity 생명주기 ────────────────────────────────────────────────
 
@@ -86,6 +107,11 @@ namespace TheShedding.GameManagement
         private void Update()
         {
             if (State != GameState.InProgress) return;
+
+            // 재접속 유예 만료 처리 — 승패 상태로 전이할 수 있으니 라운드 타임아웃 체크보다 먼저.
+            ProcessDisconnectTimeouts();
+            if (State != GameState.InProgress) return;
+
             if (Time.time >= RoundEndTime)
                 SetState(GameState.FamilyWin);
         }
@@ -98,12 +124,85 @@ namespace TheShedding.GameManagement
             registeredPlayerIds.Add(playerId);
         }
 
+        /// <summary>
+        /// 완전 이탈(명시적 퇴장). 라운드 중 소켓 끊김은 <see cref="MarkDisconnected"/>를 쓸 것.
+        /// 라운드 중 호출되면 승패 산정이 틀어지지 않도록 dead/유예 집합을 함께 정리하고 재평가한다.
+        /// </summary>
         public void UnregisterPlayer(string playerId)
         {
             if (string.IsNullOrEmpty(playerId)) return;
+
             registeredPlayerIds.Remove(playerId);
-            // TODO: 중도 이탈 처리. 자동 사망 처리 등 기획 결정 후 확장.
+            disconnectDeadlines.Remove(playerId);
+            deadRobbers.Remove(playerId);
+            deadFamily.Remove(playerId);
             ClearRoleOf(playerId);
+
+            if (State == GameState.InProgress) CheckVictory();
+        }
+
+        // ── 접속 끊김 / 재접속 (어댑터가 소켓 이벤트에서 호출) ────────────
+
+        /// <summary>
+        /// 라운드 중이면 <see cref="reconnectGraceSeconds"/> 유예 타이머를 건다. 만료 시 자동 사망.
+        /// 라운드 외 상태에서는 즉시 완전 이탈 처리. 이미 사망한 플레이어는 노옵.
+        /// 어댑터는 상태를 알 필요 없이 소켓 끊김 시점에 호출만 하면 된다.
+        /// </summary>
+        public void MarkDisconnected(string playerId)
+        {
+            if (string.IsNullOrEmpty(playerId)) return;
+            if (!registeredPlayerIds.Contains(playerId)) return;
+
+            if (State != GameState.InProgress)
+            {
+                UnregisterPlayer(playerId);
+                return;
+            }
+
+            // 이미 사망한 플레이어의 끊김은 승패에 영향 없음.
+            if (deadRobbers.Contains(playerId) || deadFamily.Contains(playerId)) return;
+
+            // 같은 사람이 두 번 끊길 수 없지만 어댑터 중복 호출 가드.
+            if (disconnectDeadlines.ContainsKey(playerId)) return;
+
+            float deadline = Time.time + reconnectGraceSeconds;
+            disconnectDeadlines[playerId] = deadline;
+            OnPlayerDisconnected?.Invoke(playerId, deadline);
+        }
+
+        /// <summary>
+        /// 유예 중이던 플레이어가 돌아왔다. 데드라인이 이미 만료된 뒤 호출되면 노옵
+        /// (만료 처리는 Update에서 이미 수행됨).
+        /// </summary>
+        public void MarkReconnected(string playerId)
+        {
+            if (string.IsNullOrEmpty(playerId)) return;
+            if (!disconnectDeadlines.Remove(playerId)) return;
+            OnPlayerReconnected?.Invoke(playerId);
+        }
+
+        private void ProcessDisconnectTimeouts()
+        {
+            if (disconnectDeadlines.Count == 0) return;
+
+            float now = Time.time;
+            expiredBuffer.Clear();
+            foreach (var kv in disconnectDeadlines)
+                if (now >= kv.Value) expiredBuffer.Add(kv.Key);
+
+            if (expiredBuffer.Count == 0) return;
+
+            foreach (var pid in expiredBuffer)
+            {
+                disconnectDeadlines.Remove(pid);
+                var role = GetRole(pid);
+                if (role == Role.Unassigned) continue; // 역할 없으면 승패에 영향 없음.
+                if (role == Role.Robber) deadRobbers.Add(pid);
+                else                     deadFamily.Add(pid);
+                OnPlayerDisconnectExpired?.Invoke(pid);
+            }
+            expiredBuffer.Clear();
+            CheckVictory();
         }
 
         // ── 역할 선택 ─────────────────────────────────────────────────────
@@ -179,6 +278,7 @@ namespace TheShedding.GameManagement
 
             deadRobbers.Clear();
             deadFamily.Clear();
+            disconnectDeadlines.Clear();
             SetStolenCount(0);
             SetRoundEndTime(Time.time + roundDurationSeconds);
             SetState(GameState.InProgress);
@@ -191,6 +291,7 @@ namespace TheShedding.GameManagement
             SetStolenCount(0);
             deadRobbers.Clear();
             deadFamily.Clear();
+            disconnectDeadlines.Clear();
 
             // Dictionary 순회 중 변경을 피하기 위해 스냅샷을 뜨고 비운다.
             if (rolesByPlayer.Count == 0) return;
