@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using TheShedding.GameManagement;
 using TheShedding.Items;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace TheShedding.Tests
 {
@@ -428,7 +430,48 @@ namespace TheShedding.Tests
             gm.TrySelectRole("p1", Role.Robber);
             gm.BeginRound();
 
+            LogAssert.Expect(LogType.Warning, new Regex("StolenCount가 음수로 떨어짐"));
             gm.ReportItemCountChanged("p1", 100, -5);
+            Assert.AreEqual(0, gm.StolenCount);
+        }
+
+        [Test]
+        public void ReportItemCountChanged_warns_when_delta_would_push_below_zero()
+        {
+            // 음수로 떨어지는 상황은 집계 체인이 꼬인 신호 — 디버깅용 경고가 반드시 발행돼야 한다.
+            var db = MakeDatabase((100, true));
+            SetField(gm, "itemDatabase", db);
+            SetField(gm, "stolenCountGoal", 10);
+
+            gm.RegisterPlayer("p1");
+            gm.TrySelectRole("p1", Role.Robber);
+            gm.BeginRound();
+            gm.ReportItemCountChanged("p1", 100, +2); // StolenCount = 2
+
+            // delta=-3이면 next = -1 → 경고 + 0으로 클램프
+            LogAssert.Expect(LogType.Warning, new Regex(@"delta -3.*playerId=p1.*itemId=100"));
+            gm.ReportItemCountChanged("p1", 100, -3);
+
+            Assert.AreEqual(0, gm.StolenCount);
+        }
+
+        [Test]
+        public void ReportItemCountChanged_does_not_warn_when_delta_lands_on_zero_exactly()
+        {
+            // 음수가 "되지 않는" 경계. 정확히 0으로 떨어지면 경고 없이 지나가야 한다.
+            var db = MakeDatabase((100, true));
+            SetField(gm, "itemDatabase", db);
+            SetField(gm, "stolenCountGoal", 10);
+
+            gm.RegisterPlayer("p1");
+            gm.TrySelectRole("p1", Role.Robber);
+            gm.BeginRound();
+            gm.ReportItemCountChanged("p1", 100, +2);
+
+            // delta=-2 → next = 0 → 경고 없음. LogAssert.Expect를 걸지 않았으므로
+            // 만약 경고가 뜨면 Unity 테스트러너가 실패 처리.
+            gm.ReportItemCountChanged("p1", 100, -2);
+
             Assert.AreEqual(0, gm.StolenCount);
         }
 

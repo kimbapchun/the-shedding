@@ -335,7 +335,17 @@ namespace TheShedding.GameManagement
             if (!data.countsAsStolen) return; // 일반 아이템은 정상 흐름 (조용히 무시)
 
             // 아기가 훔쳐가면 강도 Inventory에서 Remove가 발생해 음수 delta로 자동 감산된다.
-            SetStolenCount(Mathf.Max(0, StolenCount + delta));
+            int next = StolenCount + delta;
+            if (next < 0)
+            {
+                // 집계 체인이 어긋났다는 신호(중복 감산·순서 역전 등). 0으로 클램프하되 디버깅 흔적을 남긴다.
+                Debug.LogWarning(
+                    $"[GameManager] StolenCount가 음수로 떨어짐 — 이벤트 순서 꼬임 의심 " +
+                    $"(현재 {StolenCount}, delta {delta}, playerId={playerId}, itemId={itemId}). 0으로 클램프.",
+                    this);
+                next = 0;
+            }
+            SetStolenCount(next);
             CheckVictory();
         }
 
