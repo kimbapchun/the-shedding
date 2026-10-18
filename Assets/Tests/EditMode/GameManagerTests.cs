@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using TheShedding.GameManagement;
@@ -645,6 +646,303 @@ namespace TheShedding.Tests
         }
 
         // ═══════════════════════════════════════════════════════════════════
+        //  접속 끊김 / 재접속 유예
+        // ═══════════════════════════════════════════════════════════════════
+
+        [Test]
+        public void MarkDisconnected_during_InProgress_fires_event_with_deadline()
+        {
+            SetField(gm, "reconnectGraceSeconds", 60f);
+            gm.RegisterPlayer("p1");
+            gm.RegisterPlayer("p2");
+            gm.TrySelectRole("p1", Role.Robber);
+            gm.TrySelectRole("p2", Role.Father);
+            gm.BeginRound();
+
+            (string pid, float deadline)? captured = null;
+            gm.OnPlayerDisconnected += (pid, dl) => captured = (pid, dl);
+
+            gm.MarkDisconnected("p1");
+
+            Assert.IsTrue(captured.HasValue);
+            Assert.AreEqual("p1", captured.Value.pid);
+            Assert.AreEqual(Time.time + 60f, captured.Value.deadline, 0.1f);
+            Assert.AreEqual(GameState.InProgress, gm.State);
+        }
+
+        [Test]
+        public void MarkDisconnected_outside_InProgress_fully_unregisters()
+        {
+            gm.RegisterPlayer("p1");
+            // Waiting에서 끊김 → 즉시 완전 이탈
+            gm.MarkDisconnected("p1");
+
+            Assert.IsFalse(gm.RegisteredPlayerIds.Contains("p1"));
+            Assert.IsFalse(HasDisconnectDeadline(gm, "p1"));
+        }
+
+        [Test]
+        public void MarkDisconnected_ignored_for_unregistered_player()
+        {
+            gm.RegisterPlayer("p1");
+            gm.TrySelectRole("p1", Role.Robber);
+            gm.BeginRound();
+
+            int disconnectEvents = 0;
+            gm.OnPlayerDisconnected += (_, _) => disconnectEvents++;
+
+            gm.MarkDisconnected("ghost");
+
+            Assert.AreEqual(0, disconnectEvents);
+            Assert.IsFalse(HasDisconnectDeadline(gm, "ghost"));
+        }
+
+        [Test]
+        public void MarkDisconnected_duplicate_call_is_noop_after_first()
+        {
+            gm.RegisterPlayer("p1");
+            gm.RegisterPlayer("p2");
+            gm.TrySelectRole("p1", Role.Robber);
+            gm.TrySelectRole("p2", Role.Father);
+            gm.BeginRound();
+
+            int disconnectEvents = 0;
+            gm.OnPlayerDisconnected += (_, _) => disconnectEvents++;
+
+            gm.MarkDisconnected("p1");
+            gm.MarkDisconnected("p1"); // 중복
+
+            Assert.AreEqual(1, disconnectEvents);
+        }
+
+        [Test]
+        public void MarkDisconnected_already_dead_player_is_noop()
+        {
+            SetField(gm, "playersPerRobber", 2); // 3명 → Required=2
+            gm.RegisterPlayer("p1");
+            gm.RegisterPlayer("p2");
+            gm.RegisterPlayer("p3");
+            gm.TrySelectRole("p1", Role.Robber);
+            gm.TrySelectRole("p2", Role.Robber);
+            gm.TrySelectRole("p3", Role.Father);
+            gm.BeginRound();
+            Assert.AreEqual(GameState.InProgress, gm.State);
+
+            gm.ReportPlayerDied("p1"); // 강도 1명 사망, 1명(p2) 생존
+
+            int disconnectEvents = 0;
+            gm.OnPlayerDisconnected += (_, _) => disconnectEvents++;
+
+            gm.MarkDisconnected("p1"); // 이미 사망한 플레이어
+
+            Assert.AreEqual(0, disconnectEvents);
+            Assert.IsFalse(HasDisconnectDeadline(gm, "p1"));
+        }
+
+        [Test]
+        public void MarkReconnected_within_grace_cancels_timer_and_fires_event()
+        {
+            gm.RegisterPlayer("p1");
+            gm.RegisterPlayer("p2");
+            gm.TrySelectRole("p1", Role.Robber);
+            gm.TrySelectRole("p2", Role.Father);
+            gm.BeginRound();
+
+            gm.MarkDisconnected("p1");
+            Assert.IsTrue(HasDisconnectDeadline(gm, "p1"));
+
+            string reconnectedPid = null;
+            gm.OnPlayerReconnected += pid => reconnectedPid = pid;
+
+            gm.MarkReconnected("p1");
+
+            Assert.AreEqual("p1", reconnectedPid);
+            Assert.IsFalse(HasDisconnectDeadline(gm, "p1"));
+            Assert.AreEqual(GameState.InProgress, gm.State);
+        }
+
+        [Test]
+        public void MarkReconnected_without_disconnect_is_noop()
+        {
+            gm.RegisterPlayer("p1");
+            gm.TrySelectRole("p1", Role.Robber);
+            gm.BeginRound();
+
+            int reconnectEvents = 0;
+            gm.OnPlayerReconnected += _ => reconnectEvents++;
+
+            gm.MarkReconnected("p1");
+
+            Assert.AreEqual(0, reconnectEvents);
+        }
+
+        [Test]
+        public void DisconnectTimeout_marks_player_dead_and_triggers_FamilyWin()
+        {
+            gm.RegisterPlayer("p1");
+            gm.TrySelectRole("p1", Role.Robber);
+            gm.BeginRound();
+
+            gm.MarkDisconnected("p1");
+            ForceDisconnectDeadline(gm, "p1", Time.time - 1f); // 과거로 당김
+
+            string expiredPid = null;
+            gm.OnPlayerDisconnectExpired += pid => expiredPid = pid;
+
+            InvokePrivate(gm, "Update");
+
+            Assert.AreEqual("p1", expiredPid);
+            Assert.AreEqual(GameState.FamilyWin, gm.State);
+            Assert.IsFalse(HasDisconnectDeadline(gm, "p1"));
+        }
+
+        [Test]
+        public void DisconnectTimeout_two_robbers_one_dead_one_timed_out_triggers_FamilyWin()
+        {
+            // 리뷰어 원래 시나리오: 강도 2명 중 r1 사망, r2 이탈 후 유예 만료 → FamilyWin
+            SetField(gm, "playersPerRobber", 2); // 3명 → Required=2
+            gm.RegisterPlayer("r1");
+            gm.RegisterPlayer("r2");
+            gm.RegisterPlayer("f1");
+            gm.TrySelectRole("r1", Role.Robber);
+            gm.TrySelectRole("r2", Role.Robber);
+            gm.TrySelectRole("f1", Role.Father);
+            gm.BeginRound();
+
+            gm.ReportPlayerDied("r1");
+            Assert.AreEqual(GameState.InProgress, gm.State);
+
+            gm.MarkDisconnected("r2");
+            ForceDisconnectDeadline(gm, "r2", Time.time - 1f);
+            InvokePrivate(gm, "Update");
+
+            Assert.AreEqual(GameState.FamilyWin, gm.State);
+        }
+
+        [Test]
+        public void DisconnectTimeout_last_family_leaves_triggers_RobberWin()
+        {
+            // 리뷰어 지적 두 번째: 살아있는 마지막 가족이 이탈 → RobberWin이어야 하는데 타임아웃까지 진행되던 버그
+            gm.RegisterPlayer("r1");
+            gm.RegisterPlayer("f1");
+            gm.RegisterPlayer("f2");
+            gm.TrySelectRole("r1", Role.Robber);
+            gm.TrySelectRole("f1", Role.Father);
+            gm.TrySelectRole("f2", Role.Mother);
+            gm.BeginRound();
+
+            gm.ReportPlayerDied("f1");
+            Assert.AreEqual(GameState.InProgress, gm.State);
+
+            gm.MarkDisconnected("f2");
+            ForceDisconnectDeadline(gm, "f2", Time.time - 1f);
+            InvokePrivate(gm, "Update");
+
+            Assert.AreEqual(GameState.RobberWin, gm.State);
+        }
+
+        [Test]
+        public void DisconnectTimeout_OnPlayerDisconnectExpired_fires_before_StateChanged()
+        {
+            gm.RegisterPlayer("p1");
+            gm.TrySelectRole("p1", Role.Robber);
+            gm.BeginRound();
+
+            var log = new List<string>();
+            gm.OnPlayerDisconnectExpired += pid => log.Add($"expired:{pid}");
+            gm.OnStateChanged += s => log.Add($"state:{s}");
+
+            gm.MarkDisconnected("p1");
+            ForceDisconnectDeadline(gm, "p1", Time.time - 1f);
+            InvokePrivate(gm, "Update");
+
+            CollectionAssert.AreEqual(
+                new[] { "expired:p1", "state:FamilyWin" },
+                log);
+        }
+
+        [Test]
+        public void DisconnectTimeout_ignored_outside_InProgress()
+        {
+            gm.RegisterPlayer("p1");
+            gm.RegisterPlayer("p2");
+            gm.TrySelectRole("p1", Role.Robber);
+            gm.TrySelectRole("p2", Role.Father);
+            gm.BeginRound();
+
+            gm.MarkDisconnected("p1");
+            ForceDisconnectDeadline(gm, "p1", Time.time - 1f);
+            gm.ResetForNewRound(); // Waiting으로 복귀 (유예 집합도 비워짐)
+
+            int expiredEvents = 0;
+            gm.OnPlayerDisconnectExpired += _ => expiredEvents++;
+
+            InvokePrivate(gm, "Update");
+
+            Assert.AreEqual(0, expiredEvents);
+            Assert.AreEqual(GameState.Waiting, gm.State);
+        }
+
+        [Test]
+        public void ResetForNewRound_clears_disconnect_deadlines()
+        {
+            gm.RegisterPlayer("p1");
+            gm.RegisterPlayer("p2");
+            gm.TrySelectRole("p1", Role.Robber);
+            gm.TrySelectRole("p2", Role.Father);
+            gm.BeginRound();
+            gm.MarkDisconnected("p1");
+            Assert.IsTrue(HasDisconnectDeadline(gm, "p1"));
+
+            gm.ResetForNewRound();
+
+            Assert.IsFalse(HasDisconnectDeadline(gm, "p1"));
+        }
+
+        [Test]
+        public void UnregisterPlayer_during_InProgress_cleans_dead_sets_and_rechecks_victory()
+        {
+            // 방어선 테스트: 어댑터가 실수로 라운드 중 UnregisterPlayer를 불러도 승패 산정이 틀어지지 않아야 한다.
+            SetField(gm, "playersPerRobber", 2);
+            gm.RegisterPlayer("r1");
+            gm.RegisterPlayer("r2");
+            gm.RegisterPlayer("f1");
+            gm.TrySelectRole("r1", Role.Robber);
+            gm.TrySelectRole("r2", Role.Robber);
+            gm.TrySelectRole("f1", Role.Father);
+            gm.BeginRound();
+
+            gm.ReportPlayerDied("r1"); // deadRobbers = {r1}, robberCount=2
+            Assert.AreEqual(GameState.InProgress, gm.State);
+
+            // 리뷰어 시나리오: 이미 죽은 r1이 완전 이탈 → dead 집합에서도 빠져야 함.
+            gm.UnregisterPlayer("r1");
+
+            // r2 살아있고 r1은 빠졌으므로 FamilyWin 자동 선언되면 안 된다.
+            Assert.AreEqual(GameState.InProgress, gm.State);
+            Assert.AreEqual(1, gm.CountByRole(Role.Robber));
+        }
+
+        [Test]
+        public void UnregisterPlayer_during_InProgress_triggers_victory_when_last_opponent_leaves()
+        {
+            // 살아있는 마지막 강도/가족이 UnregisterPlayer로 빠지면 즉시 승패 재평가되어야 한다.
+            gm.RegisterPlayer("r1");
+            gm.RegisterPlayer("f1");
+            gm.RegisterPlayer("f2");
+            gm.TrySelectRole("r1", Role.Robber);
+            gm.TrySelectRole("f1", Role.Father);
+            gm.TrySelectRole("f2", Role.Mother);
+            gm.BeginRound();
+
+            gm.ReportPlayerDied("f1");
+
+            gm.UnregisterPlayer("f2"); // 살아있는 마지막 가족 이탈
+
+            Assert.AreEqual(GameState.RobberWin, gm.State);
+        }
+
+        // ═══════════════════════════════════════════════════════════════════
         //  Helpers
         // ═══════════════════════════════════════════════════════════════════
 
@@ -670,6 +968,26 @@ namespace TheShedding.Tests
                 BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.NotNull(m, $"Private method '{methodName}' not found on GameManager");
             m.Invoke(target, null);
+        }
+
+        private static Dictionary<string, float> GetDisconnectDeadlines(GameManager target)
+        {
+            var f = typeof(GameManager).GetField("disconnectDeadlines",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            Assert.NotNull(f, "disconnectDeadlines field not found");
+            return (Dictionary<string, float>)f.GetValue(target);
+        }
+
+        private static bool HasDisconnectDeadline(GameManager target, string playerId)
+            => GetDisconnectDeadlines(target).ContainsKey(playerId);
+
+        /// <summary>EditMode에서 Time.time을 조작할 수 없으니 데드라인 자체를 과거로 당긴다.</summary>
+        private static void ForceDisconnectDeadline(GameManager target, string playerId, float deadline)
+        {
+            var dict = GetDisconnectDeadlines(target);
+            Assert.IsTrue(dict.ContainsKey(playerId),
+                $"ForceDisconnectDeadline called on '{playerId}' with no active timer");
+            dict[playerId] = deadline;
         }
 
         /// <summary>테스트용 ItemDatabase를 ScriptableObject로 즉석 생성.</summary>
