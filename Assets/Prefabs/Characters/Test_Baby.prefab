@@ -207,6 +207,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3261542727490984013}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8665367756048289031}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -3395747959864721171}
   m_SourcePrefab: {fileID: 100100000, guid: cb811ea7ba6e3470fb5b02738bd74773, type: 3}
 --- !u!95 &3129693679900378435 stripped
 Animator:
@@ -567,3 +573,29 @@ MonoBehaviour:
   selectedColor: {r: 1, g: 0.85, b: 0.2, a: 1}
   selectedBorderThickness: 4
   enableHotkeys: 1
+--- !u!114 &-8665367756048289031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8558277083610137987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8833fc2b0d53d43e78c8f94d9c5aae77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TheShedding.Network::TheShedding.Network.NetworkInventory
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &-3395747959864721171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8558277083610137987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82650815ee6d43f3804a639f4b22490, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TheShedding.Network::TheShedding.Network.BabyNetworkAdapter
+  ShowTopMostFoldoutHeaderGroup: 1

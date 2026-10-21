@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3228298565931973114}
   - component: {fileID: 8698795213739489399}
   - component: {fileID: 7279174548404485916}
+  - component: {fileID: 4022828005893334680}
   m_Layer: 7
   m_Name: Test_House_Item
   m_TagString: Untagged
@@ -128,3 +129,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: TheShedding.Gameplay::TheShedding.Interactables.ItemPickup
   itemData: {fileID: 11400000, guid: 8b011ca065e5c4004b44c0fec0c8c3a3, type: 2}
+--- !u!114 &4022828005893334680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2211132695892330128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 0
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  m_InScenePlacedDisabledByDefault: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  m_InScenePlaced: 0
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
