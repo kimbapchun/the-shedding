@@ -9,7 +9,7 @@ namespace TheShedding.Network
     {
         public override void Skill() => StealRpc();
 
-        [Rpc(SendTo.Server, RequireOwnership = true)]
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         private void StealRpc() => Controller.OnSkillInput();
     }
 }

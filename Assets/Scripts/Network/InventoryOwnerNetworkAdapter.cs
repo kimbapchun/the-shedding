@@ -37,7 +37,7 @@ namespace TheShedding.Network
         public virtual void Skill() => Controller.OnSkillInput();
 
         // 위치는 소유자 권위라 서버가 보는 위치로 다시 판정한다.
-        [Rpc(SendTo.Server, RequireOwnership = true)]
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         private void InteractRpc() => Controller.TryInteract();
     }
 }

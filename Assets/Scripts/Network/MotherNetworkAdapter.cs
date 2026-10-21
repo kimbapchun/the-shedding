@@ -19,7 +19,7 @@ namespace TheShedding.Network
         // 선택 슬롯은 각자 로컬이라 고른 함정 id를 같이 보낸다.
         public override void Skill() => PlaceTrapRpc(inventory.SelectedItemId);
 
-        [Rpc(SendTo.Server, RequireOwnership = true)]
+        [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         private void PlaceTrapRpc(int trapId)
         {
             if (!inventory.Select(trapId)) return;
