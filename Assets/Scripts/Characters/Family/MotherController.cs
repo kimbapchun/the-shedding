@@ -129,9 +129,9 @@ namespace TheShedding.Characters
 
         protected override bool UseSkill()
         {
-            // RemoveItem이 EnsureSelectionValid를 동기로 부르면 HandleSelectionChanged가 실행되어
-            // selectedTrap이 다음 아이템으로 바뀐다. 이벤트 발화 전에 로컬 스냅샷을 잡아둔다.
-            var trap = selectedTrap;
+            // 캐시(selectedTrap)는 컴포넌트가 꺼져 있으면 비므로 직접 조회한다.
+            // RemoveItem 이후 선택이 바뀌어도 이 지역 변수는 유지된다.
+            var trap = itemDatabase != null ? itemDatabase.Get(Inventory.SelectedItemId) as TrapItem : null;
             if (trap == null) return false;
             if (!Inventory.RemoveItem(trap.id)) return false;
 
