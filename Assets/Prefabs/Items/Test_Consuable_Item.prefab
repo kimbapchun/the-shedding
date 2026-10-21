@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5624651414809184117}
   - component: {fileID: 3082633499337558365}
   - component: {fileID: -6125038466911085415}
+  - component: {fileID: 4625109651413945363}
   m_Layer: 7
   m_Name: Test_Consuable_Item
   m_TagString: Untagged
@@ -154,3 +155,16 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &4625109651413945363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048225899037136639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 573853a3fdc045c085c520c292bf08dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TheShedding.Network::TheShedding.Network.NetworkItemVisibility
+  ShowTopMostFoldoutHeaderGroup: 1

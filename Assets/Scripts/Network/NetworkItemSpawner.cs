@@ -42,10 +42,8 @@ namespace TheShedding.Network
 
             if (pickup.TryGetComponent(out NetworkObject networkObject) && networkObject.IsSpawned)
             {
-                // 씬 배치 오브젝트는 파괴하면 씬 동기화가 꼬여서 비활성화만 한다.
-                bool inScene = networkObject.InScenePlaced;
-                networkObject.Despawn(destroy: !inScene);
-                if (inScene) pickup.gameObject.SetActive(false);
+                // 씬 배치 오브젝트는 파괴하면 씬 동기화가 꼬인다. 숨기기는 NetworkItemVisibility가 한다.
+                networkObject.Despawn(destroy: !networkObject.InScenePlaced);
             }
             else
                 Debug.LogError($"[NetworkItemSpawner] '{pickup.name}'에 스폰된 NetworkObject가 없습니다.", pickup);
