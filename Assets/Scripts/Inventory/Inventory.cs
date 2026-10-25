@@ -7,9 +7,7 @@ namespace TheShedding.InventorySystem
     /// <summary>
     /// 아이템 ID 목록을 관리한다. 이름·아이콘·효과 같은 실체는 알지 못한다.
     ///
-    /// 리스트를 변경하는 진입점은 <see cref="AddItem"/>과 <see cref="RemoveItem"/> 두 개뿐이다.
-    /// 타입 기반 조회 같은 부가 기능은 InventoryQueries 확장 메서드에서 이 두 진입점만
-    /// 사용해 구현한다.
+    /// 추가·삭제는 AddItem, RemoveItem, RemoveAt으로 처리한다. SetItems는 초기 스냅샷 적용용이다.
     /// </summary>
     public class Inventory : MonoBehaviour
     {
@@ -52,8 +50,14 @@ namespace TheShedding.InventorySystem
 
         public bool RemoveItem(int id)
         {
-            int idx = itemIds.IndexOf(id);
-            if (idx < 0) return false;
+            return RemoveAt(itemIds.IndexOf(id));
+        }
+
+        /// <summary>중복 ID가 있어도 지정한 슬롯만 제거한다.</summary>
+        public bool RemoveAt(int idx)
+        {
+            if (idx < 0 || idx >= itemIds.Count) return false;
+            int id = itemIds[idx];
 
             int prevIndex = selectedIndex;
             int prevId = SelectedItemId;
@@ -63,6 +67,31 @@ namespace TheShedding.InventorySystem
             if (prevIndex != selectedIndex || prevId != SelectedItemId)
                 OnSelectedItemChanged?.Invoke(SelectedItemId);
             return true;
+        }
+
+        /// <summary>목록을 통째로 교체한다. 선택은 같은 id가 남아 있으면 유지한다.</summary>
+        public void SetItems(IReadOnlyList<int> ids)
+        {
+            int prevId = SelectedItemId;
+            for (int i = itemIds.Count - 1; i >= 0; i--)
+            {
+                int removed = itemIds[i];
+                itemIds.RemoveAt(i);
+                OnItemRemoved?.Invoke(removed, i);
+            }
+            foreach (int id in ids)
+            {
+                if (id == NoSelection || IsFull) continue;
+                itemIds.Add(id);
+                OnItemAdded?.Invoke(id, itemIds.Count - 1);
+            }
+
+            int keep = itemIds.IndexOf(prevId);
+            selectedIndex = itemIds.Count == 0 ? NoSelection
+                : keep >= 0 ? keep
+                : Mathf.Clamp(selectedIndex, 0, itemIds.Count - 1);
+            if (SelectedItemId != prevId)
+                OnSelectedItemChanged?.Invoke(SelectedItemId);
         }
 
         // ── 선택 슬롯 ─────────────────────────────────────────────────────

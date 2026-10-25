@@ -2,6 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TheShedding.Characters;
+using TheShedding.UI;
 
 namespace TheShedding.Network
 {
@@ -33,6 +34,12 @@ namespace TheShedding.Network
             if (TryGetComponent(out PlayerInputReader inputReader))
             {
                 inputReader.enabled = false;
+            }
+
+            // 캐릭터마다 같은 위치에 그려지고 단축키도 먹어서, 남의 것이 겹쳐 보인다.
+            if (TryGetComponent(out InventoryTestUI testUI))
+            {
+                testUI.enabled = false;
             }
 
             // PlayerInput이 여러 개 살아 있으면 Input System이 로컬 분할 플레이로 보고

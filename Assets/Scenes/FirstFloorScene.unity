@@ -27864,9 +27864,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1379963723}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b7888d67307c43e482d212c86ce36cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 4083c8eb2df7b431b9c047ceeb9dea8b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: TheShedding.Gameplay::TheShedding.Interactables.LocalItemSpawner
+  m_EditorClassIdentifier: TheShedding.Network::TheShedding.Network.NetworkItemSpawner
+  itemPrefabs:
+  - {fileID: -9140967378524799406, guid: 81877824dcefe4cd98d3e6b19d2fc800, type: 3}
+  - {fileID: 7229923902178748514, guid: 2f4a056ca389841d09c278fe6e785f3a, type: 3}
+  - {fileID: -6125038466911085415, guid: ab4ae13f25c8a410c9d5501671e4163f, type: 3}
+  - {fileID: 4022828005893334680, guid: da78e6855fa6040d1b13da8df258ae41, type: 3}
+  - {fileID: 3243173294888552335, guid: a98fcf1571a00463b8e6893d859aeb05, type: 3}
 --- !u!4 &1379963725
 Transform:
   m_ObjectHideFlags: 0

@@ -17,6 +17,9 @@ namespace TheShedding.Characters
         private BaseCharacterController controller;
         private PlayerInput playerInput;
 
+        // 지정되면 상호작용·스킬 입력을 컨트롤러 대신 여기로 보낸다.
+        public ICharacterCommands Commands { get; set; }
+
         private Vector2 moveInput;
         private bool sprintInput;
         private float lastScrollFireTime;
@@ -96,9 +99,19 @@ namespace TheShedding.Characters
         }
 
         private void OnAttackPerformed(InputAction.CallbackContext ctx)   => controller.OnAttackInput();
-        private void OnSkillPerformed(InputAction.CallbackContext ctx)    => controller.OnSkillInput();
+        private void OnSkillPerformed(InputAction.CallbackContext ctx)
+        {
+            if (Commands != null) Commands.Skill();
+            else controller.OnSkillInput();
+        }
+
         private void OnJumpPerformed(InputAction.CallbackContext ctx)     => controller.OnJumpInput();
-        private void OnInteractPerformed(InputAction.CallbackContext ctx) => controller.TryInteract();
+        private void OnInteractPerformed(InputAction.CallbackContext ctx)
+        {
+            if (Commands != null) Commands.Interact();
+            else controller.TryInteract();
+        }
+
         private void OnSitPerformed(InputAction.CallbackContext ctx)      => controller.SetSittingState(!controller.IsSitting);
         private void OnLiePerformed(InputAction.CallbackContext ctx)      => controller.SetLyingState(!controller.IsLying);
         private void OnPreviousPerformed(InputAction.CallbackContext ctx) => controller.OnPreviousItem();
