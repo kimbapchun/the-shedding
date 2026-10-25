@@ -6,7 +6,7 @@ using TheShedding.InventorySystem;
 namespace TheShedding.Network
 {
     [RequireComponent(typeof(MotherController))]
-    public class MotherNetworkAdapter : InventoryOwnerNetworkAdapter
+    public class MotherNetworkAdapter : CharacterInputNetworkAdapter
     {
         private Inventory inventory;
 
@@ -22,8 +22,7 @@ namespace TheShedding.Network
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
         private void PlaceTrapRpc(int trapId)
         {
-            if (!inventory.Select(trapId)) return;
-            Controller.OnSkillInput();
+            ((MotherController)Controller).TryPlaceTrap(trapId);
         }
     }
 }

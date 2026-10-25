@@ -127,11 +127,22 @@ namespace TheShedding.Characters
 
         // ── 우클릭 스킬: 함정 설치 ───────────────────────────────────────
 
-        protected override bool UseSkill()
+        protected override bool UseSkill() => ConsumeAndPlaceTrap(Inventory.SelectedItemId);
+
+        /// <summary>선택 슬롯을 변경하지 않고 요청한 함정을 검증·소모한다. 서버 중계 진입점.</summary>
+        public bool TryPlaceTrap(int trapId)
+        {
+            if (!CanAct() || !IsSkillReady) return false;
+            if (!ConsumeAndPlaceTrap(trapId)) return false;
+            skillCooldownEndTime = Time.time + skillCooldownDuration;
+            return true;
+        }
+
+        private bool ConsumeAndPlaceTrap(int trapId)
         {
             // 캐시(selectedTrap)는 컴포넌트가 꺼져 있으면 비므로 직접 조회한다.
             // RemoveItem 이후 선택이 바뀌어도 이 지역 변수는 유지된다.
-            var trap = itemDatabase != null ? itemDatabase.Get(Inventory.SelectedItemId) as TrapItem : null;
+            var trap = itemDatabase != null ? itemDatabase.Get(trapId) as TrapItem : null;
             if (trap == null) return false;
             if (!Inventory.RemoveItem(trap.id)) return false;
 

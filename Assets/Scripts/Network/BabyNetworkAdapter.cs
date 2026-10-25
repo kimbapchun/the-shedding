@@ -5,7 +5,7 @@ using TheShedding.Characters;
 namespace TheShedding.Network
 {
     [RequireComponent(typeof(BabyController))]
-    public class BabyNetworkAdapter : InventoryOwnerNetworkAdapter
+    public class BabyNetworkAdapter : CharacterInputNetworkAdapter
     {
         public override void Skill() => StealRpc();
 

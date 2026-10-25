@@ -25,7 +25,7 @@ namespace TheShedding.Network
             {
                 if (prefab == null || !prefab.TryGetComponent(out ItemPickup pickup)) continue;
                 if (!prefabById.TryAdd(pickup.ItemId, prefab))
-                    Debug.LogError($"[NetworkItemSpawner] id 중복: {pickup.ItemId} ({prefab.name})", this);
+                    Debug.LogError($"[NetworkItemSpawner] id 중복: {pickup.ItemId} (기존: {prefabById[pickup.ItemId].name}, 새로: {prefab.name})", this);
             }
         }
 
