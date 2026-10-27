@@ -21,6 +21,14 @@ namespace TheShedding.Characters
 
         public Inventory Inventory { get; private set; }
         public event Action<TrapType, Vector3> OnTrapPlaced;
+        public event Action<float> OnTrapCooldownStarted;
+
+        // 네트워크 계층은 서버의 남은 시간을 로컬 시간축으로 변환해 전달한다.
+        public void SynchronizeTrapCooldown(float remainingSeconds)
+        {
+            skillCooldownEndTime = Time.time + Mathf.Max(0f, remainingSeconds);
+            UpdateTrapPreview();
+        }
 
         // 선택이 바뀔 때만 갱신되는 캐시. Update에서 매 프레임 database 조회를 피한다.
         private TrapItem selectedTrap;
@@ -129,12 +137,16 @@ namespace TheShedding.Characters
 
         protected override bool UseSkill() => ConsumeAndPlaceTrap(Inventory.SelectedItemId);
 
+        public override void OnSkillInput() => TryPlaceTrap(Inventory.SelectedItemId);
+
         /// <summary>선택 슬롯을 변경하지 않고 요청한 함정을 검증·소모한다. 서버 중계 진입점.</summary>
         public bool TryPlaceTrap(int trapId)
         {
             if (!CanAct() || !IsSkillReady) return false;
             if (!ConsumeAndPlaceTrap(trapId)) return false;
             skillCooldownEndTime = Time.time + skillCooldownDuration;
+            UpdateTrapPreview();
+            OnTrapCooldownStarted?.Invoke(skillCooldownDuration);
             return true;
         }
 
