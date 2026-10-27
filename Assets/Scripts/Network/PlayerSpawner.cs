@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TheShedding.Characters;
+using TheShedding.GameManagement;
 
 namespace TheShedding.Network
 {
@@ -12,14 +14,14 @@ namespace TheShedding.Network
     /// 쓰지 않는 이유: 그 경로는 접속이 승인되는 순간, 즉 아직 로비에 있을 때 스폰한다.
     /// 캐릭터는 게임 씬의 스폰 지점 위에 나타나야 하므로 씬 로딩이 끝난 뒤로 미뤄야 한다.
     ///
-    /// 역할(아빠/엄마/아기/개/강도) 배정은 아직 없다. 지금은 전원 같은 프리팹으로 스폰하고,
-    /// 스폰 파이프라인이 도는 것을 확인한 뒤 역할을 얹는다.
+    /// 서버에서 역할을 배정하고 NGO에 등록된 역할별 프리팹을 스폰한다.
     /// </summary>
     [RequireComponent(typeof(NetworkManager))]
     public class PlayerSpawner : MonoBehaviour
     {
-        [Tooltip("스폰할 캐릭터 프리팹. NetworkObject가 있어야 하고 DefaultNetworkPrefabs에 등록되어 있어야 한다.")]
-        [SerializeField] private GameObject characterPrefab;
+        [SerializeField, Min(1)] private int playersPerRobber = 4;
+        private readonly RoleRoster roles = new();
+        private readonly Dictionary<Role, GameObject> prefabs = new();
 
         private NetworkManager m_NetworkManager;
         private NetworkSceneLoader m_SceneLoader;
@@ -64,24 +66,11 @@ namespace TheShedding.Network
 
         private void Start()
         {
-            // 셋 다 비어 있어도 컴파일은 되고 방도 열린다. 스폰 시점에야 조용히 실패하므로
-            // 설정 실수는 시작할 때 드러내는 편이 낫다.
+            // 씬 전환 설정 오류를 게임 시작 전에 드러낸다.
             if (m_SceneLoader == null)
             {
                 Debug.LogError("[PlayerSpawner] 같은 GameObject에 NetworkSceneLoader가 없습니다. " +
                                "씬 로딩 완료를 알 수 없어 스폰이 일어나지 않습니다.");
-            }
-
-            if (characterPrefab == null)
-            {
-                Debug.LogError("[PlayerSpawner] Character Prefab이 비어 있습니다. Inspector에서 지정하세요.");
-                return;
-            }
-
-            if (!characterPrefab.TryGetComponent<NetworkObject>(out _))
-            {
-                Debug.LogError($"[PlayerSpawner] '{characterPrefab.name}'에 NetworkObject가 없습니다. " +
-                               "네트워크 스폰 대상이 될 수 없습니다.");
             }
         }
 
@@ -105,13 +94,18 @@ namespace TheShedding.Network
                 // 로비로 돌아온 경우. 캐릭터는 씬과 함께 파괴되었으므로 명단만 비운다.
                 // 비우지 않으면 다음 판에서 "이미 스폰됨"으로 걸러져 아무도 나타나지 않는다.
                 m_SpawnIndexByClientId.Clear();
+                roles.Clear();
                 return;
             }
 
-            foreach (var clientId in m_NetworkManager.ConnectedClientsIds)
+            var clients = new List<ulong>(m_NetworkManager.ConnectedClientsIds);
+            // 접속 순서가 특정 역할을 고정하지 않도록 서버에서 한 번 섞는다.
+            for (int i = clients.Count - 1; i > 0; i--)
             {
-                SpawnFor(clientId);
+                int j = Random.Range(0, i + 1);
+                (clients[i], clients[j]) = (clients[j], clients[i]);
             }
+            foreach (var clientId in clients) SpawnFor(clientId);
         }
 
         /// <summary>
@@ -141,6 +135,7 @@ namespace TheShedding.Network
         private void HandleClientDisconnect(ulong clientId)
         {
             m_SpawnIndexByClientId.Remove(clientId);
+            roles.Release(clientId.ToString());
         }
 
         /// <summary>
@@ -150,6 +145,7 @@ namespace TheShedding.Network
         private void HandleServerStopped(bool wasHost)
         {
             m_SpawnIndexByClientId.Clear();
+            roles.Clear();
         }
 
         // ── 스폰 ─────────────────────────────────────────────────────────
@@ -162,6 +158,20 @@ namespace TheShedding.Network
                 return;
             }
 
+            prefabs.Clear();
+            foreach (var entry in m_NetworkManager.NetworkConfig.Prefabs.Prefabs)
+            {
+                if (entry.Prefab == null) continue;
+                var role = CharacterRole.Resolve(entry.Prefab.GetComponent<BaseCharacterController>());
+                if (role != Role.Unassigned) prefabs.TryAdd(role, entry.Prefab);
+            }
+            var assigned = roles.Assign(clientId.ToString(), m_NetworkManager.ConnectedClientsIds.Count,
+                playersPerRobber, prefabs.Keys);
+            if (!prefabs.TryGetValue(assigned, out var characterPrefab))
+            {
+                Debug.LogError($"[PlayerSpawner] clientId={clientId}에 배정할 역할 프리팹이 없습니다.");
+                return;
+            }
             var spawnIndex = TakeFreeSpawnIndex();
 
             ResolvePose(spawnIndex, out var position, out var rotation);
@@ -171,6 +181,7 @@ namespace TheShedding.Network
             if (!instance.TryGetComponent<NetworkObject>(out var networkObject))
             {
                 Debug.LogError($"[PlayerSpawner] '{characterPrefab.name}'에 NetworkObject가 없어 스폰을 취소합니다.");
+                roles.Release(clientId.ToString());
                 Destroy(instance);
                 return;
             }
@@ -182,7 +193,7 @@ namespace TheShedding.Network
 
             m_SpawnIndexByClientId[clientId] = spawnIndex;
 
-            Debug.Log($"[PlayerSpawner] 스폰 clientId={clientId} spawnIndex={spawnIndex} position={position}");
+            Debug.Log($"[PlayerSpawner] 스폰 clientId={clientId} role={assigned} spawnIndex={spawnIndex} position={position}");
         }
 
         /// <summary>
