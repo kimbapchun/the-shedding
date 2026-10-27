@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System;
 using TheShedding.InventorySystem;
 using TheShedding.Items;
@@ -22,6 +23,7 @@ namespace TheShedding.Characters
         public Inventory Inventory { get; private set; }
         public event Action<TrapType, Vector3> OnTrapPlaced;
         public event Action<float> OnTrapCooldownStarted;
+        public Func<TrapItem, Vector3, bool> TrapPlacement { get; set; }
 
         // 네트워크 계층은 서버의 남은 시간을 로컬 시간축으로 변환해 전달한다.
         public void SynchronizeTrapCooldown(float remainingSeconds)
@@ -116,15 +118,19 @@ namespace TheShedding.Characters
 
         // ── 기본 공격 (좌클릭): 칼 공격 ──────────────────────────────────
 
+        private readonly HashSet<BaseCharacterController> attackTargets = new();
+
         protected override bool TryAttack()
         {
+            attackTargets.Clear();
             int count = Physics.OverlapSphereNonAlloc(
                 transform.position, attackRange, AttackBuffer, attackTargetLayer);
 
             bool hit = false;
             for (int i = 0; i < count; i++)
             {
-                if (AttackBuffer[i].TryGetComponent<RobberController>(out var target))
+                var target = AttackBuffer[i].GetComponentInParent<RobberController>();
+                if (target != null && target.IsAlive() && attackTargets.Add(target))
                 {
                     target.TakeDamage(attackDamage);
                     hit = true;
@@ -156,6 +162,8 @@ namespace TheShedding.Characters
             // RemoveItem 이후 선택이 바뀌어도 이 지역 변수는 유지된다.
             var trap = itemDatabase != null ? itemDatabase.Get(trapId) as TrapItem : null;
             if (trap == null) return false;
+            if (!Inventory.Contains(trap.id)) return false;
+            if (TrapPlacement != null && !TrapPlacement(trap, GetPlacementPosition())) return false;
             if (!Inventory.RemoveItem(trap.id)) return false;
 
             OnTrapPlaced?.Invoke(trap.trapType, GetPlacementPosition());

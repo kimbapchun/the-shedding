@@ -2,6 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 using TheShedding.Characters;
 using TheShedding.InventorySystem;
+using TheShedding.Items;
 
 namespace TheShedding.Network
 {
@@ -23,7 +24,10 @@ namespace TheShedding.Network
         {
             base.OnNetworkSpawn();
             if (IsServer)
+            {
                 mother.OnTrapCooldownStarted += HandleCooldownStarted;
+                mother.TrapPlacement = TrySpawnTrap;
+            }
             else
             {
                 trapCooldownEndsAt.OnValueChanged += HandleCooldownChanged;
@@ -34,6 +38,7 @@ namespace TheShedding.Network
         public override void OnNetworkDespawn()
         {
             mother.OnTrapCooldownStarted -= HandleCooldownStarted;
+            mother.TrapPlacement = null;
             trapCooldownEndsAt.OnValueChanged -= HandleCooldownChanged;
             base.OnNetworkDespawn();
         }
@@ -45,6 +50,25 @@ namespace TheShedding.Network
 
         private void ApplyCooldown(double endsAt)
             => mother.SynchronizeTrapCooldown((float)System.Math.Max(0d, endsAt - NetworkManager.ServerTime.Time));
+
+        private bool TrySpawnTrap(TrapItem trap, Vector3 position)
+        {
+            if (!IsServer || trap.placementPrefab == null
+                || !trap.placementPrefab.TryGetComponent<NetworkObject>(out var prefab)
+                || !NetworkManager.NetworkConfig.Prefabs.Contains(trap.placementPrefab)) return false;
+            var instance = Instantiate(prefab, position, Quaternion.identity);
+            try
+            {
+                instance.Spawn(destroyWithScene: true);
+                return instance.IsSpawned;
+            }
+            catch (System.Exception exception)
+            {
+                Debug.LogException(exception, this);
+                Destroy(instance.gameObject);
+                return false;
+            }
+        }
 
         // 선택 슬롯은 각자 로컬이라 고른 함정 id를 같이 보낸다.
         public override void Skill() => PlaceTrapRpc(inventory.SelectedItemId);
