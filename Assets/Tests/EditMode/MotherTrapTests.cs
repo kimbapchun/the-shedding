@@ -40,6 +40,10 @@ namespace TheShedding.Tests
                 Assert.IsFalse(mother.TryPlaceTrap(20)); // 정의는 있어도 소유하지 않음
                 mother.Inventory.AddItem(20);
                 mother.Inventory.AddItem(20);
+                mother.TrapPlacement = (_, _) => false;
+                Assert.IsFalse(mother.TryPlaceTrap(20)); // 미등록 프리팹 등 설치 실패 시 보존
+                CollectionAssert.AreEqual(new[] { 10, 20, 20 }, mother.Inventory.ItemIds);
+                mother.TrapPlacement = (_, _) => true;
                 Assert.IsFalse(mother.TryPlaceTrap(10)); // 함정이 아닌 ID
                 Assert.IsTrue(mother.TryPlaceTrap(20));
                 Assert.AreEqual(10, mother.Inventory.SelectedItemId);
