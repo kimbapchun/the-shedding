@@ -138,6 +138,22 @@ namespace TheShedding.Tests
             Stabilize();
         }
 
+        [UnityTest]
+        public IEnumerator Owner_camera_binds_when_camera_appears_after_spawn()
+        {
+            host = CreateManager("camera-test-host");
+            Assert.IsTrue(host.StartHost());
+            var father = Spawn("Dad", host.LocalClientId, new Vector3(20f, 1f, 20f));
+            yield return null;
+            var camera = new GameObject("late camera", typeof(Camera), typeof(ThirdPersonCamera))
+                .GetComponent<ThirdPersonCamera>();
+            yield return Until(() => camera.Target == father.GetComponent<FatherController>(), "late camera binding");
+            var input = father.GetComponent<UnityEngine.InputSystem.PlayerInput>();
+            Assert.IsTrue(input.currentActionMap.enabled);
+            Assert.AreEqual("Player", input.currentActionMap.name);
+            Assert.Less(Vector3.Distance(camera.transform.position, father.transform.position), 8f);
+        }
+
         private NetworkManager CreateManager(string name)
         {
             var go = new GameObject(name);
