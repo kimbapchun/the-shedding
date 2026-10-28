@@ -17,5 +17,5 @@ MonoBehaviour:
   icon: {fileID: 0}
   countsAsStolen: 0
   trapType: 0
-  placementPrefab: {fileID: 0}
-  previewPrefab: {fileID: 0}
+  placementPrefab: {fileID: 2171757957784381668, guid: afeb785229441407b9a1069d72c344b2, type: 3}
+  previewPrefab: {fileID: 3835905224519315210, guid: d6894fb2dad4744fa8c719a1ac296177, type: 3}

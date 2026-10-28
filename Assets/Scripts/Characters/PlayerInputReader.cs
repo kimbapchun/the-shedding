@@ -34,6 +34,8 @@ namespace TheShedding.Characters
         private InputAction jumpAction;
         private InputAction previousAction;
         private InputAction nextAction;
+        private InputAction healAction;
+        private InputAction dropAction;
 
         private void Awake()
         {
@@ -50,10 +52,14 @@ namespace TheShedding.Characters
             jumpAction     = playerInput.actions["Jump"];
             previousAction = playerInput.actions["Previous"];
             nextAction     = playerInput.actions["Next"];
+            healAction = playerInput.actions.FindAction("UseHealItem");
+            dropAction = playerInput.actions.FindAction("DropItem");
         }
 
         private void OnEnable()
         {
+            if (healAction != null) healAction.performed += OnHealPerformed;
+            if (dropAction != null) dropAction.performed += OnDropPerformed;
             attackAction.performed   += OnAttackPerformed;
             skillAction.performed    += OnSkillPerformed;
             jumpAction.performed     += OnJumpPerformed;
@@ -66,6 +72,8 @@ namespace TheShedding.Characters
 
         private void OnDisable()
         {
+            if (healAction != null) healAction.performed -= OnHealPerformed;
+            if (dropAction != null) dropAction.performed -= OnDropPerformed;
             attackAction.performed   -= OnAttackPerformed;
             skillAction.performed    -= OnSkillPerformed;
             jumpAction.performed     -= OnJumpPerformed;
@@ -98,7 +106,17 @@ namespace TheShedding.Characters
             controller.Move(moveInput, sprintInput);
         }
 
-        private void OnAttackPerformed(InputAction.CallbackContext ctx)   => controller.OnAttackInput();
+        private void OnAttackPerformed(InputAction.CallbackContext ctx)
+        {
+            if (Commands != null) Commands.Attack();
+            else controller.OnAttackInput();
+        }
+        private void OnHealPerformed(InputAction.CallbackContext ctx)
+        {
+            if (Commands != null) Commands.UseHealItem();
+            else if (controller is RobberCharacterController robber) robber.UseHealItem();
+        }
+        private void OnDropPerformed(InputAction.CallbackContext ctx) => Commands?.DropItem();
         private void OnSkillPerformed(InputAction.CallbackContext ctx)
         {
             if (Commands != null) Commands.Skill();
@@ -112,8 +130,16 @@ namespace TheShedding.Characters
             else controller.TryInteract();
         }
 
-        private void OnSitPerformed(InputAction.CallbackContext ctx)      => controller.SetSittingState(!controller.IsSitting);
-        private void OnLiePerformed(InputAction.CallbackContext ctx)      => controller.SetLyingState(!controller.IsLying);
+        private void OnSitPerformed(InputAction.CallbackContext ctx)
+        {
+            if (Commands != null) Commands.SetSitting(!controller.IsSitting);
+            else controller.SetSittingState(!controller.IsSitting);
+        }
+        private void OnLiePerformed(InputAction.CallbackContext ctx)
+        {
+            if (Commands != null) Commands.SetLying(!controller.IsLying);
+            else controller.SetLyingState(!controller.IsLying);
+        }
         private void OnPreviousPerformed(InputAction.CallbackContext ctx) => controller.OnPreviousItem();
         private void OnNextPerformed(InputAction.CallbackContext ctx)     => controller.OnNextItem();
     }

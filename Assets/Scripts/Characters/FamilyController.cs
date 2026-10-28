@@ -4,6 +4,7 @@ namespace TheShedding.Characters
 {
     public abstract class FamilyController : BaseCharacterController
     {
+        public event System.Action OnAttackStarted;
         [Header("Attack")]
         [SerializeField] protected float attackCooldownDuration = 1f;
 
@@ -21,12 +22,12 @@ namespace TheShedding.Characters
         protected bool IsAttackReady => Time.time >= attackCooldownEndTime;
         protected bool IsSkillReady  => Time.time >= skillCooldownEndTime;
 
-        protected override void Update()
-        {
-            if (CurrentStatusEffect != StatusEffect.None && Time.time >= statusEffectEndTime)
-                ApplyStatusEffect(StatusEffect.None, 0f);
+        public float FlashlightStunEndTime => stunEndTime;
 
-            base.Update();
+        public void SynchronizeFlashlightStun(float remaining)
+        {
+            stunEndTime = Time.time + Mathf.Max(0f, remaining);
+            if (IsStunned) StopMovement();
         }
 
         protected override bool CanAct() => base.CanAct() && !IsStunned && CurrentStatusEffect != StatusEffect.KnockedDown;
@@ -60,7 +61,8 @@ namespace TheShedding.Characters
             if (IsLying) return;
 
             attackCooldownEndTime = Time.time + attackCooldownDuration;
-            animator?.SetTrigger(HashIsAttacking);
+            if (!NetworkSimulation) animator?.SetTrigger(HashIsAttacking);
+            OnAttackStarted?.Invoke();
             TryAttack();
         }
 

@@ -3,6 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using TheShedding.Characters;
 using TheShedding.Interactables;
+using TheShedding.InventorySystem;
 
 namespace TheShedding.Network
 {
@@ -49,19 +50,40 @@ namespace TheShedding.Network
                 Debug.LogError($"[NetworkItemSpawner] '{pickup.name}'에 스폰된 NetworkObject가 없습니다.", pickup);
         }
 
-        public void Spawn(int itemId, Vector3 position)
+        public bool TryDrop(Inventory inventory, int itemId, Vector3 position)
         {
-            if (!IsServer) return;
+            if (!IsServer || inventory == null || !inventory.Contains(itemId)
+                || !prefabById.ContainsKey(itemId)) return false;
+            // 스폰 실패 시 아이템을 잃지 않도록 성공 후 소모한다.
+            if (!TrySpawn(itemId, position)) return false;
+            return inventory.RemoveItem(itemId);
+        }
+
+        public void Spawn(int itemId, Vector3 position) => TrySpawn(itemId, position);
+
+        private bool TrySpawn(int itemId, Vector3 position)
+        {
+            if (!IsServer) return false;
 
             if (!prefabById.TryGetValue(itemId, out var prefab))
             {
                 Debug.LogError($"[NetworkItemSpawner] id {itemId} 프리팹이 등록되지 않았습니다.", this);
-                return;
+                return false;
             }
 
             var instance = Instantiate(prefab, position, Quaternion.identity);
             instance.GetComponent<ItemPickup>().Spawner = this;
-            instance.Spawn(destroyWithScene: true);
+            try
+            {
+                instance.Spawn(destroyWithScene: true);
+                return instance.IsSpawned;
+            }
+            catch (System.Exception exception)
+            {
+                Debug.LogException(exception, this);
+                Destroy(instance.gameObject);
+                return false;
+            }
         }
     }
 }
