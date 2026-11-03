@@ -52,7 +52,11 @@ namespace TheShedding.Characters
                 bool died = CurrentLifeSegments > 0 && life <= 0;
                 CurrentLifeSegments = life;
                 OnLifeChanged?.Invoke(life);
-                if (died) OnDeath();
+                if (died)
+                {
+                    OnDied?.Invoke();
+                    OnDeath();
+                }
             }
             CurrentStatusEffect = status;
             statusEffectEndTime = Time.time + Mathf.Max(0f, statusRemaining);

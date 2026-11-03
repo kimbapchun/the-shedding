@@ -38,6 +38,59 @@ namespace TheShedding.Tests
         }
 
         [Test]
+        public void Selected_role_takes_priority_and_counts_toward_auto_assignment()
+        {
+            var roster = new RoleRoster();
+            Assert.AreEqual(Role.Robber, roster.Assign("a", 2, 4, AllRoles, Role.Robber));
+            Assert.AreEqual(Role.Father, roster.Assign("b", 2, 4, AllRoles));
+            Assert.AreEqual(Role.Mother, roster.Assign("c", 3, 4, new[] { Role.Mother }, Role.Dog));
+        }
+
+        [Test]
+        public void Replicated_death_raises_died_event_once()
+        {
+            var go = new GameObject("replicated robber");
+            try
+            {
+                var robber = go.AddComponent<RobberCharacterController>();
+                Awake(robber);
+                int died = 0;
+                robber.OnDied += () => died++;
+                robber.ApplyReplicatedState(0, StatusEffect.None, 0f, 0f);
+                robber.ApplyReplicatedState(0, StatusEffect.None, 0f, 0f);
+                Assert.AreEqual(1, died);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
+        public void Repeated_flashlight_stun_refreshes_end_time_only_at_interval()
+        {
+            var go = new GameObject("stunned father");
+            try
+            {
+                var father = go.AddComponent<FatherController>();
+                Awake(father);
+                father.ApplyFlashlightStun(2f);
+                float end = father.FlashlightStunEndTime;
+                father.SynchronizeFlashlightStun(1.8f);
+                float kept = father.FlashlightStunEndTime;
+                father.ApplyFlashlightStun(2f);
+                Assert.AreEqual(kept, father.FlashlightStunEndTime);
+                father.SynchronizeFlashlightStun(1f);
+                father.ApplyFlashlightStun(2f);
+                Assert.AreEqual(end, father.FlashlightStunEndTime, 0.1f);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
         public void Disabled_server_controller_expires_status_and_blocks_dead_actions()
         {
             var go = new GameObject("server robber");

@@ -18,16 +18,25 @@ namespace TheShedding.Network
 
         private readonly Dictionary<int, NetworkObject> prefabById = new();
 
+        /// <summary>현재 씬의 인스턴스.</summary>
+        public static NetworkItemSpawner Instance { get; private set; }
+
         private static bool IsServer => NetworkManager.Singleton != null && NetworkManager.Singleton.IsServer;
 
         private void Awake()
         {
+            Instance = this;
             foreach (var prefab in itemPrefabs)
             {
                 if (prefab == null || !prefab.TryGetComponent(out ItemPickup pickup)) continue;
                 if (!prefabById.TryAdd(pickup.ItemId, prefab))
                     Debug.LogError($"[NetworkItemSpawner] id 중복: {pickup.ItemId} (기존: {prefabById[pickup.ItemId].name}, 새로: {prefab.name})", this);
             }
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
         }
 
         private void Start()

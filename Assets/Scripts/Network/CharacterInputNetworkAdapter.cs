@@ -67,7 +67,7 @@ namespace TheShedding.Network
         private void DropRpc(int itemId)
         {
             if (!Controller.IsActionAllowed || Controller is not IInventoryOwner owner) return;
-            var spawner = FindFirstObjectByType<NetworkItemSpawner>();
+            var spawner = NetworkItemSpawner.Instance;
             if (spawner != null) spawner.TryDrop(owner.Inventory, itemId,
                 transform.position + transform.forward * 1.5f);
         }

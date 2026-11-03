@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,7 +15,8 @@ namespace TheShedding.Network
     /// 쓰지 않는 이유: 그 경로는 접속이 승인되는 순간, 즉 아직 로비에 있을 때 스폰한다.
     /// 캐릭터는 게임 씬의 스폰 지점 위에 나타나야 하므로 씬 로딩이 끝난 뒤로 미뤄야 한다.
     ///
-    /// 서버에서 역할을 배정하고 NGO에 등록된 역할별 프리팹을 스폰한다.
+    /// GameManager에 선택된 역할이 있으면 따르고, 없으면 서버가 자동 배정해
+    /// NGO에 등록된 역할별 프리팹을 스폰한다.
     /// </summary>
     [RequireComponent(typeof(NetworkManager))]
     public class PlayerSpawner : MonoBehaviour
@@ -25,6 +27,10 @@ namespace TheShedding.Network
 
         private NetworkManager m_NetworkManager;
         private NetworkSceneLoader m_SceneLoader;
+        private ConnectionApprovalHandler m_ApprovalHandler;
+
+        // 접속 해제 콜백 순서상 승인 명단이 먼저 지워질 수 있어 스폰 시점의 값을 들고 있는다.
+        private readonly Dictionary<ulong, string> m_PlayerIdByClientId = new Dictionary<ulong, string>();
 
         /// <summary>
         /// 스폰을 마친 클라이언트 → 배정된 스폰 지점 번호.
@@ -38,6 +44,7 @@ namespace TheShedding.Network
 
             // 싱글톤 대신 같은 오브젝트에서 가져온다. Awake 실행 순서와 무관하게 이미 존재한다.
             m_SceneLoader = GetComponent<NetworkSceneLoader>();
+            m_ApprovalHandler = GetComponent<ConnectionApprovalHandler>();
         }
 
         private void OnEnable()
@@ -93,8 +100,7 @@ namespace TheShedding.Network
             {
                 // 로비로 돌아온 경우. 캐릭터는 씬과 함께 파괴되었으므로 명단만 비운다.
                 // 비우지 않으면 다음 판에서 "이미 스폰됨"으로 걸러져 아무도 나타나지 않는다.
-                m_SpawnIndexByClientId.Clear();
-                roles.Clear();
+                ClearRoster();
                 return;
             }
 
@@ -105,7 +111,9 @@ namespace TheShedding.Network
                 int j = Random.Range(0, i + 1);
                 (clients[i], clients[j]) = (clients[j], clients[i]);
             }
-            foreach (var clientId in clients) SpawnFor(clientId);
+            // 자동 배정이 이미 선택된 역할을 가져가지 않도록 선택한 사람부터 스폰한다.
+            foreach (var clientId in clients.OrderBy(id => GetSelectedRole(ResolvePlayerId(id)) == Role.Unassigned))
+                SpawnFor(clientId);
         }
 
         /// <summary>
@@ -135,18 +143,29 @@ namespace TheShedding.Network
         private void HandleClientDisconnect(ulong clientId)
         {
             m_SpawnIndexByClientId.Remove(clientId);
-            roles.Release(clientId.ToString());
+            if (m_PlayerIdByClientId.Remove(clientId, out var playerId)) roles.Release(playerId);
         }
 
         /// <summary>
         /// 방을 닫을 때 명단을 비운다. 한 번 실행한 앱에서 호스트를 여러 번 열 수 있는데,
         /// 남겨두면 다음 방에서 같은 clientId가 "이미 스폰됨"으로 걸러진다.
         /// </summary>
-        private void HandleServerStopped(bool wasHost)
+        private void HandleServerStopped(bool wasHost) => ClearRoster();
+
+        private void ClearRoster()
         {
             m_SpawnIndexByClientId.Clear();
+            m_PlayerIdByClientId.Clear();
             roles.Clear();
         }
+
+        private string ResolvePlayerId(ulong clientId)
+            => m_ApprovalHandler != null && m_ApprovalHandler.TryGetPlayerId(clientId, out var playerId)
+                ? playerId
+                : clientId.ToString();
+
+        private static Role GetSelectedRole(string playerId)
+            => GameManager.Instance != null ? GameManager.Instance.GetRole(playerId) : Role.Unassigned;
 
         // ── 스폰 ─────────────────────────────────────────────────────────
 
@@ -165,8 +184,9 @@ namespace TheShedding.Network
                 var role = CharacterRole.Resolve(entry.Prefab.GetComponent<BaseCharacterController>());
                 if (role != Role.Unassigned) prefabs.TryAdd(role, entry.Prefab);
             }
-            var assigned = roles.Assign(clientId.ToString(), m_NetworkManager.ConnectedClientsIds.Count,
-                playersPerRobber, prefabs.Keys);
+            var playerId = ResolvePlayerId(clientId);
+            var assigned = roles.Assign(playerId, m_NetworkManager.ConnectedClientsIds.Count,
+                playersPerRobber, prefabs.Keys, GetSelectedRole(playerId));
             if (!prefabs.TryGetValue(assigned, out var characterPrefab))
             {
                 Debug.LogError($"[PlayerSpawner] clientId={clientId}에 배정할 역할 프리팹이 없습니다.");
@@ -181,7 +201,7 @@ namespace TheShedding.Network
             if (!instance.TryGetComponent<NetworkObject>(out var networkObject))
             {
                 Debug.LogError($"[PlayerSpawner] '{characterPrefab.name}'에 NetworkObject가 없어 스폰을 취소합니다.");
-                roles.Release(clientId.ToString());
+                roles.Release(playerId);
                 Destroy(instance);
                 return;
             }
@@ -192,6 +212,7 @@ namespace TheShedding.Network
             networkObject.SpawnAsPlayerObject(clientId, destroyWithScene: true);
 
             m_SpawnIndexByClientId[clientId] = spawnIndex;
+            m_PlayerIdByClientId[clientId] = playerId;
 
             Debug.Log($"[PlayerSpawner] 스폰 clientId={clientId} role={assigned} spawnIndex={spawnIndex} position={position}");
         }

@@ -8,10 +8,16 @@ namespace TheShedding.GameManagement
     public sealed class RoleRoster
     {
         private readonly Dictionary<string, Role> assignments = new();
-        public Role Assign(string playerId, int playerCount, int playersPerRobber, IEnumerable<Role> available)
+        /// <param name="selected">플레이어가 이미 고른 역할. 있으면 자동 배정보다 우선한다.</param>
+        public Role Assign(string playerId, int playerCount, int playersPerRobber, ICollection<Role> choices,
+            Role selected = Role.Unassigned)
         {
             if (assignments.TryGetValue(playerId, out var current)) return current;
-            var choices = new HashSet<Role>(available);
+            if (selected != Role.Unassigned && choices.Contains(selected))
+            {
+                assignments.Add(playerId, selected);
+                return selected;
+            }
             int required = System.Math.Max(1, (playerCount + System.Math.Max(1, playersPerRobber) - 1)
                 / System.Math.Max(1, playersPerRobber));
             Role role = Role.Unassigned;

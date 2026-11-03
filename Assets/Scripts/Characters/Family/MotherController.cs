@@ -143,16 +143,19 @@ namespace TheShedding.Characters
 
         protected override bool UseSkill() => ConsumeAndPlaceTrap(Inventory.SelectedItemId);
 
-        public override void OnSkillInput() => TryPlaceTrap(Inventory.SelectedItemId);
+        protected override void StartSkillCooldown()
+        {
+            base.StartSkillCooldown();
+            UpdateTrapPreview();
+            OnTrapCooldownStarted?.Invoke(skillCooldownDuration);
+        }
 
         /// <summary>선택 슬롯을 변경하지 않고 요청한 함정을 검증·소모한다. 서버 중계 진입점.</summary>
         public bool TryPlaceTrap(int trapId)
         {
             if (!CanAct() || !IsSkillReady) return false;
             if (!ConsumeAndPlaceTrap(trapId)) return false;
-            skillCooldownEndTime = Time.time + skillCooldownDuration;
-            UpdateTrapPreview();
-            OnTrapCooldownStarted?.Invoke(skillCooldownDuration);
+            StartSkillCooldown();
             return true;
         }
 
