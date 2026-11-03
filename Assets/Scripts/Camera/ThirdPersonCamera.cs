@@ -39,11 +39,19 @@ namespace TheShedding
             cam = GetComponent<Camera>();
         }
 
+        public BaseCharacterController Target => target;
+
         public void SetTarget(BaseCharacterController controller, PlayerInput input)
         {
             target = controller;
             lookAction = input.actions["Look"];
             currentPivotHeight = standingPivotHeight;
+            yaw = transform.eulerAngles.y;
+            pitch = Mathf.Clamp(Mathf.DeltaAngle(0f, transform.eulerAngles.x), minPitch, maxPitch);
+            var rotation = Quaternion.Euler(pitch, yaw, 0f);
+            transform.SetPositionAndRotation(target.transform.position + Vector3.up * currentPivotHeight
+                - rotation * Vector3.forward * GetCollisionDistance(target.transform.position + Vector3.up * currentPivotHeight,
+                    -(rotation * Vector3.forward)), rotation);
         }
 
         public void ApplySettings(CameraSettings settings)

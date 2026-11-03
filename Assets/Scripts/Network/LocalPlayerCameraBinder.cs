@@ -19,38 +19,36 @@ namespace TheShedding.Network
     {
         public override void OnNetworkSpawn()
         {
-            // 남의 캐릭터가 내 카메라를 뺏어가지 않게 한다.
-            // 이 검사가 없으면 마지막으로 스폰된 캐릭터가 모두의 카메라를 가져간다.
-            if (!IsOwner)
-            {
-                return;
-            }
-
-            var camera = FindFirstObjectByType<ThirdPersonCamera>();
-
-            if (camera == null)
-            {
-                Debug.LogError("[LocalPlayerCameraBinder] 씬에서 ThirdPersonCamera를 찾지 못했습니다. " +
-                               "카메라가 캐릭터를 따라가지 않습니다.");
-                return;
-            }
-
-            if (!TryGetComponent(out BaseCharacterController controller))
-            {
-                Debug.LogError("[LocalPlayerCameraBinder] 같은 오브젝트에 BaseCharacterController가 없습니다.");
-                return;
-            }
-
-            // SetTarget이 PlayerInput에서 Look 액션을 꺼내 쓴다. 비소유자는
-            // PlayerNetworkAuthority가 PlayerInput을 꺼두지만 여기는 소유자 경로라 살아 있다.
-            if (!TryGetComponent(out PlayerInput playerInput))
-            {
-                Debug.LogError("[LocalPlayerCameraBinder] 같은 오브젝트에 PlayerInput이 없습니다. " +
-                               "시점 조작을 연결할 수 없습니다.");
-                return;
-            }
-
-            camera.SetTarget(controller, playerInput);
+            if (IsOwner) StartCoroutine(BindLocalCamera());
         }
+
+        private System.Collections.IEnumerator BindLocalCamera()
+        {
+            // 씬 동기화 중에는 캐릭터보다 카메라가 늦게 준비될 수 있다.
+            float deadline = Time.realtimeSinceStartup + 10f;
+            while (IsSpawned && IsOwner)
+            {
+                var camera = FindAnyObjectByType<ThirdPersonCamera>();
+                if (camera != null && TryGetComponent(out BaseCharacterController controller)
+                    && TryGetComponent(out PlayerInput input))
+                {
+                    input.enabled = true;
+                    input.ActivateInput();
+                    // 프리팹의 Default Action Map이 비어 있어도 로컬 입력을 활성화한다.
+                    input.SwitchCurrentActionMap("Player");
+                    camera.SetTarget(controller, input);
+                    Debug.Log($"[LocalPlayerCameraBinder] 연결 owner={OwnerClientId} character={name} camera={camera.name} position={transform.position}", this);
+                    yield break;
+                }
+                if (Time.realtimeSinceStartup >= deadline)
+                {
+                    Debug.LogError($"[LocalPlayerCameraBinder] 카메라 연결 시간 초과 owner={OwnerClientId} character={name} scene={gameObject.scene.name}", this);
+                    yield break;
+                }
+                yield return null;
+            }
+        }
+
+        public override void OnNetworkDespawn() => StopAllCoroutines();
     }
 }

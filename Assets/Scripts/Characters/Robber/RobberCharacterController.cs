@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using TheShedding.InventorySystem;
 using TheShedding.Items;
 using UnityEngine;
@@ -33,18 +35,25 @@ namespace TheShedding.Characters
         {
             base.Update();
 
-            if (!CanAct()) return;
+            if (!NetworkSimulation) EvaluateFlashlight();
+        }
 
-            if (IsFlashlightOn)
+        private readonly HashSet<FamilyController> flashlightTargets = new();
+
+        public void SynchronizeFlashlight(bool enabled) => IsFlashlightOn = enabled;
+
+        // 서버 어댑터에서 호출하므로 컴포넌트 enabled 값과 무관하게 판정한다.
+        public void EvaluateFlashlight()
+        {
+            if (!CanAct() || !IsFlashlightOn) return;
+            flashlightTargets.Clear();
+            int count = Physics.OverlapSphereNonAlloc(
+                transform.position, flashRange, FlashlightBuffer, familyLayer);
+            for (int i = 0; i < count; i++)
             {
-                int count = Physics.OverlapSphereNonAlloc(
-                    transform.position, flashRange, FlashlightBuffer, familyLayer);
-
-                for (int i = 0; i < count; i++)
-                {
-                    if (FlashlightBuffer[i].TryGetComponent<FamilyController>(out var family))
-                        family.ApplyFlashlightStun(flashStunDuration);
-                }
+                var family = FlashlightBuffer[i].GetComponentInParent<FamilyController>();
+                if (family != null && family.IsAlive() && flashlightTargets.Add(family))
+                    family.ApplyFlashlightStun(flashStunDuration);
             }
         }
 
@@ -56,7 +65,7 @@ namespace TheShedding.Characters
 
         public void UseHealItem()
         {
-            if (Inventory == null || itemDatabase == null) return;
+            if (!CanAct() || Inventory == null || itemDatabase == null) return;
             if (!Inventory.TryRemoveFirstOfType<ConsumableItem>(itemDatabase, out var item)) return;
             Recover(item.healAmount);
         }
