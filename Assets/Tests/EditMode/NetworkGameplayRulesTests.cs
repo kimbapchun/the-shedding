@@ -42,8 +42,8 @@ namespace TheShedding.Tests
         {
             var roster = new RoleRoster();
             Assert.AreEqual(Role.Robber, roster.Assign("a", 2, 4, AllRoles, Role.Robber));
-            Assert.AreEqual(Role.Father, roster.Assign("b", 2, 4, AllRoles));
-            Assert.AreEqual(Role.Mother, roster.Assign("c", 3, 4, new[] { Role.Mother }, Role.Dog));
+            Assert.AreEqual(Role.Mother, roster.Assign("b", 2, 4, AllRoles));
+            Assert.AreEqual(Role.Father, roster.Assign("c", 3, 4, new[] { Role.Father }, Role.Dog));
         }
 
         [Test]
