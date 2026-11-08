@@ -17,9 +17,11 @@ namespace TheShedding.Characters
         protected float attackCooldownEndTime;
         protected float skillCooldownEndTime;
         private float stunEndTime;
+        private float flashlightImmunityEndTime;
 
-        // 범위 안에 있는 동안 매 프레임 호출되므로, 갱신 주기를 둬 상태 복제가 매번 일어나지 않게 한다.
-        private const float StunRefreshInterval = 0.5f;
+        [Header("Flashlight")]
+        [SerializeField, Min(0f)] private float flashlightImmunityDuration = 3f;
+
 
         private bool IsStunned   => Time.time < stunEndTime;
         protected bool IsAttackReady => Time.time >= attackCooldownEndTime;
@@ -51,8 +53,10 @@ namespace TheShedding.Characters
 
         public void ApplyFlashlightStun(float duration)
         {
-            if (!IsStunned || stunEndTime - Time.time <= duration - StunRefreshInterval)
-                stunEndTime = Time.time + duration;
+            // 연속 조사나 여러 강도의 조사로 스턴/면역 종료 시각을 연장하지 않는다.
+            if (duration <= 0f || IsStunned || Time.time < flashlightImmunityEndTime) return;
+            stunEndTime = Time.time + duration;
+            flashlightImmunityEndTime = stunEndTime + Mathf.Max(0f, flashlightImmunityDuration);
             StopMovement();
         }
 

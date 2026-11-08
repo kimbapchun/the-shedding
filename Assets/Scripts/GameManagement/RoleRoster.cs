@@ -13,15 +13,17 @@ namespace TheShedding.GameManagement
             Role selected = Role.Unassigned)
         {
             if (assignments.TryGetValue(playerId, out var current)) return current;
-            if (selected != Role.Unassigned && choices.Contains(selected))
+            int required = System.Math.Max(1, (playerCount + System.Math.Max(1, playersPerRobber) - 1)
+                / System.Math.Max(1, playersPerRobber));
+            int robberCount = assignments.Values.Count(r => r == Role.Robber);
+            if (selected != Role.Unassigned && choices.Contains(selected)
+                && (selected == Role.Robber ? robberCount < required : !assignments.ContainsValue(selected)))
             {
                 assignments.Add(playerId, selected);
                 return selected;
             }
-            int required = System.Math.Max(1, (playerCount + System.Math.Max(1, playersPerRobber) - 1)
-                / System.Math.Max(1, playersPerRobber));
             Role role = Role.Unassigned;
-            if (choices.Contains(Role.Robber) && assignments.Values.Count(r => r == Role.Robber) < required)
+            if (choices.Contains(Role.Robber) && robberCount < required)
                 role = Role.Robber;
             else
                 foreach (var family in new[] { Role.Mother, Role.Baby, Role.Father, Role.Dog })

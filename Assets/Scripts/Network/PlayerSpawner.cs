@@ -160,9 +160,22 @@ namespace TheShedding.Network
         }
 
         private string ResolvePlayerId(ulong clientId)
-            => m_ApprovalHandler != null && m_ApprovalHandler.TryGetPlayerId(clientId, out var playerId)
-                ? playerId
-                : clientId.ToString();
+        {
+            if (m_ApprovalHandler != null && m_ApprovalHandler.TryGetPlayerId(clientId, out var playerId))
+                return playerId;
+
+            // 승인 페이로드가 누락된 호스트도 역할 선택 UI와 같은 식별자를 사용한다.
+            var connection = GetComponent<ConnectionManager>();
+            if (m_NetworkManager.IsHost && clientId == m_NetworkManager.LocalClientId
+                && connection != null && !string.IsNullOrEmpty(connection.LocalPlayerId))
+            {
+                Debug.LogWarning($"[PlayerSpawner] clientId={clientId} 승인 식별자가 없어 호스트 LocalPlayerId를 사용합니다.");
+                return connection.LocalPlayerId;
+            }
+
+            Debug.LogWarning($"[PlayerSpawner] clientId={clientId} 승인 식별자가 없어 clientId를 사용합니다. 역할 선택 연결을 확인하세요.");
+            return clientId.ToString();
+        }
 
         private static Role GetSelectedRole(string playerId)
             => GameManager.Instance != null ? GameManager.Instance.GetRole(playerId) : Role.Unassigned;

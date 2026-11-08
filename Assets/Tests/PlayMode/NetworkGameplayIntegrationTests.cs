@@ -58,6 +58,14 @@ namespace TheShedding.Tests
                 && late.SpawnManager.SpawnedObjects.ContainsKey(robberObject.NetworkObjectId), "late join");
             Stabilize();
             Assert.IsTrue(Replica(late, robberObject).GetComponent<RobberCharacterController>().IsFlashlightOn);
+            yield return Until(() => mother.IsActionAllowed && remoteMother.IsActionAllowed,
+                "continuous flashlight must release family after stun");
+            float end = mother.FlashlightStunEndTime;
+            yield return new WaitForSeconds(0.5f);
+            Assert.IsTrue(mother.IsActionAllowed && remoteMother.IsActionAllowed, "immune while flashlight stays on");
+            Assert.AreEqual(end, mother.FlashlightStunEndTime, "no stun refresh during immunity");
+            yield return Until(() => !mother.IsActionAllowed && !remoteMother.IsActionAllowed,
+                "stun resumes after immunity");
             robberCommands.Skill();
             yield return Until(() => !robber.IsFlashlightOn && !remoteRobber.IsFlashlightOn, "flashlight off");
             yield return Until(() => mother.IsActionAllowed && remoteMother.IsActionAllowed, "stun expiration");
@@ -205,6 +213,48 @@ namespace TheShedding.Tests
             Assert.IsTrue(input.currentActionMap.enabled);
             Assert.AreEqual("Player", input.currentActionMap.name);
             Assert.Less(Vector3.Distance(camera.transform.position, father.transform.position), 8f);
+        }
+
+        [UnityTest]
+        public IEnumerator Host_payload_preserves_local_player_id_through_approval()
+        {
+            yield return VerifyHostPlayerId(false);
+        }
+
+        [UnityTest]
+        public IEnumerator Host_without_payload_falls_back_to_local_player_id()
+        {
+            yield return VerifyHostPlayerId(true);
+        }
+
+        private IEnumerator VerifyHostPlayerId(bool omitPayload)
+        {
+            host = CreateManager("identity host");
+            host.NetworkConfig.ConnectionApproval = true;
+            var connection = host.gameObject.AddComponent<ConnectionManager>();
+            var spawner = host.gameObject.AddComponent<PlayerSpawner>();
+            spawner.enabled = false; // 씬 스폰 없이 식별 경로만 검사한다.
+            if (!omitPayload)
+            {
+                typeof(ConnectionManager).GetMethod("ApplyConnectionPayload", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .Invoke(connection, null);
+                Assert.AreEqual(connection.LocalPlayerId,
+                    System.Text.Encoding.UTF8.GetString(host.NetworkConfig.ConnectionData));
+            }
+            Assert.IsTrue(host.StartHost());
+            yield return Until(() => host.IsHost, "host started");
+            var approval = host.GetComponent<ConnectionApprovalHandler>();
+            if (!omitPayload)
+            {
+                Assert.IsTrue(approval.TryGetPlayerId(host.LocalClientId, out var approvedId));
+                Assert.AreEqual(connection.LocalPlayerId, approvedId);
+            }
+            else
+                LogAssert.Expect(LogType.Warning,
+                    $"[PlayerSpawner] clientId={host.LocalClientId} 승인 식별자가 없어 호스트 LocalPlayerId를 사용합니다.");
+            var resolved = typeof(PlayerSpawner).GetMethod("ResolvePlayerId", BindingFlags.NonPublic | BindingFlags.Instance)
+                .Invoke(spawner, new object[] { host.LocalClientId });
+            Assert.AreEqual(connection.LocalPlayerId, resolved);
         }
 
         private IEnumerator Connect()

@@ -67,7 +67,28 @@ namespace TheShedding.Tests
         }
 
         [Test]
-        public void Repeated_flashlight_stun_refreshes_end_time_only_at_interval()
+        public void Selected_family_cannot_be_assigned_twice()
+        {
+            var roster = new RoleRoster();
+            Assert.AreEqual(Role.Mother, roster.Assign("a", 4, 4, AllRoles, Role.Mother));
+            Assert.AreEqual(Role.Robber, roster.Assign("b", 4, 4, AllRoles, Role.Mother));
+            Assert.AreEqual(Role.Unassigned, roster.Assign("c", 4, 4, new[] { Role.Mother }, Role.Mother));
+            roster.Release("a");
+            Assert.AreEqual(Role.Mother, roster.Assign("c", 4, 4, AllRoles, Role.Mother));
+        }
+
+        [TestCase(4, 1)]
+        [TestCase(5, 2)]
+        public void Selected_robbers_respect_capacity(int players, int capacity)
+        {
+            var roster = new RoleRoster();
+            for (int i = 0; i < capacity; i++)
+                Assert.AreEqual(Role.Robber, roster.Assign(i.ToString(), players, 4, AllRoles, Role.Robber));
+            Assert.AreEqual(Role.Mother, roster.Assign("overflow", players, 4, AllRoles, Role.Robber));
+        }
+
+        [Test]
+        public void Flashlight_does_not_extend_stun_or_immunity_and_can_stun_after_immunity()
         {
             var go = new GameObject("stunned father");
             try
@@ -76,18 +97,23 @@ namespace TheShedding.Tests
                 Awake(father);
                 father.ApplyFlashlightStun(2f);
                 float end = father.FlashlightStunEndTime;
-                father.SynchronizeFlashlightStun(1.8f);
-                float kept = father.FlashlightStunEndTime;
+                father.ApplyFlashlightStun(10f);
+                Assert.AreEqual(end, father.FlashlightStunEndTime);
+                Assert.IsFalse(father.IsActionAllowed);
+                // 만료 시각을 옮겨 시간 경계를 대기 없이 검증한다.
+                typeof(FamilyController).GetField("stunEndTime", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .SetValue(father, Time.time - 1f);
+                float expired = father.FlashlightStunEndTime;
                 father.ApplyFlashlightStun(2f);
-                Assert.AreEqual(kept, father.FlashlightStunEndTime);
-                father.SynchronizeFlashlightStun(1f);
+                Assert.AreEqual(expired, father.FlashlightStunEndTime);
+                Assert.IsTrue(father.IsActionAllowed);
+                typeof(FamilyController).GetField("flashlightImmunityEndTime", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .SetValue(father, Time.time);
                 father.ApplyFlashlightStun(2f);
-                Assert.AreEqual(end, father.FlashlightStunEndTime, 0.1f);
+                Assert.IsFalse(father.IsActionAllowed);
+                Assert.Greater(father.FlashlightStunEndTime, Time.time);
             }
-            finally
-            {
-                UnityEngine.Object.DestroyImmediate(go);
-            }
+            finally { UnityEngine.Object.DestroyImmediate(go); }
         }
 
         [Test]
