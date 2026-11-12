@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TheShedding.Characters
@@ -25,8 +26,11 @@ namespace TheShedding.Characters
         }
 
         // KnockedDown 강도는 즉사, 일반 강도는 LimpAndBleed 부여
+        private readonly HashSet<BaseCharacterController> attackTargets = new();
+
         protected override bool TryAttack()
         {
+            attackTargets.Clear();
             int count = Physics.OverlapSphereNonAlloc(
                 transform.position, biteRange, AttackBuffer, attackTargetLayer);
 
@@ -35,7 +39,8 @@ namespace TheShedding.Characters
             {
                 var col = AttackBuffer[i];
                 if (col.gameObject == gameObject) continue;
-                if (!col.TryGetComponent<BaseCharacterController>(out var target)) continue;
+                var target = col.GetComponentInParent<RobberController>();
+                if (target == null || !target.IsAlive() || !attackTargets.Add(target)) continue;
 
                 if (target.CurrentStatusEffect == StatusEffect.KnockedDown)
                     target.TakeDamage(target.CurrentLifeSegments);

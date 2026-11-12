@@ -27,6 +27,9 @@ namespace TheShedding.Network
         /// <summary>승인된 접속의 clientId → 식별자. 재접속한 사람을 알아보는 근거가 된다.</summary>
         private readonly Dictionary<ulong, string> m_PlayerIdByClientId = new Dictionary<ulong, string>();
 
+        public bool TryGetPlayerId(ulong clientId, out string playerId)
+            => m_PlayerIdByClientId.TryGetValue(clientId, out playerId) && !string.IsNullOrEmpty(playerId);
+
         private void Awake()
         {
             m_NetworkManager = GetComponent<NetworkManager>();
