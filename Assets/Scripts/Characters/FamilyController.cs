@@ -4,6 +4,7 @@ namespace TheShedding.Characters
 {
     public abstract class FamilyController : BaseCharacterController
     {
+        public event System.Action OnAttackStarted;
         [Header("Attack")]
         [SerializeField] protected float attackCooldownDuration = 1f;
 
@@ -16,17 +17,22 @@ namespace TheShedding.Characters
         protected float attackCooldownEndTime;
         protected float skillCooldownEndTime;
         private float stunEndTime;
+        private float flashlightImmunityEndTime;
+
+        [Header("Flashlight")]
+        [SerializeField, Min(0f)] private float flashlightImmunityDuration = 3f;
+
 
         private bool IsStunned   => Time.time < stunEndTime;
         protected bool IsAttackReady => Time.time >= attackCooldownEndTime;
         protected bool IsSkillReady  => Time.time >= skillCooldownEndTime;
 
-        protected override void Update()
-        {
-            if (CurrentStatusEffect != StatusEffect.None && Time.time >= statusEffectEndTime)
-                ApplyStatusEffect(StatusEffect.None, 0f);
+        public float FlashlightStunEndTime => stunEndTime;
 
-            base.Update();
+        public void SynchronizeFlashlightStun(float remaining)
+        {
+            stunEndTime = Time.time + Mathf.Max(0f, remaining);
+            if (IsStunned) StopMovement();
         }
 
         protected override bool CanAct() => base.CanAct() && !IsStunned && CurrentStatusEffect != StatusEffect.KnockedDown;
@@ -47,7 +53,10 @@ namespace TheShedding.Characters
 
         public void ApplyFlashlightStun(float duration)
         {
+            // 연속 조사나 여러 강도의 조사로 스턴/면역 종료 시각을 연장하지 않는다.
+            if (duration <= 0f || IsStunned || Time.time < flashlightImmunityEndTime) return;
             stunEndTime = Time.time + duration;
+            flashlightImmunityEndTime = stunEndTime + Mathf.Max(0f, flashlightImmunityDuration);
             StopMovement();
         }
 
@@ -60,7 +69,8 @@ namespace TheShedding.Characters
             if (IsLying) return;
 
             attackCooldownEndTime = Time.time + attackCooldownDuration;
-            animator?.SetTrigger(HashIsAttacking);
+            if (!NetworkSimulation) animator?.SetTrigger(HashIsAttacking);
+            OnAttackStarted?.Invoke();
             TryAttack();
         }
 
@@ -73,9 +83,11 @@ namespace TheShedding.Characters
             if (!CanAct()) return;
             if (!IsSkillReady) return;
 
-            if (UseSkill())
-                skillCooldownEndTime = Time.time + skillCooldownDuration;
+            if (UseSkill()) StartSkillCooldown();
         }
+
+        protected virtual void StartSkillCooldown()
+            => skillCooldownEndTime = Time.time + skillCooldownDuration;
 
         protected abstract bool UseSkill();
     }

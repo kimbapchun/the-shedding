@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TheShedding.Characters
@@ -20,15 +21,19 @@ namespace TheShedding.Characters
             base.Awake();
         }
 
+        private readonly HashSet<BaseCharacterController> attackTargets = new();
+
         protected override bool TryAttack()
         {
+            attackTargets.Clear();
             int count = Physics.OverlapSphereNonAlloc(
                 transform.position, attackRange, AttackBuffer, attackTargetLayer);
 
             bool hit = false;
             for (int i = 0; i < count; i++)
             {
-                if (AttackBuffer[i].TryGetComponent<RobberController>(out var target))
+                var target = AttackBuffer[i].GetComponentInParent<RobberController>();
+                if (target != null && target.IsAlive() && attackTargets.Add(target))
                 {
                     target.TakeDamage(attackDamage);
                     hit = true;

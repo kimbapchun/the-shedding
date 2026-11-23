@@ -1,0 +1,27 @@
+{
+    "name": "TheShedding.Network.PlayModeTests",
+    "rootNamespace": "",
+    "references": [
+        "TheShedding.Gameplay",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "TheShedding.Network",
+        "Unity.Netcode.Runtime",
+        "Unity.InputSystem",
+        "Unity.Networking.Transport"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS",
+        "UNITY_EDITOR"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

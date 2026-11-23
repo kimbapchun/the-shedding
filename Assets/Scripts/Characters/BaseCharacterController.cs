@@ -31,6 +31,48 @@ namespace TheShedding.Characters
 
         // ── 런타임 상태 ──────────────────────────────────────────────────
 
+        public bool NetworkSimulation { get; set; }
+        public bool IsActionAllowed => CanAct();
+        public float StatusEffectEndTime => statusEffectEndTime;
+        public float TrapSlowEndTime => trapSlowEndTime;
+
+        // 비소유 컨트롤러가 꺼져 있어도 네트워크 서버가 직접 호출한다.
+        public void TickStatusEffects()
+        {
+            if (CurrentStatusEffect != StatusEffect.None && CurrentStatusEffect != StatusEffect.KnockedDown
+                && Time.time >= statusEffectEndTime)
+                ApplyStatusEffect(StatusEffect.None, 0f);
+        }
+
+        public void ApplyReplicatedState(int life, StatusEffect status, float statusRemaining, float slowRemaining,
+            bool sitting = false, bool lying = false)
+        {
+            if (CurrentLifeSegments != life)
+            {
+                bool died = CurrentLifeSegments > 0 && life <= 0;
+                CurrentLifeSegments = life;
+                OnLifeChanged?.Invoke(life);
+                if (died)
+                {
+                    OnDied?.Invoke();
+                    OnDeath();
+                }
+            }
+            CurrentStatusEffect = status;
+            statusEffectEndTime = Time.time + Mathf.Max(0f, statusRemaining);
+            trapSlowEndTime = Time.time + Mathf.Max(0f, slowRemaining);
+            OnStatusChanged?.Invoke(status);
+            OnStatusEffectApplied(status);
+            IsSitting = sitting;
+            IsLying = lying;
+            if (animator != null)
+            {
+                animator.SetBool(HashIsSitting, sitting);
+                animator.SetBool(HashIsLying, lying);
+            }
+            if (!CanAct()) StopMovement();
+        }
+
         public int CurrentLifeSegments { get; protected set; }
         public StatusEffect CurrentStatusEffect { get; protected set; }
         protected float statusEffectEndTime;
@@ -118,7 +160,9 @@ namespace TheShedding.Characters
 
         protected virtual void Update()
         {
+            if (!NetworkSimulation) TickStatusEffects();
 #if UNITY_EDITOR
+            if (NetworkSimulation || Keyboard.current == null) return;
             if (Keyboard.current.pKey.isPressed)
                 ApplyStatusEffect(StatusEffect.Limp, 0.5f);
             if (Keyboard.current.oKey.wasPressedThisFrame)
@@ -130,7 +174,7 @@ namespace TheShedding.Characters
 
         protected void StopMovement()
         {
-            rb.linearVelocity = Vector3.zero;
+            if (!rb.isKinematic) rb.linearVelocity = Vector3.zero;
             if (animator != null)
             {
                 animator.SetBool(HashIsWalking,   false);
@@ -141,7 +185,7 @@ namespace TheShedding.Characters
 
         public virtual void Move(Vector2 input, bool sprintPressed)
         {
-            if (!IsAlive()) return;
+            if (!CanAct()) { StopMovement(); return; }
             bool isMoving    = input != Vector2.zero;
             bool isLimping   = CurrentStatusEffect == StatusEffect.Limp || CurrentStatusEffect == StatusEffect.LimpAndBleed;
             bool isSprinting = isMoving && !isLimping && !IsSitting && !IsLying && sprintPressed;
@@ -301,7 +345,7 @@ namespace TheShedding.Characters
         protected virtual void OnDeath()
         {
             StopMovement();
-            animator?.SetBool(HashIsDead, true);
+            if (animator != null) animator.SetBool(HashIsDead, true);
         }
 
         // ── 앉기 / 눕기 ───────────────────────────────────────────────────
@@ -314,7 +358,7 @@ namespace TheShedding.Characters
             if (sitting)
             {
                 IsLying = false;
-                rb.linearVelocity = Vector3.zero;
+                if (!rb.isKinematic) rb.linearVelocity = Vector3.zero;
                 if (animator != null) animator.SetBool(HashIsLying, false);
             }
 
@@ -330,7 +374,7 @@ namespace TheShedding.Characters
             if (lying)
             {
                 IsSitting = false;
-                rb.linearVelocity = Vector3.zero;
+                if (!rb.isKinematic) rb.linearVelocity = Vector3.zero;
                 if (animator != null) animator.SetBool(HashIsSitting, false);
             }
 
