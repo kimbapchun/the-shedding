@@ -24275,6 +24275,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 107.84141, y: 240.81949, z: 14.902599}
   m_Center: {x: 45.198254, y: 26.737396, z: 0.007960796}
+--- !u!114 &781565855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781565850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b1f4131efd904642bd7577881a6c80d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TheShedding.Gameplay::TheShedding.Interactables.SlidingDoor
+  openOffset: {x: 1.7, y: 0, z: 0}
+  slideDuration: 0.4
 --- !u!1 &783664282 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6023806193220417297, guid: dd1c369a9408f448cb9f7c55147a4e0d, type: 3}
@@ -26570,6 +26584,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8033689131440631437, guid: 2de13cc98038e4fcbbe21793d916e3bb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: -7310666698650190269, guid: 2de13cc98038e4fcbbe21793d916e3bb, type: 3}
       propertyPath: m_LocalPosition.z
       value: 5.6
@@ -26610,6 +26628,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8033689131440631437, guid: 2de13cc98038e4fcbbe21793d916e3bb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 781565854}
+    - targetCorrespondingSourceObject: {fileID: -8033689131440631437, guid: 2de13cc98038e4fcbbe21793d916e3bb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 781565855}
     - targetCorrespondingSourceObject: {fileID: -7318072807127031672, guid: 2de13cc98038e4fcbbe21793d916e3bb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1403423244}
