@@ -44904,6 +44904,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: c0a4d5f950da34e5fb0f2580b7f75684, type: 2}
+    - target: {fileID: -4355658059898633202, guid: 59fc6eb1a2a654da2859a04a17f1f3ea, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: -4169514081986482202, guid: 59fc6eb1a2a654da2859a04a17f1f3ea, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.26
@@ -44963,6 +44967,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -4355658059898633202, guid: 59fc6eb1a2a654da2859a04a17f1f3ea, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1303013272}
+    - targetCorrespondingSourceObject: {fileID: -4355658059898633202, guid: 59fc6eb1a2a654da2859a04a17f1f3ea, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1828356242}
     - targetCorrespondingSourceObject: {fileID: -7313707754044009241, guid: 59fc6eb1a2a654da2859a04a17f1f3ea, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1913265285}
@@ -45553,6 +45560,20 @@ Transform:
   - {fileID: 2089844030}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1828356242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1736152690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b1f4131efd904642bd7577881a6c80d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TheShedding.Gameplay::TheShedding.Interactables.SlidingDoor
+  openOffset: {x: 1.7, y: 0, z: 0}
+  slideDuration: 0.4
 --- !u!43 &1839513776
 Mesh:
   m_ObjectHideFlags: 0
